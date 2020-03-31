@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="5dp"
+        android:gravity="center"
+        android:text="نام شهر خود را از لیست زیر انتخاب کنید"
+        android:textSize="16sp" />
+
+    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+        android:id="@+id/spiner_selectweather"
+        android:layout_width="match_parent"
+        android:layout_height="50sp"
+        android:layout_margin="10dp"
+        android:gravity="right|center_vertical" />
+
+    <Button
+        android:id="@+id/btn_selectweather"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="تایید"
+        android:textSize="16sp" />
+</LinearLayout>

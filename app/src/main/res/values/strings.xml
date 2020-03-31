@@ -1,0 +1,186 @@
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="app_name">چتر</string>
+
+
+    <string name="login" translatable="false">Login</string>
+
+    <string name="join" translatable="false">Join</string>
+
+    <string name="hide" translatable="false">Hide</string>
+
+    <string name="show" translatable="false">Show</string>
+    <string name="lorm_persian" translatable="false">
+لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.
+    </string>
+    <string name="channel_name" translatable="false">کانال اطلاع رسانی</string>
+    <string name="video_loading_text" translatable="false">در حال بارگزاری...</string>
+    <string name="error_loading_text" translatable="false">مشکلی پیش آمد!</string>
+
+
+    <string name="change_city" translatable="false">تغییر شهر</string>
+    <string name="enter_zip_code" translatable="false">با وارد کردن نام شهر یا کد پستی می توانید شهر را تغییر دهید</string>
+    <string name="could_not_find" translatable="false">نتوانستیم شهر مورد نظر خود را پیدا کنیم. لطفاً یک نام شهر جدید وارد کنید:</string>
+    <string name="city_not_found" translatable="false">شهر یافت نشد</string>
+    <string name="city_already_exists" translatable="false">شهر قبلاً وجود دارد</string>
+    <string name="need_not_add" translatable="false">دیگر لازم نیست این شهر را دوباره اضافه کنید</string>
+    <string name="location" translatable="false">موقعیت</string>
+    <string name="toggle_values" translatable="false">مقادیر را تغییر دهید</string>
+
+    <string name="uh_oh" translatable="false">اوه اوه به نظر می رسد نام شهری که وارد کرده اید در بانک اطلاعاتی وجود ندارد. لطفا دوباره تلاش کنید</string>
+    <string name="pick_city" translatable="false">برای پیش بینی آب و هوا لطفا نام شهر خود را وارد کنید</string>
+    <string name="hey_there_condition" translatable="false">سلام اینجا , %s همین حالا!</string>
+
+    <string name="snow_" translatable="false">برف : %1$.2f %2$s</string>
+    <string name="humidity" translatable="false">رطوبت : %d %%</string>
+    <string name="pressure" translatable="false">فشار : %.2f hPa</string>
+
+    <string name="wind_" translatable="false">باد : %1$.2f %2$s</string>
+
+    <string name="wind_blowing_in" translatable="false">وزش باد به سمت %s</string>
+    <string name="north" translatable="false">شمال</string>
+    <string name="north_east" translatable="false">شمال شرقی</string>
+    <string name="north_west" translatable="false">شمال غربی</string>
+    <string name="south" translatable="false">جنوب</string>
+    <string name="south_east" translatable="false">جنوب شرقی</string>
+    <string name="south_west" translatable="false">جنوب غربی</string>
+    <string name="east" translatable="false">شرق</string>
+    <string name="west" translatable="false">غرب</string>
+
+    <string name="restart_app" translatable="false">برنامه را مجدداً راه اندازی کنید</string>
+    <string name="restart_app_content" translatable="false">لطفاً برنامه را دوباره راه اندازی کنید تا با پیکربندی جدید بررسی شود</string>
+
+    <string name="reset" translatable="false">بازنشانی</string>
+
+    <string name="enter_city_first" translatable="false">ابتدا نام شهر را وارد کنید</string>
+    <string name="check_internet" translatable="false">لطفا اتصال به اینترنت خود را بررسی کنید</string>
+    <string name="enable_gps" translatable="false">GPS را فعال کنید</string>
+    <string name="enable_gps_content" translatable="false">برای کارکرد این عملکرد باید GPS را فعال کنید</string>
+
+    <string name="please_wait" translatable="false">لطفا صبر کنید</string>
+    <string name="loading" translatable="false">بارگذاری</string>
+    <string name="settings" translatable="false">تنظیمات</string>
+
+    <string name="daily" translatable="false">روزانه</string>
+    <string name="enable" translatable="false">فعال کردن</string>
+
+    <string name="title_activity_first_launch" translatable="false">نام شهر خود را در اینجا وارد کنید</string>
+
+    <!-- Drawer Strings -->
+    <string name="drawer_item_home" translatable="false">وضعیت هوا</string>
+    <string name="drawer_item_graph" translatable="false">نمودارهای هوا</string>
+    <string name="drawer_item_map" translatable="false">نقشه هواشناسی</string>
+    <string name="drawer_item_about" translatable="false">درباره</string>
+    <string name="drawer_item_add_city" translatable="false">شهر را اضافه کنید</string>
+
+    <string name="rationale_string" translatable="false">روی تنظیمات ضربه بزنید ، سپس در مجوزها ، اجازه موقعیت مکانی را برای انجام این عمل فعال کنید</string>
+    <string name="show_location_rationale" translatable="false">این مجوز برای دسترسی به داده های هواشناسی موقعیت مکانی شما لازم است</string>
+
+    <string name="morning" translatable="false">صبح</string>
+    <string name="night" translatable="false">شب</string>
+    <string name="day" translatable="false">روز</string>
+    <string name="Evening" translatable="false">عصر</string>
+
+    <!-- Target Strings -->
+    <string name="target_search_title" translatable="false">جستجوی یک شهر</string>
+    <string name="target_search_content" translatable="false">جستجوی داده های آب و هوا از بیش از 200،000 شهر و شهر</string>
+    <string name="target_location_content" translatable="false">برای بررسی وضعیت آب و هوای مکانی که اکنون در آن هستید ضربه بزنید. برای دیدن گزینه های بیشتر ، از لبه سمت چپ صفحه به سمت راست بکشید</string>
+    <string name="target_refresh_title" translatable="false">تازه کردن</string>
+    <string name="target_refresh_content" translatable="false">برای تازه کردن ، از بالا انگشت خود را بکشید</string>
+
+    <string name="no_internet_title" translatable="false">اینترنت ندارد</string>
+    <string name="no_internet_content" translatable="false">برای نمایش داده های هواشناسی باید دسترسی به اینترنت فعال شود</string>
+
+    <!-- Settings Headers -->
+    <string name="pref_temp_header" translatable="false">درجه حرارت</string>
+    <string name="pref_notification_header" translatable="false">اطلاعیه</string>
+    <string name="pref_display_header" translatable="false">نمایش دادن</string>
+    <string name="pref_other_header" translatable="false">سایر تنظیمات</string>
+
+    <!-- Settings Titles -->
+    <string name="pref_units_title" translatable="false">واحد دما</string>
+    <string name="pref_enable_notifs_title" translatable="false">فعال سازی اعلان</string>
+    <string name="pref_refresh_title" translatable="false">بازخوانی فاصله</string>
+    <string name="pref_lang_title" translatable="false">زبان</string>
+    <string name="pref_owm_key_title" translatable="false">کلید OpenWeatherMap سفارشی</string>
+    <string name="pref_delete_cities_title" translatable="false">شهرها را حذف کنید</string>
+    <string name="pref_time_format_title" translatable="false">قالب زمان</string>
+
+    <!-- Settings Summary -->
+    <string name="pref_units_summary" translatable="false">یک واحد درجه حرارت ترجیحی را که می خواهید دمای آن را ببینید انتخاب کنید</string>
+    <string name="pref_owm_key_summary" translatable="false">شما می توانید کلید API OpenWeatherMap سفارشی خود را وارد کنید ، و به کاهش بار از کلید API من کمک کنید. \ n \ n توجه: وارد کردن یک کلید API اشتباه ممکن است منجر به اقدامات ناخواسته شود. این کار را با ریسک خودتان انجام دهید</string>
+    <string name="pref_delete_cities_summary" translatable="false">حذف از شهرهای اضافی نمایش داده شده در برنامه</string>
+    <string name="pref_add_city_content" translatable="false">می توانید وارد یک شهر جدید شوید و آن را به لیست شهرهای ذخیره شده اضافه کنید</string>
+    <string name="pref_time_format_summary" translatable="false">نمایش زمان در قالب 24 ساعته</string>
+
+    <!-- Bottom Bar Strings -->
+    <string name="bottom_rain" translatable="false">باران</string>
+    <string name="bottom_wind" translatable="false">باد</string>
+
+    <!-- Graph Strings -->
+    <string name="g_pressure" translatable="false">فشار ، hPa</string>
+    <string name="g_snow" translatable="false">برف ، میلی متر</string>
+    <string name="cancel" translatable="false">لغو</string>
+    <string name="ok" translatable="false">تایید</string>
+
+
+    <string name="application_name">ExoPlayer</string>
+
+    <string name="track_selection_title">Select tracks</string>
+
+    <string name="unexpected_intent_action">Unexpected intent action: <xliff:g iid="action">%1$s</xliff:g></string>
+
+    <string name="error_cleartext_not_permitted">Cleartext traffic not permitted</string>
+
+    <string name="error_generic">Playback failed</string>
+
+    <string name="error_unrecognized_abr_algorithm">Unrecognized ABR algorithm</string>
+
+    <string name="error_unrecognized_stereo_mode">Unrecognized stereo mode</string>
+
+    <string name="error_drm_unsupported_before_api_18">Protected content not supported on API levels below 18</string>
+
+    <string name="error_drm_unsupported_scheme">This device does not support the required DRM scheme</string>
+
+    <string name="error_drm_unknown">An unknown DRM error occurred</string>
+
+    <string name="error_no_decoder">This device does not provide a decoder for <xliff:g iid="mime_type">%1$s</xliff:g></string>
+
+    <string name="error_no_secure_decoder">This device does not provide a secure decoder for <xliff:g iid="mime_type">%1$s</xliff:g></string>
+
+    <string name="error_querying_decoders">Unable to query device decoders</string>
+
+    <string name="error_instantiating_decoder">Unable to instantiate decoder <xliff:g iid="decoder_name">%1$s</xliff:g></string>
+
+    <string name="error_unsupported_video">Media includes video tracks, but none are playable by this device</string>
+
+    <string name="error_unsupported_audio">Media includes audio tracks, but none are playable by this device</string>
+
+    <string name="storage_permission_denied">Permission to access storage was denied</string>
+
+    <string name="sample_list_load_error">One or more sample lists failed to load</string>
+
+    <string name="ima_not_loaded">Playing sample without ads, as the IMA extension was not loaded</string>
+
+    <string name="unsupported_ads_in_concatenation">Playing sample without ads, as ads are not supported in concatenations</string>
+
+    <string name="download_start_error">Failed to start download</string>
+
+    <string name="download_playlist_unsupported">This demo app does not support downloading playlists</string>
+
+    <string name="download_drm_unsupported">This demo app does not support downloading protected content</string>
+
+    <string name="download_scheme_unsupported">This demo app only supports downloading http streams</string>
+
+    <string name="download_live_unsupported">This demo app does not support downloading live content</string>
+
+    <string name="download_ads_unsupported">IMA does not support offline ads</string>
+
+    <string name="prefer_extension_decoders">Prefer extension decoders</string>
+
+    <string name="random_abr">Enable random ABR</string>
+
+    <string name="tunneling">Request multimedia tunneling</string>
+
+
+</resources>
