@@ -74,6 +74,13 @@ public class DBHelperCategory extends SQLiteOpenHelper {
                 new String[]{Integer.toString(id)});
     }
 
+    public void deleteAllRecord() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL(
+                "delete from " + CONTACTS_TABLE_NAME
+        );
+    }
+
     public ArrayList<Categoryy> getAllRows() {
         ArrayList<Categoryy> array_list = new ArrayList<>();
 

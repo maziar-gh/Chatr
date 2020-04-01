@@ -37,6 +37,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ir.maziardev.chatrapp.R;
 import ir.maziardev.chatrapp.adapter.SliderAdapterExample;
+import ir.maziardev.chatrapp.database.DBHelperCategory;
+import ir.maziardev.chatrapp.models.Categoryy;
 import ir.maziardev.chatrapp.models.Update;
 import ir.maziardev.chatrapp.network.AppController;
 import ir.maziardev.chatrapp.weather.WeatherActivity;
@@ -73,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.card_salamat_main)
     CardView card_salamat;
 
+    DBHelperCategory dbCategory;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +84,9 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         initSlider_load();
-        /*gpsTracker();*/
+
+        dbCategory = new DBHelperCategory(this);
+
 
         final PersianCalendarView persianCalendarView = findViewById(R.id.persian_calendar_main);
         final PersianCalendarHandler calendar = persianCalendarView.getCalendar();

@@ -45,7 +45,7 @@ public class AppController extends Application {
     public static final String WEATHER_BY_CITY_URL = "http://mobileapp.irimo.ir/WeatherServer/GetStationData/";
 
     public static final String API_AZAN_URL = "http://chatr.anzalepoxy.ir/azan/index.htm";
-    public static final String API_EST_URL = "http://maziardev.ir/estekhare/index.php";
+    public static final String API_EST_URL = "http://chatr.anzalepoxy.ir/estekhare/index.php";
 
     public static final String API_BASE_URL = "http://chatr.anzalepoxy.ir/chatr/app/index.php/api/";
     public static final String API_UPDATE_URL = API_BASE_URL + "update";

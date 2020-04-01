@@ -24,6 +24,24 @@ public class Lists {
     private boolean sub_page1;
     private boolean sub_page2;
 
+    public Lists() {
+    }
+
+    public Lists(String title, String img, String url, String id_category, boolean site) {
+        this.title = title;
+        this.img = img;
+        this.url = url;
+        this.id_category = id_category;
+        this.site = site;
+    }
+
+    public Lists(String title, String img, String url, boolean site) {
+        this.title = title;
+        this.img = img;
+        this.url = url;
+        this.site = site;
+    }
+
     public String getAction() {
         return action;
     }

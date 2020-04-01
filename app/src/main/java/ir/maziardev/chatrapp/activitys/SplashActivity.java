@@ -3,7 +3,6 @@ package ir.maziardev.chatrapp.activitys;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +29,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import ir.maziardev.chatrapp.R;
+import ir.maziardev.chatrapp.database.lib.DBHelperAudioBookLib;
+import ir.maziardev.chatrapp.database.DBHelperCategory;
+import ir.maziardev.chatrapp.database.lib.DBHelperMafatihLib;
+import ir.maziardev.chatrapp.database.lib.DBHelperNahjLib;
+import ir.maziardev.chatrapp.database.lib.DBHelperQuranLib;
+import ir.maziardev.chatrapp.database.lib.DBHelperResaleLib;
 import ir.maziardev.chatrapp.enums.ChannelType;
 import ir.maziardev.chatrapp.enums.PageType;
 import ir.maziardev.chatrapp.models.Categoryy;
@@ -48,47 +53,56 @@ public class SplashActivity extends AppCompatActivity {
     private byte downloaditem = 0;
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
+    private DBHelperCategory dbCategory;
+    private DBHelperAudioBookLib dbAudiobookLib;
+    private DBHelperQuranLib dbQuranLib;
+    private DBHelperMafatihLib dbMafatihLib;
+    private DBHelperNahjLib dbNahjLib;
+    private DBHelperResaleLib dbResaleLib;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        if (!isNetworkConnected()) {
-            Toast.makeText(this, "اتصال به اینترنت برقرار نیست!", Toast.LENGTH_LONG).show();
-
-
-        }
-
+        initDb();
+        if (isNetworkConnected()) {
+            initClearDb();
+        }else Toast.makeText(this, "اتصال به اینترنت برقرار نیست!", Toast.LENGTH_LONG).show();
         scheduler.scheduleAtFixedRate(new CustomTask(), 1000, 1000, TimeUnit.MILLISECONDS);
     }
 
+    private void initDb(){
+        dbCategory = new DBHelperCategory(this);
+        dbAudiobookLib = new DBHelperAudioBookLib(this);
+        dbQuranLib = new DBHelperQuranLib(this);
+        dbMafatihLib = new DBHelperMafatihLib(this);
+        dbNahjLib = new DBHelperNahjLib(this);
+        dbResaleLib = new DBHelperResaleLib(this);
+    }
+    private void initClearDb(){
+        dbCategory.deleteAllRecord();
+        dbAudiobookLib.deleteAllRecord();
+        dbQuranLib.deleteAllRecord();
+        dbMafatihLib.deleteAllRecord();
+        dbNahjLib.deleteAllRecord();
+        dbResaleLib.deleteAllRecord();
+    }
+
     public class CustomTask extends TimerTask {
-
         public CustomTask() {
-
             init();
-
         }
 
         public void run() {
             try {
-
                 if (isNetworkConnected()) {
-
-
-                    Log.e("TAG--------", ""+downloaditem);
-
                     if (downloaditem == 17) {
                         startActivity(new Intent(SplashActivity.this, LoginActivity.class));
-
                         scheduler.shutdown();
                         finish();
                     }
-                } else {
-                    Toast.makeText(SplashActivity.this, "اتصال به اینترنت برقرار نیست!", Toast.LENGTH_LONG).show();
-                }
-
+                }else Toast.makeText(SplashActivity.this, "اتصال به اینترنت برقرار نیست!", Toast.LENGTH_LONG).show();
             } catch (Exception ex) {
                 init();
                 System.out.println("error running thread " + ex.getMessage());
@@ -97,12 +111,9 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void init() {
-
         downloaditem = 0;
         clearOldData();
-
         initCategory();
-
     }
 
     private void initAll(){
@@ -175,17 +186,14 @@ public class SplashActivity extends AppCompatActivity {
                             for (int i = 0; i < catArray.length(); i++) {
                                 JSONObject object = catArray.getJSONObject(i);
 
-
                                 Categoryy category = new Categoryy();
                                 category.setId(object.getString("id"));
                                 category.setTitle(object.getString("title"));
-
-                                //Log.e("TAG---", category.getId()+".."+category.getTitle());
-                                //adding the hero to herolist
                                 AppController.arrayList_category.add(category);
 
-
+                                dbCategory.insertData(category.getId(), category.getTitle());
                             }
+                            dbCategory.close();
 
                             initAll();
 
@@ -224,12 +232,17 @@ public class SplashActivity extends AppCompatActivity {
                                 Lists library = new Lists();
                                 library.setTitle(object.getString("title"));
                                 library.setSite(true);
-                                library.setFlag(true);
-                                library.setRadio(true);
                                 library.setId_category(object.getString("id_category"));
                                 library.setImg(object.getString("img"));
                                 library.setUrl(object.getString("url"));
 
+                                dbAudiobookLib.insertData(
+                                        library.getId_category(),
+                                        library.getTitle(),
+                                        library.getImg(),
+                                        library.getUrl(),
+                                        library.isSite()
+                                );
                                 AppController.list_li_audio.add(library);
                             }
 
@@ -240,6 +253,13 @@ public class SplashActivity extends AppCompatActivity {
                                 library.setTitle(object.getString("title"));
                                 library.setImg(object.getString("img"));
                                 library.setUrl(object.getString("url"));
+
+                                dbQuranLib.insertData(
+                                        library.getTitle(),
+                                        library.getImg(),
+                                        library.getUrl(),
+                                        library.isSite()
+                                );
 
                                 AppController.list_li_quran.add(library);
                             }
@@ -252,6 +272,13 @@ public class SplashActivity extends AppCompatActivity {
                                 library.setImg(object.getString("img"));
                                 library.setUrl(object.getString("url"));
 
+                                dbMafatihLib.insertData(
+                                        library.getTitle(),
+                                        library.getImg(),
+                                        library.getUrl(),
+                                        library.isSite()
+                                );
+
                                 AppController.list_li_mafatih.add(library);
                             }
 
@@ -263,6 +290,13 @@ public class SplashActivity extends AppCompatActivity {
                                 library.setImg(object.getString("img"));
                                 library.setUrl(object.getString("url"));
 
+                                dbNahjLib.insertData(
+                                        library.getTitle(),
+                                        library.getImg(),
+                                        library.getUrl(),
+                                        library.isSite()
+                                );
+
                                 AppController.list_li_nahj.add(library);
                             }
 
@@ -273,6 +307,13 @@ public class SplashActivity extends AppCompatActivity {
                                 library.setTitle(object.getString("title"));
                                 library.setImg(object.getString("img"));
                                 library.setUrl(object.getString("url"));
+
+                                dbResaleLib.insertData(
+                                        library.getTitle(),
+                                        library.getImg(),
+                                        library.getUrl(),
+                                        library.isSite()
+                                );
 
                                 AppController.list_li_resale.add(library);
                             }
