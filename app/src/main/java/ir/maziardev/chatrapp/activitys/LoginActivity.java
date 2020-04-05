@@ -7,17 +7,34 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ir.maziardev.chatrapp.R;
+import ir.maziardev.chatrapp.classes.SavePref;
 import ir.maziardev.chatrapp.network.AppController;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -44,6 +61,9 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.tv_help)
     TextView tv_help;
 
+    Random rnd = new Random();
+    String random;
+    SavePref save;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +71,29 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
-        card_verfication.setVisibility(View.GONE);
-        btn_verfication.setEnabled(false);
-        edt_phone.requestFocusFromTouch();
+        save = new SavePref(this);
+        String user = save.load(AppController.SAVE_USER, "0");
+        String send_code = save.load(AppController.SAVE_SEND_CODE, "0");
+
+        if (user.equals("1")) {
+            startActivity(new Intent(LoginActivity.this, SplashActivity.class));
+            finish();
+        }else if(send_code.equals("1")){
+            card_phone.setVisibility(View.GONE);
+            tv_help.setVisibility(View.GONE);
+            card_verfication.setVisibility(View.VISIBLE);
+        }else {
+            card_verfication.setVisibility(View.GONE);
+            btn_verfication.setEnabled(false);
+            edt_phone.requestFocusFromTouch();
+
+            random = rnd.nextInt(9) + "" +
+                    rnd.nextInt(9) + "" +
+                    rnd.nextInt(9) + "" +
+                    rnd.nextInt(9);
+            save.save(AppController.SAVE_CODE, random);
+        }
+
 
         PackageInfo pinfo = null;
         try {
@@ -65,13 +105,11 @@ public class LoginActivity extends AppCompatActivity {
         tv_version.append(pinfo.versionName);
 
 
-
         btn_sendcode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                card_phone.setVisibility(View.GONE);
-                tv_help.setVisibility(View.GONE);
-                card_verfication.setVisibility(View.VISIBLE);
+                save.save(AppController.SAVE_USER_phone, edt_phone.getText().toString());
+                sendVerficationCode(edt_phone.getText().toString());
             }
         });
 
@@ -133,18 +171,66 @@ public class LoginActivity extends AppCompatActivity {
         btn_verfication.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, SplashActivity.class));
-                finish();
+                String code = save.load(AppController.SAVE_CODE, "");
+                String token = save.load(AppController.SAVE_USER_token, "");
+                if (code.equals(edt_verfication.getText().toString())) {
+                    save.save(AppController.SAVE_USER, "1");
+                    startActivity(new Intent(LoginActivity.this, SplashActivity.class));
+                    finish();
+                } else {
+                    edt_verfication.setText("");
+                    Toast.makeText(LoginActivity.this, "کد وارد شده صحیح نمی باشد.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
-
-
-        /*startActivity(new Intent(LoginActivity.this, MainActivity.class));
-        finish();*/
 
     }
 
 
+    private void sendVerficationCode(String phone) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, AppController.API_SIGNUP_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        //Toast.makeText(MainActivity.this,response,Toast.LENGTH_LONG).show();
+                        try {
+                            JSONObject object = new JSONObject(response);
+
+                            if (object.getInt("status") == 204) {
+                                Toast.makeText(LoginActivity.this, "این شماره موبایل در سامانه موجود نمی باشد", Toast.LENGTH_SHORT).show();
+
+                            } else if (object.getInt("status") == 200 || object.getInt("status") == 201) {
+                                Toast.makeText(LoginActivity.this, "کد برای شماره تلفن شما ارسال شد", Toast.LENGTH_SHORT).show();
+                                card_phone.setVisibility(View.GONE);
+                                tv_help.setVisibility(View.GONE);
+                                card_verfication.setVisibility(View.VISIBLE);
+
+                                save.save(AppController.SAVE_SEND_CODE, "1");
+                                save.save(AppController.SAVE_USER_id, object.getInt("id_user"));
+                                save.save(AppController.SAVE_USER_token, object.getInt("token"));
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, "Error: " + error.getMessage());
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("phone", phone.substring(1, phone.length()));
+                params.put("verifycode", random);
+                return params;
+            }
+
+        };
+        AppController.getInstance().addToRequestQueue(stringRequest, "sendVerficationCode");
+    }
 
 
     @Override
