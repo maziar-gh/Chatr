@@ -60,6 +60,7 @@ public class PersianCalendarActivity extends AppCompatActivity {
         htmlWebView.setWebViewClient(new CustomWebViewClient());
         WebSettings webSetting = htmlWebView.getSettings();
         webSetting.setJavaScriptEnabled(true);
+        webSetting.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         htmlWebView.loadUrl(AppController.API_AZAN_URL);
 
         final PersianCalendarHandler calendar = persianCalendarView.getCalendar();

@@ -41,8 +41,9 @@ public class LoginActivity extends AppCompatActivity {
     EditText edt_verfication;
     @BindView(R.id.tv_version_login)
     TextView tv_version;
+    @BindView(R.id.tv_help)
+    TextView tv_help;
 
-    private boolean isdownload = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
 
         card_verfication.setVisibility(View.GONE);
         btn_verfication.setEnabled(false);
-
+        edt_phone.requestFocusFromTouch();
 
         PackageInfo pinfo = null;
         try {
@@ -69,6 +70,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 card_phone.setVisibility(View.GONE);
+                tv_help.setVisibility(View.GONE);
                 card_verfication.setVisibility(View.VISIBLE);
             }
         });
@@ -78,6 +80,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 card_phone.setVisibility(View.VISIBLE);
+                tv_help.setVisibility(View.VISIBLE);
                 card_verfication.setVisibility(View.GONE);
                 btn_verfication.setEnabled(false);
                 edt_verfication.setText("");
@@ -130,14 +133,14 @@ public class LoginActivity extends AppCompatActivity {
         btn_verfication.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                startActivity(new Intent(LoginActivity.this, SplashActivity.class));
                 finish();
             }
         });
 
 
-        startActivity(new Intent(LoginActivity.this, MainActivity.class));
-        finish();
+        /*startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        finish();*/
 
     }
 

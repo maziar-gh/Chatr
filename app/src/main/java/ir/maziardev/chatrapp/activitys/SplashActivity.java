@@ -126,7 +126,7 @@ public class SplashActivity extends AppCompatActivity {
         }else {
             Toast.makeText(this, "اتصال به اینترنت برقرار نیست!", Toast.LENGTH_LONG).show();
             getAllDataFromDB();
-            startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+            startActivity(new Intent(SplashActivity.this, MainActivity.class));
             scheduler.shutdown();
             finish();
         }
