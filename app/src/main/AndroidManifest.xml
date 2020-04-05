@@ -11,9 +11,6 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
     <uses-feature
         android:name="android.software.leanback"
         android:required="false" />
@@ -83,10 +80,7 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-
             </intent-filter>
-            <meta-data android:name="cheshmakPush" android:value="openActivityOnPush"/>
-
         </activity>
         <activity
             android:name=".activitys.VideoActivity"
