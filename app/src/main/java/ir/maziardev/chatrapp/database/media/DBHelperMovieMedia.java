@@ -1,4 +1,4 @@
-package ir.maziardev.chatrapp.database.lib;
+package ir.maziardev.chatrapp.database.media;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -10,34 +10,38 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import ir.maziardev.chatrapp.models.Lists;
+import ir.maziardev.chatrapp.models.GridList;
 import ir.maziardev.chatrapp.network.AppController;
 
-public class DBHelperResaleLib extends SQLiteOpenHelper {
+public class DBHelperMovieMedia extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = AppController.DATABASE_NAME;
 
-    public static final String TABLE_NAME = "tbl_resalelib";
+    public static final String TABLE_NAME = "tbl_movie";
     public static final String COLUMN_ID = "id";
+    public static final String COLUMN_ID_CATEGORY = "id_category";
     public static final String COLUMN_TITLE = "title";
     public static final String COLUMN_IMG = "img";
     public static final String COLUMN_URL = "url";
+    public static final String COLUMN_ACTOR = "actor";
     public static final String COLUMN_SITE = "site";
 
     private HashMap hp;
 
-    public DBHelperResaleLib(Context context) {
+    public DBHelperMovieMedia(Context context) {
         super(context, DATABASE_NAME, null, 1);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(
-                "create table " + TABLE_NAME + "(" +
-                        COLUMN_ID + " integer primary key, " +
+                "CREATE TABLE " + TABLE_NAME + "(" +
+                        COLUMN_ID + " integer PRIMARY KEY, " +
+                        COLUMN_ID_CATEGORY + " text, " +
                         COLUMN_TITLE + " text, " +
                         COLUMN_IMG + " text, " +
                         COLUMN_URL + " text ," +
+                        COLUMN_ACTOR + " text ," +
                         COLUMN_SITE + " text " +
                         ")"
         );
@@ -58,12 +62,15 @@ public class DBHelperResaleLib extends SQLiteOpenHelper {
         }
     }
 
-    public boolean insertData(String title, String img, String url, boolean site) {
+    public boolean insertData(String id_category, String title, String img,
+                              String url, String actor, boolean site) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_ID_CATEGORY, id_category);
         contentValues.put(COLUMN_TITLE, title);
         contentValues.put(COLUMN_IMG, img);
         contentValues.put(COLUMN_URL, url);
+        contentValues.put(COLUMN_ACTOR, actor);
         contentValues.put(COLUMN_SITE, (site)? "1" : "0");
         db.insert(TABLE_NAME, null, contentValues);
         return true;
@@ -71,7 +78,7 @@ public class DBHelperResaleLib extends SQLiteOpenHelper {
 
     public Cursor getData(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from " + TABLE_NAME + " where " +
+        Cursor res = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " +
                 COLUMN_ID + "=" + id + "", null);
         return res;
     }
@@ -96,22 +103,25 @@ public class DBHelperResaleLib extends SQLiteOpenHelper {
         );
     }
 
-    public ArrayList<Lists> getAllRows() {
-        ArrayList<Lists> array_list = new ArrayList<>();
+    public ArrayList<GridList> getAllRows() {
+        ArrayList<GridList> array_list = new ArrayList<>();
 
         //hp = new HashMap();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from " + TABLE_NAME + " ", null);
+        Cursor res = db.rawQuery("SELECT * FROM " + TABLE_NAME + " ", null);
         res.moveToFirst();
 
         while (res.isAfterLast() == false) {
-            Lists library = new Lists(
+            GridList gridList = new GridList(
                     res.getString(res.getColumnIndex(COLUMN_TITLE)),
                     res.getString(res.getColumnIndex(COLUMN_IMG)),
                     res.getString(res.getColumnIndex(COLUMN_URL)),
+                    res.getString(res.getColumnIndex(COLUMN_ID_CATEGORY)),
+                    res.getString(res.getColumnIndex(COLUMN_ACTOR)),
                     (res.getString(res.getColumnIndex(COLUMN_SITE)).equals("1"))
             );
-            array_list.add(library);
+            gridList.setSeries(true);
+            array_list.add(gridList);
             res.moveToNext();
         }
         return array_list;

@@ -17,10 +17,10 @@ public class DBHelperCategory extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = AppController.DATABASE_NAME;
 
-    public static final String CONTACTS_TABLE_NAME = "tbl_category";
-    public static final String CONTACTS_COLUMN_ID = "id";
-    public static final String CONTACTS_COLUMN_IDD = "idd";
-    public static final String CONTACTS_COLUMN_TITLE = "title";
+    public static final String TABLE_NAME = "tbl_category";
+    public static final String COLUMN_ID = "id";
+    public static final String COLUMN_IDD = "idd";
+    public static final String COLUMN_TITLE = "title";
 
     private HashMap hp;
 
@@ -31,53 +31,62 @@ public class DBHelperCategory extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(
-                "create table " + CONTACTS_TABLE_NAME + "(" +
-                        CONTACTS_COLUMN_ID + " integer primary key, " +
-                        CONTACTS_COLUMN_IDD + " text, " +
-                        CONTACTS_COLUMN_TITLE + " text" +
+                "create table " + TABLE_NAME + "(" +
+                        COLUMN_ID + " integer primary key, " +
+                        COLUMN_IDD + " text, " +
+                        COLUMN_TITLE + " text" +
                         ")"
         );
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + CONTACTS_TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(db);
+    }
+
+    @Override
+    public void onOpen(SQLiteDatabase db) {
+        try{
+            onCreate(db);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public boolean insertData(String id, String title) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(CONTACTS_COLUMN_IDD, id);
-        contentValues.put(CONTACTS_COLUMN_TITLE, title);
-        db.insert(CONTACTS_TABLE_NAME, null, contentValues);
+        contentValues.put(COLUMN_IDD, id);
+        contentValues.put(COLUMN_TITLE, title);
+        db.insert(TABLE_NAME, null, contentValues);
         return true;
     }
 
     public Cursor getData(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from " + CONTACTS_TABLE_NAME + " where " +
-                CONTACTS_COLUMN_ID + "=" + id + "", null);
+        Cursor res = db.rawQuery("select * from " + TABLE_NAME + " where " +
+                COLUMN_ID + "=" + id + "", null);
         return res;
     }
 
     public int numberOfRows() {
         SQLiteDatabase db = this.getReadableDatabase();
-        int numRows = (int) DatabaseUtils.queryNumEntries(db, CONTACTS_TABLE_NAME);
+        int numRows = (int) DatabaseUtils.queryNumEntries(db, TABLE_NAME);
         return numRows;
     }
 
     public Integer deleteItem(Integer id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(CONTACTS_TABLE_NAME,
-                " " + CONTACTS_COLUMN_ID + " = ? ",
+        return db.delete(TABLE_NAME,
+                " " + COLUMN_ID + " = ? ",
                 new String[]{Integer.toString(id)});
     }
 
     public void deleteAllRecord() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(
-                "delete from " + CONTACTS_TABLE_NAME
+                "delete from " + TABLE_NAME
         );
     }
 
@@ -86,13 +95,13 @@ public class DBHelperCategory extends SQLiteOpenHelper {
 
         //hp = new HashMap();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from " + CONTACTS_TABLE_NAME + " ", null);
+        Cursor res = db.rawQuery("select * from " + TABLE_NAME + " ", null);
         res.moveToFirst();
 
         while (res.isAfterLast() == false) {
             Categoryy item = new Categoryy(
-                    res.getString(res.getColumnIndex(CONTACTS_COLUMN_IDD)),
-                    res.getString(res.getColumnIndex(CONTACTS_COLUMN_TITLE))
+                    res.getString(res.getColumnIndex(COLUMN_IDD)),
+                    res.getString(res.getColumnIndex(COLUMN_TITLE))
             );
             array_list.add(item);
             res.moveToNext();

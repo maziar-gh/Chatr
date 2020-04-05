@@ -10,6 +10,19 @@ public class WeatherCity {
     private String lat;
     private String lng;
 
+    public WeatherCity() {
+    }
+
+    public WeatherCity(String province, String stationEn, String stationFa, String stationNumber, String iCAO, String lat, String lng) {
+        this.province = province;
+        this.stationEn = stationEn;
+        this.stationFa = stationFa;
+        this.stationNumber = stationNumber;
+        this.iCAO = iCAO;
+        this.lat = lat;
+        this.lng = lng;
+    }
+
     public String getProvince() {
         return province;
     }

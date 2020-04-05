@@ -120,16 +120,7 @@ public class AppController extends Application {
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );
-
-
     }
-
-
-
-
-
-
-
 
 
     @Override

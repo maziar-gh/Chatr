@@ -18,6 +18,18 @@ public class GridList {
     private boolean movie;
     private boolean series;
 
+    public GridList() {
+    }
+
+    public GridList(String title, String img, String url, String id_category, String actor, boolean site) {
+        this.title = title;
+        this.img = img;
+        this.url = url;
+        this.category = id_category;
+        this.actor = actor;
+        this.site = site;
+    }
+
     public boolean isSite() {
         return site;
     }

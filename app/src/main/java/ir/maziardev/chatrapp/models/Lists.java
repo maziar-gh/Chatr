@@ -13,6 +13,7 @@ public class Lists {
     private String url;
     private String id_category;
     private String action;
+    private String description;
     private boolean flag;
     private boolean image;
     private boolean site;
@@ -25,6 +26,11 @@ public class Lists {
     private boolean sub_page2;
 
     public Lists() {
+    }
+
+    public Lists(String title, String url) {
+        this.title = title;
+        this.url = url;
     }
 
     public Lists(String title, String img, String url, String id_category, boolean site) {
@@ -40,6 +46,13 @@ public class Lists {
         this.img = img;
         this.url = url;
         this.site = site;
+    }
+
+    public Lists(String title, String description, String img, String action) {
+        this.title = title;
+        this.description = description;
+        this.img = img;
+        this.action = action;
     }
 
     public String getAction() {

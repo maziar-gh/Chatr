@@ -14,6 +14,21 @@ public class Channell {
     private String location;
     private String phone;
 
+    public Channell() {
+    }
+
+    public Channell(String title, String img, String music, String movie,
+                    String survey, String location, String phone, ChannelType type) {
+        this.title = title;
+        this.type = type;
+        this.img = img;
+        this.music = music;
+        this.movie = movie;
+        this.survey = survey;
+        this.location = location;
+        this.phone = phone;
+    }
+
     public String getId() {
         return id;
     }

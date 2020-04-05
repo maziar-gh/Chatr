@@ -49,6 +49,15 @@ public class DBHelperNahjLib extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    @Override
+    public void onOpen(SQLiteDatabase db) {
+        try{
+            onCreate(db);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
     public boolean insertData(String title, String img, String url, boolean site) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();

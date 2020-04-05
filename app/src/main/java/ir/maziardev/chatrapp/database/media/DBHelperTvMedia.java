@@ -1,4 +1,4 @@
-package ir.maziardev.chatrapp.database.lib;
+package ir.maziardev.chatrapp.database.media;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -13,12 +13,13 @@ import java.util.HashMap;
 import ir.maziardev.chatrapp.models.Lists;
 import ir.maziardev.chatrapp.network.AppController;
 
-public class DBHelperResaleLib extends SQLiteOpenHelper {
+public class DBHelperTvMedia extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = AppController.DATABASE_NAME;
 
-    public static final String TABLE_NAME = "tbl_resalelib";
+    public static final String TABLE_NAME = "tbl_tv";
     public static final String COLUMN_ID = "id";
+    public static final String COLUMN_ID_CATEGORY = "id_category";
     public static final String COLUMN_TITLE = "title";
     public static final String COLUMN_IMG = "img";
     public static final String COLUMN_URL = "url";
@@ -26,15 +27,16 @@ public class DBHelperResaleLib extends SQLiteOpenHelper {
 
     private HashMap hp;
 
-    public DBHelperResaleLib(Context context) {
+    public DBHelperTvMedia(Context context) {
         super(context, DATABASE_NAME, null, 1);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(
-                "create table " + TABLE_NAME + "(" +
-                        COLUMN_ID + " integer primary key, " +
+                "CREATE TABLE " + TABLE_NAME + "(" +
+                        COLUMN_ID + " integer PRIMARY KEY, " +
+                        COLUMN_ID_CATEGORY + " text, " +
                         COLUMN_TITLE + " text, " +
                         COLUMN_IMG + " text, " +
                         COLUMN_URL + " text ," +
@@ -58,9 +60,10 @@ public class DBHelperResaleLib extends SQLiteOpenHelper {
         }
     }
 
-    public boolean insertData(String title, String img, String url, boolean site) {
+    public boolean insertData(String id_category, String title, String img, String url, boolean site) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_ID_CATEGORY, id_category);
         contentValues.put(COLUMN_TITLE, title);
         contentValues.put(COLUMN_IMG, img);
         contentValues.put(COLUMN_URL, url);
@@ -71,7 +74,7 @@ public class DBHelperResaleLib extends SQLiteOpenHelper {
 
     public Cursor getData(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from " + TABLE_NAME + " where " +
+        Cursor res = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " +
                 COLUMN_ID + "=" + id + "", null);
         return res;
     }
@@ -101,7 +104,7 @@ public class DBHelperResaleLib extends SQLiteOpenHelper {
 
         //hp = new HashMap();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from " + TABLE_NAME + " ", null);
+        Cursor res = db.rawQuery("SELECT * FROM " + TABLE_NAME + " ", null);
         res.moveToFirst();
 
         while (res.isAfterLast() == false) {
@@ -109,6 +112,7 @@ public class DBHelperResaleLib extends SQLiteOpenHelper {
                     res.getString(res.getColumnIndex(COLUMN_TITLE)),
                     res.getString(res.getColumnIndex(COLUMN_IMG)),
                     res.getString(res.getColumnIndex(COLUMN_URL)),
+                    res.getString(res.getColumnIndex(COLUMN_ID_CATEGORY)),
                     (res.getString(res.getColumnIndex(COLUMN_SITE)).equals("1"))
             );
             array_list.add(library);

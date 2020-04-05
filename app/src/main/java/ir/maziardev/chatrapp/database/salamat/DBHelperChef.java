@@ -1,4 +1,4 @@
-package ir.maziardev.chatrapp.database.lib;
+package ir.maziardev.chatrapp.database.salamat;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -11,34 +11,35 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import ir.maziardev.chatrapp.models.Lists;
+import ir.maziardev.chatrapp.models.Slider;
 import ir.maziardev.chatrapp.network.AppController;
 
-public class DBHelperResaleLib extends SQLiteOpenHelper {
+public class DBHelperChef extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = AppController.DATABASE_NAME;
 
-    public static final String TABLE_NAME = "tbl_resalelib";
+    public static final String TABLE_NAME = "tbl_chef";
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_TITLE = "title";
     public static final String COLUMN_IMG = "img";
-    public static final String COLUMN_URL = "url";
-    public static final String COLUMN_SITE = "site";
+    public static final String COLUMN_ACTION = "act";
+    public static final String COLUMN_DESCRIPTION = "descr";
 
     private HashMap hp;
 
-    public DBHelperResaleLib(Context context) {
+    public DBHelperChef(Context context) {
         super(context, DATABASE_NAME, null, 1);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(
-                "create table " + TABLE_NAME + "(" +
-                        COLUMN_ID + " integer primary key, " +
+                "CREATE TABLE " + TABLE_NAME + "(" +
+                        COLUMN_ID + " integer PRIMARY KEY, " +
                         COLUMN_TITLE + " text, " +
+                        COLUMN_DESCRIPTION + " text, " +
                         COLUMN_IMG + " text, " +
-                        COLUMN_URL + " text ," +
-                        COLUMN_SITE + " text " +
+                        COLUMN_ACTION + " text" +
                         ")"
         );
     }
@@ -58,20 +59,20 @@ public class DBHelperResaleLib extends SQLiteOpenHelper {
         }
     }
 
-    public boolean insertData(String title, String img, String url, boolean site) {
+    public boolean insertData(String title, String description, String img, String action) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_TITLE, title);
+        contentValues.put(COLUMN_DESCRIPTION, description);
         contentValues.put(COLUMN_IMG, img);
-        contentValues.put(COLUMN_URL, url);
-        contentValues.put(COLUMN_SITE, (site)? "1" : "0");
+        contentValues.put(COLUMN_ACTION, action);
         db.insert(TABLE_NAME, null, contentValues);
         return true;
     }
 
     public Cursor getData(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from " + TABLE_NAME + " where " +
+        Cursor res = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " +
                 COLUMN_ID + "=" + id + "", null);
         return res;
     }
@@ -92,7 +93,7 @@ public class DBHelperResaleLib extends SQLiteOpenHelper {
     public void deleteAllRecord() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(
-                "delete from " + TABLE_NAME
+                "DELETE FROM " + TABLE_NAME
         );
     }
 
@@ -101,17 +102,17 @@ public class DBHelperResaleLib extends SQLiteOpenHelper {
 
         //hp = new HashMap();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from " + TABLE_NAME + " ", null);
+        Cursor res = db.rawQuery("SELECT * FROM " + TABLE_NAME + " ", null);
         res.moveToFirst();
 
         while (res.isAfterLast() == false) {
-            Lists library = new Lists(
+            Lists lists = new Lists(
                     res.getString(res.getColumnIndex(COLUMN_TITLE)),
+                    res.getString(res.getColumnIndex(COLUMN_DESCRIPTION)),
                     res.getString(res.getColumnIndex(COLUMN_IMG)),
-                    res.getString(res.getColumnIndex(COLUMN_URL)),
-                    (res.getString(res.getColumnIndex(COLUMN_SITE)).equals("1"))
+                    res.getString(res.getColumnIndex(COLUMN_ACTION))
             );
-            array_list.add(library);
+            array_list.add(lists);
             res.moveToNext();
         }
         return array_list;

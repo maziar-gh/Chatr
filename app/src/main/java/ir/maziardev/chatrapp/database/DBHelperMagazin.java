@@ -1,4 +1,4 @@
-package ir.maziardev.chatrapp.database.lib;
+package ir.maziardev.chatrapp.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -11,22 +11,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import ir.maziardev.chatrapp.models.Lists;
+import ir.maziardev.chatrapp.models.Magazin;
 import ir.maziardev.chatrapp.network.AppController;
 
-public class DBHelperResaleLib extends SQLiteOpenHelper {
+public class DBHelperMagazin extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = AppController.DATABASE_NAME;
 
-    public static final String TABLE_NAME = "tbl_resalelib";
+    public static final String TABLE_NAME = "tbl_magazin";
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_TITLE = "title";
-    public static final String COLUMN_IMG = "img";
     public static final String COLUMN_URL = "url";
-    public static final String COLUMN_SITE = "site";
 
     private HashMap hp;
 
-    public DBHelperResaleLib(Context context) {
+    public DBHelperMagazin(Context context) {
         super(context, DATABASE_NAME, null, 1);
     }
 
@@ -36,9 +35,7 @@ public class DBHelperResaleLib extends SQLiteOpenHelper {
                 "create table " + TABLE_NAME + "(" +
                         COLUMN_ID + " integer primary key, " +
                         COLUMN_TITLE + " text, " +
-                        COLUMN_IMG + " text, " +
-                        COLUMN_URL + " text ," +
-                        COLUMN_SITE + " text " +
+                        COLUMN_URL + " text " +
                         ")"
         );
     }
@@ -58,13 +55,11 @@ public class DBHelperResaleLib extends SQLiteOpenHelper {
         }
     }
 
-    public boolean insertData(String title, String img, String url, boolean site) {
+    public boolean insertData(String title, String url) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_TITLE, title);
-        contentValues.put(COLUMN_IMG, img);
         contentValues.put(COLUMN_URL, url);
-        contentValues.put(COLUMN_SITE, (site)? "1" : "0");
         db.insert(TABLE_NAME, null, contentValues);
         return true;
     }
@@ -96,8 +91,8 @@ public class DBHelperResaleLib extends SQLiteOpenHelper {
         );
     }
 
-    public ArrayList<Lists> getAllRows() {
-        ArrayList<Lists> array_list = new ArrayList<>();
+    public ArrayList<Magazin> getAllRows() {
+        ArrayList<Magazin> array_list = new ArrayList<>();
 
         //hp = new HashMap();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -105,13 +100,11 @@ public class DBHelperResaleLib extends SQLiteOpenHelper {
         res.moveToFirst();
 
         while (res.isAfterLast() == false) {
-            Lists library = new Lists(
+            Magazin magazin = new Magazin(
                     res.getString(res.getColumnIndex(COLUMN_TITLE)),
-                    res.getString(res.getColumnIndex(COLUMN_IMG)),
-                    res.getString(res.getColumnIndex(COLUMN_URL)),
-                    (res.getString(res.getColumnIndex(COLUMN_SITE)).equals("1"))
+                    res.getString(res.getColumnIndex(COLUMN_URL))
             );
-            array_list.add(library);
+            array_list.add(magazin);
             res.moveToNext();
         }
         return array_list;

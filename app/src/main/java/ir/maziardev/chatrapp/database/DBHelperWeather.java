@@ -1,4 +1,4 @@
-package ir.maziardev.chatrapp.database.lib;
+package ir.maziardev.chatrapp.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -10,26 +10,27 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import ir.maziardev.chatrapp.models.Categoryy;
-import ir.maziardev.chatrapp.models.Lists;
+import ir.maziardev.chatrapp.models.Slider;
+import ir.maziardev.chatrapp.models.WeatherCity;
 import ir.maziardev.chatrapp.network.AppController;
 
-public class DBHelperAudioBookLib extends SQLiteOpenHelper {
+public class DBHelperWeather extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = AppController.DATABASE_NAME;
 
-    public static final String TABLE_NAME = "tbl_audiobooklib";
+    public static final String TABLE_NAME = "tbl_weather";
     public static final String COLUMN_ID = "id";
-    public static final String COLUMN_ID_CATEGORY = "id_category";
-    public static final String COLUMN_TITLE = "title";
-    public static final String COLUMN_IMG = "img";
-    public static final String COLUMN_URL = "url";
-    public static final String COLUMN_SITE = "site";
+    public static final String COLUMN_PROVINCE = "province";
+    public static final String COLUMN_STATIONEN = "stationen";
+    public static final String COLUMN_STATIONFA = "stationfa";
+    public static final String COLUMN_STATIONEN_NUMBER = "stationnumber";
+    public static final String COLUMN_ICAO = "icao";
+    public static final String COLUMN_LAT = "lat";
+    public static final String COLUMN_LNG = "lng";
 
     private HashMap hp;
 
-
-    public DBHelperAudioBookLib(Context context) {
+    public DBHelperWeather(Context context) {
         super(context, DATABASE_NAME, null, 1);
     }
 
@@ -38,11 +39,13 @@ public class DBHelperAudioBookLib extends SQLiteOpenHelper {
         db.execSQL(
                 "CREATE TABLE " + TABLE_NAME + "(" +
                         COLUMN_ID + " integer PRIMARY KEY, " +
-                        COLUMN_ID_CATEGORY + " text, " +
-                        COLUMN_TITLE + " text, " +
-                        COLUMN_IMG + " text, " +
-                        COLUMN_URL + " text ," +
-                        COLUMN_SITE + " text " +
+                        COLUMN_PROVINCE + " text, " +
+                        COLUMN_STATIONEN + " text, " +
+                        COLUMN_STATIONFA + " text, " +
+                        COLUMN_STATIONEN_NUMBER + " text, " +
+                        COLUMN_ICAO + " text, " +
+                        COLUMN_LAT + " text, " +
+                        COLUMN_LNG + " text" +
                         ")"
         );
     }
@@ -62,14 +65,17 @@ public class DBHelperAudioBookLib extends SQLiteOpenHelper {
         }
     }
 
-    public boolean insertData(String id_category, String title, String img, String url, boolean site) {
+    public boolean insertData(String province, String station_en, String station_fa,
+                              String station_number, String icao, String lat, String lng) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COLUMN_ID_CATEGORY, id_category);
-        contentValues.put(COLUMN_TITLE, title);
-        contentValues.put(COLUMN_IMG, img);
-        contentValues.put(COLUMN_URL, url);
-        contentValues.put(COLUMN_SITE, (site)? "1" : "0");
+        contentValues.put(COLUMN_PROVINCE, province);
+        contentValues.put(COLUMN_STATIONEN, station_en);
+        contentValues.put(COLUMN_STATIONFA, station_fa);
+        contentValues.put(COLUMN_STATIONEN_NUMBER, station_number);
+        contentValues.put(COLUMN_ICAO, icao);
+        contentValues.put(COLUMN_LAT, lat);
+        contentValues.put(COLUMN_LNG, lng);
         db.insert(TABLE_NAME, null, contentValues);
         return true;
     }
@@ -97,12 +103,12 @@ public class DBHelperAudioBookLib extends SQLiteOpenHelper {
     public void deleteAllRecord() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(
-                "delete from " + TABLE_NAME
+                "DELETE FROM " + TABLE_NAME
         );
     }
 
-    public ArrayList<Lists> getAllRows() {
-        ArrayList<Lists> array_list = new ArrayList<>();
+    public ArrayList<WeatherCity> getAllRows() {
+        ArrayList<WeatherCity> array_list = new ArrayList<>();
 
         //hp = new HashMap();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -110,14 +116,16 @@ public class DBHelperAudioBookLib extends SQLiteOpenHelper {
         res.moveToFirst();
 
         while (res.isAfterLast() == false) {
-            Lists library = new Lists(
-                    res.getString(res.getColumnIndex(COLUMN_TITLE)),
-                    res.getString(res.getColumnIndex(COLUMN_IMG)),
-                    res.getString(res.getColumnIndex(COLUMN_URL)),
-                    res.getString(res.getColumnIndex(COLUMN_ID_CATEGORY)),
-                    (res.getString(res.getColumnIndex(COLUMN_SITE)).equals("1"))
+            WeatherCity weatherCity = new WeatherCity(
+                    res.getString(res.getColumnIndex(COLUMN_PROVINCE)),
+                    res.getString(res.getColumnIndex(COLUMN_STATIONEN)),
+                    res.getString(res.getColumnIndex(COLUMN_STATIONFA)),
+                    res.getString(res.getColumnIndex(COLUMN_STATIONEN_NUMBER)),
+                    res.getString(res.getColumnIndex(COLUMN_ICAO)),
+                    res.getString(res.getColumnIndex(COLUMN_LAT)),
+                    res.getString(res.getColumnIndex(COLUMN_LNG))
             );
-            array_list.add(library);
+            array_list.add(weatherCity);
             res.moveToNext();
         }
         return array_list;

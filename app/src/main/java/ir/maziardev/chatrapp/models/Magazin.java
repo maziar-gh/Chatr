@@ -7,6 +7,14 @@ public class Magazin {
     private String title;
     private String url;
 
+    public Magazin() {
+    }
+
+    public Magazin(String title, String url) {
+        this.title = title;
+        this.url = url;
+    }
+
     public String getId() {
         return id;
     }

@@ -8,6 +8,16 @@ public class Slider {
     private String img;
     private String action;
 
+    public Slider() {
+    }
+
+    public Slider(String title, String description, String img, String action) {
+        this.title = title;
+        this.description = description;
+        this.img = img;
+        this.action = action;
+    }
+
     public String getTitle() {
         return title;
     }
