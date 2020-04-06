@@ -256,7 +256,7 @@ public class SplashActivity extends AppCompatActivity {
             try {
                 if (isNetworkConnected()) {
                     if (downloaditem == 17) {
-                        startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                        startActivity(new Intent(SplashActivity.this, MainActivity.class));
                         scheduler.shutdown();
                         finish();
                     }

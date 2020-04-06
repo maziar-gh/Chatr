@@ -31,6 +31,7 @@ import ir.maziardev.chatrapp.models.Update;
 import ir.maziardev.chatrapp.models.WeatherCity;
 import ir.maziardev.chatrapp.models.WeatherItem;
 import ir.mirrajabi.persiancalendar.core.models.PersianDate;
+import me.cheshmak.android.sdk.core.Cheshmak;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class AppController extends Application {
@@ -38,6 +39,13 @@ public class AppController extends Application {
     public static final String TAG = AppController.class.getSimpleName();
 
     public static String APP_VERSION_CODE = "-1";
+
+    public static String SAVE_USER = "SAVE_USER";
+    public static String SAVE_SEND_CODE = "SAVE_SEND_CODE";
+    public static String SAVE_CODE = "SAVE_CODE";
+    public static String SAVE_USER_phone = "SAVE_USER_phone";
+    public static String SAVE_USER_id = "SAVE_USER_id";
+    public static String SAVE_USER_token = "SAVE_USER_token";
 
     public static String DATABASE_NAME = "chatrdb.db";
 
@@ -59,6 +67,7 @@ public class AppController extends Application {
     public static final String API_GAMES_URL = API_BASE_URL + "games";
     public static final String API_SALAMAT_URL = API_BASE_URL + "salamat";
     public static final String API_NEWS_URL = API_BASE_URL + "news";
+    public static final String API_SIGNUP_URL = API_BASE_URL + "signup";
 
     public static ArrayList<Slider> arrayList_slider = new ArrayList<>();
     public static ArrayList<Channell> arrayList_channel = new ArrayList<>();
@@ -114,6 +123,9 @@ public class AppController extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
+
+        Cheshmak.with(this);
+        Cheshmak.initTracker("XmuvSnFEbUhc1GVn2kxpJg==");
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/iransans.ttf")
