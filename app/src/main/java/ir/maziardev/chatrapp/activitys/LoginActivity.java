@@ -1,6 +1,7 @@
 package ir.maziardev.chatrapp.activitys;
 
 import android.Manifest;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -178,7 +179,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String code = save.load(AppController.SAVE_CODE, "");
-                String token = save.load(AppController.SAVE_USER_token, "");
                 if (code.equals(edt_verfication.getText().toString())) {
                     save.save(AppController.SAVE_USER, "1");
                     startActivity(new Intent(LoginActivity.this, SplashActivity.class));
@@ -244,8 +244,9 @@ public class LoginActivity extends AppCompatActivity {
                                 card_verfication.setVisibility(View.VISIBLE);
 
                                 save.save(AppController.SAVE_SEND_CODE, "1");
-                                save.save(AppController.SAVE_USER_id, object.getInt("id_user"));
-                                save.save(AppController.SAVE_USER_token, object.getInt("token"));
+                                save.save(AppController.SAVE_USER_id, object.getString("id_user"));
+                                save.save(AppController.SAVE_USER_token, object.getString("token"));
+                                AppController.APP_TOKEN = object.getString("token");
                             }
                         } catch (Exception e) {
                             e.printStackTrace();

@@ -40,12 +40,17 @@ public class AppController extends Application {
 
     public static String APP_VERSION_CODE = "-1";
 
+    public static String APP_TOKEN = "APP_TOKEN";
+
     public static String SAVE_USER = "SAVE_USER";
     public static String SAVE_SEND_CODE = "SAVE_SEND_CODE";
     public static String SAVE_CODE = "SAVE_CODE";
     public static String SAVE_USER_phone = "SAVE_USER_phone";
     public static String SAVE_USER_id = "SAVE_USER_id";
     public static String SAVE_USER_token = "SAVE_USER_token";
+    public static String SAVE_USER_name = "SAVE_USER_name";
+    public static String SAVE_USER_dgree = "SAVE_USER_dgree";
+    public static String SAVE_USER_pcode = "SAVE_USER_pcode";
 
     public static String DATABASE_NAME = "chatrdb.db";
 
@@ -54,20 +59,22 @@ public class AppController extends Application {
 
     public static final String API_AZAN_URL = "http://chatr.anzalepoxy.ir/azan/index.htm";
     public static final String API_EST_URL = "http://chatr.anzalepoxy.ir/estekhare/index.php";
+    public static final String API_SUPPORT_URL = "http://chatr.anzalepoxy.ir/chat/spachat.php";
 
     public static final String API_BASE_URL = "http://chatr.anzalepoxy.ir/chatr/app/index.php/api/";
-    public static final String API_UPDATE_URL = API_BASE_URL + "update";
-    public static final String API_SLIDER_URL = API_BASE_URL + "slider";
-    public static final String API_CHANNEL_URL = API_BASE_URL + "channel";
-    public static final String API_MEDIA_URL = API_BASE_URL + "media";
-    public static final String API_CATEGORY_URL = API_BASE_URL + "category";
-    public static final String API_LIBRARY_URL = API_BASE_URL + "library";
-    public static final String API_SERVICES_URL = API_BASE_URL + "services";
-    public static final String API_MAGAZIN_URL = API_BASE_URL + "magazin";
-    public static final String API_GAMES_URL = API_BASE_URL + "games";
-    public static final String API_SALAMAT_URL = API_BASE_URL + "salamat";
-    public static final String API_NEWS_URL = API_BASE_URL + "news";
-    public static final String API_SIGNUP_URL = API_BASE_URL + "signup";
+    public static final String API_UPDATE_URL = API_BASE_URL + "update/detail/";
+    public static final String API_SLIDER_URL = API_BASE_URL + "slider/detail/";
+    public static final String API_CHANNEL_URL = API_BASE_URL + "channel/detail/";
+    public static final String API_MEDIA_URL = API_BASE_URL + "media/";
+    public static final String API_CATEGORY_URL = API_BASE_URL + "category/detail/";
+    public static final String API_LIBRARY_URL = API_BASE_URL + "library/detail/";
+    public static final String API_SERVICES_URL = API_BASE_URL + "services/detail/";
+    public static final String API_MAGAZIN_URL = API_BASE_URL + "magazin/detail/";
+    public static final String API_GAMES_URL = API_BASE_URL + "games/detail/";
+    public static final String API_SALAMAT_URL = API_BASE_URL + "salamat/detail/";
+    public static final String API_NEWS_URL = API_BASE_URL + "news/detail/";
+    public static final String API_SIGNUP_URL = API_BASE_URL + "signup/";
+    public static final String API_USER_URL = API_BASE_URL + "user/detail/";
 
     public static ArrayList<Slider> arrayList_slider = new ArrayList<>();
     public static ArrayList<Channell> arrayList_channel = new ArrayList<>();
@@ -191,7 +198,6 @@ public class AppController extends Application {
             mRequestQueue.cancelAll(tag);
         }
     }
-
 
 
 }

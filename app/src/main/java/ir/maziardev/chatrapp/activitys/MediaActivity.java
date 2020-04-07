@@ -3,7 +3,6 @@ package ir.maziardev.chatrapp.activitys;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -30,6 +28,7 @@ import ir.maziardev.chatrapp.network.AppController;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MediaActivity extends AppCompatActivity {
+
 
     @BindView(R.id.recycler_tv_media)
     RecyclerView recycler_tv;
@@ -75,21 +74,6 @@ public class MediaActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         init();
-
-
-        /*fab_search = findViewById(R.id.floating_action_button);
-
-
-        // click event for show-dismiss bottom sheet
-        fab_search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                View dialogView = getLayoutInflater().inflate(R.layout.bottom_sheet, null);
-                BottomSheetDialog dialog = new BottomSheetDialog(MediaActivity.this);
-                dialog.setContentView(dialogView);
-                dialog.show();
-            }
-        });*/
 
     }
 

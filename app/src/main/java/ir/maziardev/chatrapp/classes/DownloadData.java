@@ -1,16 +1,9 @@
-package ir.maziardev.chatrapp.activitys;
+package ir.maziardev.chatrapp.classes;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -24,17 +17,18 @@ import org.json.JSONObject;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.TimerTask;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import ir.maziardev.chatrapp.R;
-import ir.maziardev.chatrapp.classes.SavePref;
+import ir.maziardev.chatrapp.activitys.MainActivity;
+import ir.maziardev.chatrapp.activitys.SplashActivity;
+import ir.maziardev.chatrapp.database.DBHelperCategory;
 import ir.maziardev.chatrapp.database.DBHelperChannel;
 import ir.maziardev.chatrapp.database.DBHelperGames;
 import ir.maziardev.chatrapp.database.DBHelperMagazin;
@@ -42,7 +36,6 @@ import ir.maziardev.chatrapp.database.DBHelperService;
 import ir.maziardev.chatrapp.database.DBHelperSlider;
 import ir.maziardev.chatrapp.database.DBHelperWeather;
 import ir.maziardev.chatrapp.database.lib.DBHelperAudioBookLib;
-import ir.maziardev.chatrapp.database.DBHelperCategory;
 import ir.maziardev.chatrapp.database.lib.DBHelperMafatihLib;
 import ir.maziardev.chatrapp.database.lib.DBHelperNahjLib;
 import ir.maziardev.chatrapp.database.lib.DBHelperQuranLib;
@@ -75,13 +68,12 @@ import ir.maziardev.chatrapp.models.Magazin;
 import ir.maziardev.chatrapp.models.Slider;
 import ir.maziardev.chatrapp.models.WeatherCity;
 import ir.maziardev.chatrapp.network.AppController;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class SplashActivity extends AppCompatActivity {
+public class DownloadData {
 
-    private static final String TAG = SplashActivity.class.getSimpleName();
-    private byte downloaditem = 0;
-    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    private static final String TAG = DownloadData.class.getSimpleName();
+    private static byte downloaditem = 0;
+    private Context context;
     private SavePref save;
 
     private DBHelperCategory dbCategory;
@@ -115,217 +107,86 @@ public class SplashActivity extends AppCompatActivity {
     private DBHelperJamjam dbHelperJamjam;
     private DBHelperTasnim dbHelperTasnim;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
-        save = new SavePref(this);
-
-        AppController.APP_TOKEN = save.load(AppController.SAVE_USER_token, "0");
-
-        Log.e("tag--------", AppController.APP_TOKEN);
-
-        isStoragePermissionGranted();
+    public DownloadData(Context context) {
+        this.context = context;
+        this.save = new SavePref(context);
         initDb();
+
         if (isNetworkConnected()) {
             initClearDb();
-            scheduler.scheduleAtFixedRate(new CustomTask(), 1000, 1000, TimeUnit.MILLISECONDS);
-        } else {
-            Toast.makeText(this, "اتصال به اینترنت برقرار نیست!", Toast.LENGTH_LONG).show();
+            init();
+        }else {
+            Toast.makeText(this.context, "اتصال به اینترنت برقرار نیست!", Toast.LENGTH_LONG).show();
+            clearOldData();
             getAllDataFromDB();
-            startActivity(new Intent(SplashActivity.this, MainActivity.class));
-            scheduler.shutdown();
-            finish();
-        }
-
-    }
-
-    private void initDb() {
-        dbCategory = new DBHelperCategory(this);
-        dbAudiobookLib = new DBHelperAudioBookLib(this);
-        dbQuranLib = new DBHelperQuranLib(this);
-        dbMafatihLib = new DBHelperMafatihLib(this);
-        dbNahjLib = new DBHelperNahjLib(this);
-        dbResaleLib = new DBHelperResaleLib(this);
-        dbService = new DBHelperService(this);
-        dbGames = new DBHelperGames(this);
-        dbMagazin = new DBHelperMagazin(this);
-        dbSlider = new DBHelperSlider(this);
-        dbHelperChannel = new DBHelperChannel(this);
-        dbHelperWeather = new DBHelperWeather(this);
-        dbHelperTvMedia = new DBHelperTvMedia(this);
-        dbHelperRadioMedia = new DBHelperRadioMedia(this);
-        dbHelperMusicMedia = new DBHelperMusicMedia(this);
-        dbHelperMovieMedia = new DBHelperMovieMedia(this);
-        dbHelperSeriesMedia = new DBHelperSeriesMedia(this);
-        dbHelperCartonMedia = new DBHelperCartonMedia(this);
-        dbHelperQuranMedia = new DBHelperQuranMedia(this);
-        dbHelperNoheMedia = new DBHelperNoheMedia(this);
-        dbHelperChef = new DBHelperChef(this);
-        dbHelperEmploy = new DBHelperEmploy(this);
-        dbHelperSport = new DBHelperSport(this);
-        dbHelperFood = new DBHelperFood(this);
-        dbHelperPlant = new DBHelperPlant(this);
-        dbHelperPray = new DBHelperPray(this);
-        dbHelperPsychology = new DBHelperPsychology(this);
-        dbHelperIsna = new DBHelperIsna(this);
-        dbHelperJamjam = new DBHelperJamjam(this);
-        dbHelperTasnim = new DBHelperTasnim(this);
-    }
-
-    private void initClearDb() {
-        try {
-            dbCategory.deleteAllRecord();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            dbAudiobookLib.deleteAllRecord();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            dbQuranLib.deleteAllRecord();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            dbMafatihLib.deleteAllRecord();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            dbNahjLib.deleteAllRecord();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            dbResaleLib.deleteAllRecord();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            dbService.deleteAllRecord();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            dbGames.deleteAllRecord();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            dbMagazin.deleteAllRecord();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            dbSlider.deleteAllRecord();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            dbHelperChannel.deleteAllRecord();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            dbHelperWeather.deleteAllRecord();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            dbHelperTvMedia.deleteAllRecord();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            dbHelperRadioMedia.deleteAllRecord();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            dbHelperMusicMedia.deleteAllRecord();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            dbHelperMovieMedia.deleteAllRecord();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            dbHelperSeriesMedia.deleteAllRecord();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            dbHelperCartonMedia.deleteAllRecord();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            dbHelperQuranMedia.deleteAllRecord();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            dbHelperNoheMedia.deleteAllRecord();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            dbHelperChef.deleteAllRecord();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            dbHelperEmploy.deleteAllRecord();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            dbHelperSport.deleteAllRecord();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            dbHelperFood.deleteAllRecord();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            dbHelperPlant.deleteAllRecord();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            dbHelperPray.deleteAllRecord();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            dbHelperPsychology.deleteAllRecord();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            dbHelperIsna.deleteAllRecord();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            dbHelperJamjam.deleteAllRecord();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            dbHelperTasnim.deleteAllRecord();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
+
+    private void initDb(){
+        dbCategory = new DBHelperCategory(this.context);
+        dbAudiobookLib = new DBHelperAudioBookLib(this.context);
+        dbQuranLib = new DBHelperQuranLib(this.context);
+        dbMafatihLib = new DBHelperMafatihLib(this.context);
+        dbNahjLib = new DBHelperNahjLib(this.context);
+        dbResaleLib = new DBHelperResaleLib(this.context);
+        dbService = new DBHelperService(this.context);
+        dbGames = new DBHelperGames(this.context);
+        dbMagazin = new DBHelperMagazin(this.context);
+        dbSlider = new DBHelperSlider(this.context);
+        dbHelperChannel = new DBHelperChannel(this.context);
+        dbHelperWeather = new DBHelperWeather(this.context);
+        dbHelperTvMedia = new DBHelperTvMedia(this.context);
+        dbHelperRadioMedia = new DBHelperRadioMedia(this.context);
+        dbHelperMusicMedia = new DBHelperMusicMedia(this.context);
+        dbHelperMovieMedia = new DBHelperMovieMedia(this.context);
+        dbHelperSeriesMedia = new DBHelperSeriesMedia(this.context);
+        dbHelperCartonMedia = new DBHelperCartonMedia(this.context);
+        dbHelperQuranMedia = new DBHelperQuranMedia(this.context);
+        dbHelperNoheMedia = new DBHelperNoheMedia(this.context);
+        dbHelperChef = new DBHelperChef(this.context);
+        dbHelperEmploy = new DBHelperEmploy(this.context);
+        dbHelperSport = new DBHelperSport(this.context);
+        dbHelperFood = new DBHelperFood(this.context);
+        dbHelperPlant = new DBHelperPlant(this.context);
+        dbHelperPray = new DBHelperPray(this.context);
+        dbHelperPsychology = new DBHelperPsychology(this.context);
+        dbHelperIsna = new DBHelperIsna(this.context);
+        dbHelperJamjam = new DBHelperJamjam(this.context);
+        dbHelperTasnim = new DBHelperTasnim(this.context);
+    }
+    private void initClearDb(){
+        try { dbCategory.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
+        try { dbAudiobookLib.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
+        try { dbQuranLib.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
+        try { dbMafatihLib.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
+        try { dbNahjLib.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
+        try { dbResaleLib.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
+        try { dbService.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
+        try { dbGames.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
+        try { dbMagazin.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
+        try { dbSlider.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
+        try { dbHelperChannel.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
+        try { dbHelperWeather.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
+        try { dbHelperTvMedia.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
+        try { dbHelperRadioMedia.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
+        try { dbHelperMusicMedia.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
+        try { dbHelperMovieMedia.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
+        try { dbHelperSeriesMedia.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
+        try { dbHelperCartonMedia.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
+        try { dbHelperQuranMedia.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
+        try { dbHelperNoheMedia.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
+        try { dbHelperChef.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
+        try { dbHelperEmploy.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
+        try { dbHelperSport.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
+        try { dbHelperFood.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
+        try { dbHelperPlant.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
+        try { dbHelperPray.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
+        try { dbHelperPsychology.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
+        try { dbHelperIsna.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
+        try { dbHelperJamjam.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
+        try { dbHelperTasnim.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
+    }
     private void getAllDataFromDB() {
         AppController.arrayList_category = dbCategory.getAllRows();
         AppController.list_li_audio = dbAudiobookLib.getAllRows();
@@ -359,53 +220,12 @@ public class SplashActivity extends AppCompatActivity {
         AppController.list_ne_tasnim = dbHelperTasnim.getAllRows();
     }
 
-    public boolean isStoragePermissionGranted() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_GRANTED) {
-                Log.v(TAG, "Permission is granted");
-                return true;
-            } else {
-
-                Log.v(TAG, "Permission is revoked");
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-                return false;
-            }
-        } else { //permission is automatically granted on sdk<23 upon installation
-            Log.v(TAG, "Permission is granted");
-            return true;
-        }
-    }
-
-    public class CustomTask extends TimerTask {
-        public CustomTask() {
-            init();
-        }
-
-        public void run() {
-            try {
-                if (isNetworkConnected()) {
-                    if (downloaditem == 18) {
-                        startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                        scheduler.shutdown();
-                        finish();
-                    }
-                } else
-                    Toast.makeText(SplashActivity.this, "اتصال به اینترنت برقرار نیست!", Toast.LENGTH_LONG).show();
-            } catch (Exception ex) {
-                init();
-                System.out.println("error running thread " + ex.getMessage());
-            }
-        }
-    }
-
     private void init() {
         downloaditem = 0;
         clearOldData();
         initCategory();
     }
-
-    private void initAll() {
+    private void initAll(){
         initUser();
         initMagazin();
         initServices();
@@ -418,7 +238,6 @@ public class SplashActivity extends AppCompatActivity {
         initNews();
         initWeatherCity();
     }
-
     private void clearOldData() {
         AppController.arrayList_weather_city.clear();
 
@@ -462,7 +281,6 @@ public class SplashActivity extends AppCompatActivity {
         AppController.list_ne_varzeshnavad.clear();
         AppController.list_ne_yjc.clear();
     }
-
     private void initCategory() {
         StringRequest req = new StringRequest(Request.Method.GET, AppController.API_CATEGORY_URL + AppController.APP_TOKEN,
                 new Response.Listener<String>() {
@@ -504,7 +322,6 @@ public class SplashActivity extends AppCompatActivity {
         req.setShouldCache(false);
         AppController.getInstance().addToRequestQueue(req, "initCategory");
     }
-
     private void initLibrary() {
         StringRequest req = new StringRequest(Request.Method.GET, AppController.API_LIBRARY_URL + AppController.APP_TOKEN,
                 new Response.Listener<String>() {
@@ -626,7 +443,6 @@ public class SplashActivity extends AppCompatActivity {
         req.setShouldCache(false);
         AppController.getInstance().addToRequestQueue(req, "initLibrary");
     }
-
     private void initServices() {
         StringRequest req = new StringRequest(Request.Method.GET, AppController.API_SERVICES_URL + AppController.APP_TOKEN,
                 new Response.Listener<String>() {
@@ -672,7 +488,6 @@ public class SplashActivity extends AppCompatActivity {
         req.setShouldCache(false);
         AppController.getInstance().addToRequestQueue(req, "initLibrary");
     }
-
     private void initGames() {
         StringRequest req = new StringRequest(Request.Method.GET, AppController.API_GAMES_URL + AppController.APP_TOKEN,
                 new Response.Listener<String>() {
@@ -719,7 +534,6 @@ public class SplashActivity extends AppCompatActivity {
         req.setShouldCache(false);
         AppController.getInstance().addToRequestQueue(req, "initGames");
     }
-
     private void initMagazin() {
         StringRequest req = new StringRequest(Request.Method.GET, AppController.API_MAGAZIN_URL + AppController.APP_TOKEN,
                 new Response.Listener<String>() {
@@ -759,7 +573,6 @@ public class SplashActivity extends AppCompatActivity {
         req.setShouldCache(false);
         AppController.getInstance().addToRequestQueue(req, "initMagazin");
     }
-
     private void initSlider() {
         StringRequest req = new StringRequest(Request.Method.GET, AppController.API_SLIDER_URL + AppController.APP_TOKEN,
                 new Response.Listener<String>() {
@@ -802,7 +615,6 @@ public class SplashActivity extends AppCompatActivity {
         req.setShouldCache(false);
         AppController.getInstance().addToRequestQueue(req, "initSlider");
     }
-
     private void initChannel() {
         StringRequest req = new StringRequest(Request.Method.GET, AppController.API_CHANNEL_URL + AppController.APP_TOKEN,
                 new Response.Listener<String>() {
@@ -875,7 +687,6 @@ public class SplashActivity extends AppCompatActivity {
         req.setShouldCache(false);
         AppController.getInstance().addToRequestQueue(req, "initChannel");
     }
-
     private void initWeatherCity() {
         StringRequest req = new StringRequest(Request.Method.GET, AppController.WEATHER_CITY_URL,
                 new Response.Listener<String>() {
@@ -924,7 +735,6 @@ public class SplashActivity extends AppCompatActivity {
         req.setShouldCache(false);
         AppController.getInstance().addToRequestQueue(req, "initWeatherCity");
     }
-
     private void initMedia() {
         StringRequest req = new StringRequest(Request.Method.GET, AppController.API_MEDIA_URL + "tv/" + AppController.APP_TOKEN,
                 new Response.Listener<String>() {
@@ -1321,7 +1131,6 @@ public class SplashActivity extends AppCompatActivity {
         req.setShouldCache(false);
         AppController.getInstance().addToRequestQueue(req, "initNohe");
     }
-
     private void initSalamat() {
         StringRequest req = new StringRequest(Request.Method.GET, AppController.API_SALAMAT_URL + AppController.APP_TOKEN,
                 new Response.Listener<String>() {
@@ -1477,7 +1286,6 @@ public class SplashActivity extends AppCompatActivity {
         req.setShouldCache(false);
         AppController.getInstance().addToRequestQueue(req, "initSalamat");
     }
-
     private void initNews() {
         StringRequest req = new StringRequest(Request.Method.GET, AppController.API_NEWS_URL + AppController.APP_TOKEN,
                 new Response.Listener<String>() {
@@ -1620,7 +1428,6 @@ public class SplashActivity extends AppCompatActivity {
         req.setShouldCache(false);
         AppController.getInstance().addToRequestQueue(req, "initNews");
     }
-
     private void initUser() {
         String uid = save.load(AppController.SAVE_USER_id, "0");
         StringRequest req = new StringRequest(Request.Method.GET, AppController.API_USER_URL + "/" + uid + "/" + AppController.APP_TOKEN,
@@ -1651,10 +1458,6 @@ public class SplashActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(req, "initUser");
     }
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
 
     private boolean isNetworkConnected() {
         InetAddress inetAddress = null;

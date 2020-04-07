@@ -10,12 +10,10 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
-    <uses-permission android:name="android.permission.SEND_SMS"/>
-    <uses-permission android:name="android.permission.READ_SMS"/>
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
 
     <uses-feature
@@ -34,7 +32,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-
+        <activity
+            android:name=".activitys.SupportActivity"
+            android:theme="@style/Theme.AppCompat.Light"/>
         <activity
             android:name=".activitys.SplashActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
@@ -82,15 +82,16 @@
             android:theme="@style/Theme.AppCompat.Light" />
         <activity
             android:name=".activitys.LoginActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-
             </intent-filter>
-            <meta-data android:name="cheshmakPush" android:value="openActivityOnPush"/>
 
+            <meta-data
+                android:name="cheshmakPush"
+                android:value="openActivityOnPush" />
         </activity>
         <activity
             android:name=".activitys.VideoActivity"
@@ -98,16 +99,15 @@
         <activity
             android:name=".weather.WeatherActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".activitys.QeblehActivity"
+        <activity
+            android:name=".activitys.QeblehActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <receiver android:name=".sms.SmsReceiver">
             <intent-filter>
-                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
-
-
     </application>
 
 </manifest>

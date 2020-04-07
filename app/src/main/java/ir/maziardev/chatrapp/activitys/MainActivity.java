@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +19,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -37,6 +39,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ir.maziardev.chatrapp.R;
 import ir.maziardev.chatrapp.adapter.SliderAdapterExample;
+import ir.maziardev.chatrapp.classes.DownloadData;
+import ir.maziardev.chatrapp.classes.SavePref;
 import ir.maziardev.chatrapp.database.DBHelperCategory;
 import ir.maziardev.chatrapp.models.Categoryy;
 import ir.maziardev.chatrapp.models.Update;
@@ -51,9 +55,16 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+    private SavePref save;
 
+    @BindView(R.id.swip_main)
+    SwipeRefreshLayout swip_main;
     @BindView(R.id.imageSlider_2)
     SliderView sliderView;
+    @BindView(R.id.linear_support_main)
+    LinearLayout linear_support;
+    @BindView(R.id.linear_profile_main)
+    LinearLayout linear_profile;
     @BindView(R.id.tv_calandar_main)
     TextView tv_calandar;
     @BindView(R.id.card_media_main)
@@ -75,18 +86,15 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.card_salamat_main)
     CardView card_salamat;
 
-    DBHelperCategory dbCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        save = new SavePref(this);
 
         initSlider_load();
-
-        dbCategory = new DBHelperCategory(this);
-
 
         final PersianCalendarView persianCalendarView = findViewById(R.id.persian_calendar_main);
         final PersianCalendarHandler calendar = persianCalendarView.getCalendar();
@@ -159,6 +167,34 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, SalamatActivity.class));
+            }
+        });
+
+        linear_support.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, SupportActivity.class));
+            }
+        });
+
+        linear_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProfileDialogClass pd = new ProfileDialogClass(MainActivity.this,
+                        save.load(AppController.SAVE_USER_dgree, ""),
+                        save.load(AppController.SAVE_USER_name, ""),
+                        save.load(AppController.SAVE_USER_pcode, "")
+                );
+                pd.show();
+            }
+        });
+
+
+        swip_main.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new DownloadData(MainActivity.this);
+                swip_main.setRefreshing(false);
             }
         });
 
