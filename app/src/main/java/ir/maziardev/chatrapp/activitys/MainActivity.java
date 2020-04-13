@@ -269,6 +269,7 @@ public class MainActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+
                         try {
                             JSONObject object = new JSONObject(response);
 
@@ -298,7 +299,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void installupdate(Update update) {
-        if (Integer.parseInt(update.getVersion_code()) > Integer.parseInt(AppController.APP_VERSION_CODE)) {
+       if (Integer.parseInt(update.getVersion_code()) > Integer.parseInt(AppController.APP_VERSION_CODE)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
             builder.setMessage("" +
                     "نسخه جدید برنامه آماده دریافت می باشد" +

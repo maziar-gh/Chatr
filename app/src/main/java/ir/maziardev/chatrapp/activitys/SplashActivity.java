@@ -2,6 +2,7 @@ package ir.maziardev.chatrapp.activitys;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -123,9 +125,8 @@ public class SplashActivity extends AppCompatActivity {
 
         AppController.APP_TOKEN = save.load(AppController.SAVE_USER_token, "0");
 
-        Log.e("tag--------", AppController.APP_TOKEN);
+        if (save.load(AppController.SAVE_STORAGE_PERMISION, "0").equals("0")) showStorageDialog();
 
-        isStoragePermissionGranted();
         initDb();
         if (isNetworkConnected()) {
             initClearDb();
@@ -138,6 +139,23 @@ public class SplashActivity extends AppCompatActivity {
             finish();
         }
 
+    }
+
+    private void showStorageDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this);
+        builder.setMessage("\n" +
+                "برای کار بدون اینترنت برنامه نیاز به مجوز استفاده از حافظه برای ذخیره سازی مورد نیاز می باشد." +
+                "\n"
+        ).setTitle("راهنما").setIcon(android.R.drawable.ic_menu_info_details);
+
+        builder.setNegativeButton("متوجه شدم!", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                isStoragePermissionGranted();
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void initDb() {
@@ -363,11 +381,11 @@ public class SplashActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
-                Log.v(TAG, "Permission is granted");
+                save.save(AppController.SAVE_STORAGE_PERMISION, "1");
                 return true;
             } else {
 
-                Log.v(TAG, "Permission is revoked");
+                //showStorageDialog();
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
                 return false;
             }

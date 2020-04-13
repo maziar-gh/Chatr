@@ -45,6 +45,7 @@ public class AppController extends Application {
     public static String SAVE_USER = "SAVE_USER";
     public static String SAVE_SEND_CODE = "SAVE_SEND_CODE";
     public static String SAVE_CODE = "SAVE_CODE";
+    public static String SAVE_STORAGE_PERMISION = "SAVE_STORAGE_PERMISION";
     public static String SAVE_USER_phone = "SAVE_USER_phone";
     public static String SAVE_USER_id = "SAVE_USER_id";
     public static String SAVE_USER_token = "SAVE_USER_token";
@@ -63,7 +64,7 @@ public class AppController extends Application {
     public static final String API_SUPPORT_URL = "http://chatr.anzalepoxy.ir/chat/spachat.php";
 
     public static final String API_BASE_URL = "http://chatr.anzalepoxy.ir/chatr/app/index.php/api/";
-    public static final String API_UPDATE_URL = API_BASE_URL + "update/detail/";
+    public static final String API_UPDATE_URL = API_BASE_URL + "update/";
     public static final String API_SLIDER_URL = API_BASE_URL + "slider/detail/";
     public static final String API_CHANNEL_URL = API_BASE_URL + "channel/detail/";
     public static final String API_MEDIA_URL = API_BASE_URL + "media/";

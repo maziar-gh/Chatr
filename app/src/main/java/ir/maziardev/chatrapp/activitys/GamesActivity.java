@@ -24,15 +24,18 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class GamesActivity extends AppCompatActivity {
 
-    @BindView(R.id.recycler_car_game)
-    RecyclerView recycler_car;
+    @BindView(R.id.recycler_child_game)
+    RecyclerView recycler_child;
+    @BindView(R.id.recycler_teen_game)
+    RecyclerView recycler_teen;
     @BindView(R.id.recycler_other_game)
     RecyclerView recycler_other;
 
 
-    private List<Mainlist> menuList_car = new ArrayList<>();
+    private List<Mainlist> menuList_child = new ArrayList<>();
+    private List<Mainlist> menuList_teen = new ArrayList<>();
     private List<Mainlist> menuList_other = new ArrayList<>();
-    private ListTvAdapter mAdapter_car, mAdapter_other;
+    private ListTvAdapter mAdapter_child, mAdapter_teen, mAdapter_other;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,26 +48,48 @@ public class GamesActivity extends AppCompatActivity {
 
     private void init() {
 
-        //________________________________________car
-        mAdapter_car = new ListTvAdapter(this, menuList_car);
+        //________________________________________child
+        mAdapter_child = new ListTvAdapter(this, menuList_child);
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
-        recycler_car.setLayoutManager(layoutManager);
-        recycler_car.setItemAnimator(new DefaultItemAnimator());
-        recycler_car.setAdapter(mAdapter_car);
+        recycler_child.setLayoutManager(layoutManager);
+        recycler_child.setItemAnimator(new DefaultItemAnimator());
+        recycler_child.setAdapter(mAdapter_child);
 
         for (int i = 0; i < AppController.list_games.size(); i++) {
             Lists game = AppController.list_games.get(i);
-            if(game.getId_category().equals("4")) {
+            if(game.getId_category().equals("16")) {
                 Mainlist mainlist = new Mainlist();
                 mainlist.setTitle(game.getTitle());
                 mainlist.setImg(game.getImg());
                 mainlist.setUrl(game.getUrl());
                 mainlist.setMainType(MainType.GAMES);
-                menuList_car.add(mainlist);
+                menuList_child.add(mainlist);
             }
         }
-        mAdapter_car.notifyDataSetChanged();
+        mAdapter_child.notifyDataSetChanged();
+
+
+        //________________________________________teen
+        mAdapter_teen = new ListTvAdapter(this, menuList_teen);
+        layoutManager
+                = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
+        recycler_teen.setLayoutManager(layoutManager);
+        recycler_teen.setItemAnimator(new DefaultItemAnimator());
+        recycler_teen.setAdapter(mAdapter_teen);
+
+        for (int i = 0; i < AppController.list_games.size(); i++) {
+            Lists game = AppController.list_games.get(i);
+            if(game.getId_category().equals("17")) {
+                Mainlist mainlist = new Mainlist();
+                mainlist.setTitle(game.getTitle());
+                mainlist.setImg(game.getImg());
+                mainlist.setUrl(game.getUrl());
+                mainlist.setMainType(MainType.GAMES);
+                menuList_teen.add(mainlist);
+            }
+        }
+        mAdapter_teen.notifyDataSetChanged();
 
 
         //________________________________________other

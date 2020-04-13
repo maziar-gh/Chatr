@@ -18,7 +18,31 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="2dp"
+                    android:gravity="right"
+                    android:text="بازی کودکان"
+                    android:textSize="15sp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_child_game"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right" />
+
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -28,15 +52,15 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="2dp"
-                    android:layout_marginTop="10dp"
                     android:gravity="right"
-                    android:text="بازی ماشین"
+                    android:text="بازی نوجوانان"
                     android:textSize="15sp" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_car_game"
+                    android:id="@+id/recycler_teen_game"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"/>
@@ -49,15 +73,15 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="2dp"
-                    android:gravity="right"
-                    android:text="متفرقه"
-                    android:textSize="15sp" />
+               <TextView
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_marginTop="10dp"
+                   android:layout_marginRight="10dp"
+                   android:layout_marginBottom="2dp"
+                   android:gravity="right"
+                   android:text="دیگر بازی ها"
+                   android:textSize="15sp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_other_game"

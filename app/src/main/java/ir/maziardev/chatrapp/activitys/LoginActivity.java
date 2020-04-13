@@ -3,6 +3,7 @@ package ir.maziardev.chatrapp.activitys;
 import android.Manifest;
 import android.app.Application;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -16,6 +17,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
@@ -190,19 +192,24 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        showSmsDialog();
+    }
 
-        requestPermission();
+    private void showSmsDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+        builder.setMessage("\n" +
+                "برای خواندن خودکار کد احراز هویت نیاز به مجوز استفاده از SMS می باشد." +
+                "\n"
+        ).setTitle("راهنما").setIcon(android.R.drawable.ic_menu_info_details);
 
-        SmsReceiver.bindListener(new SmsListener() {
-            @Override
-            public void onMessageReceived(String messageText) {
-                //Log.e("Text",messageText);
-                edt_verfication.setText(messageText);
-                btn_verfication.performClick();
-                Toast.makeText(LoginActivity.this, "خوش آمدید", Toast.LENGTH_SHORT).show();
+        builder.setNegativeButton("متوجه شدم!", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                requestPermission();
+                dialog.dismiss();
             }
         });
-
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
 
@@ -210,18 +217,15 @@ public class LoginActivity extends AppCompatActivity {
     private void requestPermission(){
         ActivityCompat.requestPermissions(LoginActivity.this,new String[]{
                 Manifest.permission.SEND_SMS},PERMISSION_REQUEST_CODE);
-    }
 
-    private boolean checkPermission(){
-        int result = ContextCompat.checkSelfPermission(LoginActivity.this,
-                Manifest.permission.ACCESS_FINE_LOCATION);
-        if (result == PackageManager.PERMISSION_GRANTED){
-
-            return true;
-
-        } else {
-            return false;
-        }
+        SmsReceiver.bindListener(new SmsListener() {
+            @Override
+            public void onMessageReceived(String messageText) {
+                edt_verfication.setText(messageText);
+                btn_verfication.performClick();
+                Toast.makeText(LoginActivity.this, "خوش آمدید", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 
