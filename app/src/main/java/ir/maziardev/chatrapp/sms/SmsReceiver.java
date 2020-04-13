@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
 
+import ir.maziardev.chatrapp.network.AppController;
+
 public class SmsReceiver extends BroadcastReceiver {
 
     private static SmsListener mListener;
@@ -20,9 +22,7 @@ public class SmsReceiver extends BroadcastReceiver {
             SmsMessage smsMessage = SmsMessage.createFromPdu((byte[]) pdus[i]);
 
             String sender = smsMessage.getDisplayOriginatingAddress();
-            //You must check here if the sender is
-            // your provider and not another one with same text.
-
+            if(!sender.equals(AppController.SMS_SENDER)) continue;
             String messageBody = smsMessage.getMessageBody();
 
             //Pass on the text to our listener.

@@ -52,6 +52,7 @@ public class AppController extends Application {
     public static String SAVE_USER_dgree = "SAVE_USER_dgree";
     public static String SAVE_USER_pcode = "SAVE_USER_pcode";
 
+    public static String SMS_SENDER = "981000596446";
     public static String DATABASE_NAME = "chatrdb.db";
 
     public static final String WEATHER_CITY_URL = "http://mobileapp.irimo.ir/WeatherServer/GetStationList";

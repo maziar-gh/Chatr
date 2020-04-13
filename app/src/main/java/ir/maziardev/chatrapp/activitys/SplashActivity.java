@@ -977,7 +977,6 @@ public class SplashActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.e("TAG-------radio", response);
 
                         try {
                             JSONObject obj = new JSONObject(response);

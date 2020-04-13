@@ -1,8 +1,6 @@
-package ir.maziardev.chatrapp.classes;
+package ir.maziardev.chatrapp.network;
 
 import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -17,8 +15,6 @@ import org.json.JSONObject;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
@@ -26,8 +22,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import ir.maziardev.chatrapp.activitys.MainActivity;
-import ir.maziardev.chatrapp.activitys.SplashActivity;
+import ir.maziardev.chatrapp.classes.SavePref;
 import ir.maziardev.chatrapp.database.DBHelperCategory;
 import ir.maziardev.chatrapp.database.DBHelperChannel;
 import ir.maziardev.chatrapp.database.DBHelperGames;
@@ -67,7 +62,6 @@ import ir.maziardev.chatrapp.models.Lists;
 import ir.maziardev.chatrapp.models.Magazin;
 import ir.maziardev.chatrapp.models.Slider;
 import ir.maziardev.chatrapp.models.WeatherCity;
-import ir.maziardev.chatrapp.network.AppController;
 
 public class DownloadData {
 
@@ -787,8 +781,6 @@ public class DownloadData {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.e("TAG-------radio", response);
-
                         try {
                             JSONObject obj = new JSONObject(response);
                             JSONArray radioArray = obj.getJSONArray("radio");
