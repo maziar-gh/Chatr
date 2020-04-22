@@ -71,11 +71,16 @@ public class ListTvAdapter extends RecyclerView.Adapter<ListTvAdapter.ViewHolder
 
         Mainlist mainlist = dataList.get(position);
 
-        Glide.with(mContext)
-                .load(mainlist.getImg())
-                .centerCrop()
-                .placeholder(R.drawable.noimage)
-                .into(holder.tv_image);
+        try{
+            Glide.with(mContext)
+                    .load(mainlist.getImg())
+                    .centerCrop()
+                    .placeholder(R.drawable.noimage)
+                    .into(holder.tv_image);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
 
         holder.tv_title.setText(mainlist.getTitle());
 

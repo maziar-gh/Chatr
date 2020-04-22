@@ -25,7 +25,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
-import com.dcastalia.localappupdate.DownloadApk;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.IndicatorView.draw.controller.DrawController;
 import com.smarteist.autoimageslider.SliderAnimations;
@@ -197,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         isStoragePermissionGranted();
-        updatecheck();
+        //updatecheck();
     }
 
 
@@ -316,7 +315,7 @@ public class MainActivity extends AppCompatActivity {
             builder.setPositiveButton("بروز رسانی", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     if (isStoragePermissionGranted()) {
-                        downloadTask(update.getUrl());
+                        //downloadTask(update.getUrl());
                     }
                 }
             });
@@ -332,8 +331,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void downloadTask(String url) {
-        DownloadApk downloadApk = new DownloadApk(MainActivity.this);
-        downloadApk.startDownloadingApk(url);
+        //DownloadApk downloadApk = new DownloadApk(MainActivity.this);
+        //downloadApk.startDownloadingApk(url);
     }
 
 

@@ -31,7 +31,6 @@ import ir.maziardev.chatrapp.models.Update;
 import ir.maziardev.chatrapp.models.WeatherCity;
 import ir.maziardev.chatrapp.models.WeatherItem;
 import ir.mirrajabi.persiancalendar.core.models.PersianDate;
-import me.cheshmak.android.sdk.core.Cheshmak;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class AppController extends Application {
@@ -133,8 +132,8 @@ public class AppController extends Application {
         super.onCreate();
         mInstance = this;
 
-        Cheshmak.with(this);
-        Cheshmak.initTracker("XmuvSnFEbUhc1GVn2kxpJg==");
+        //Cheshmak.with(this);
+        //Cheshmak.initTracker("XmuvSnFEbUhc1GVn2kxpJg==");
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/iransans.ttf")
