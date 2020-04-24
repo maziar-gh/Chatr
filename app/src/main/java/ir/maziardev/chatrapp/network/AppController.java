@@ -12,6 +12,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.util.Util;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.File;
 import java.io.IOException;
@@ -125,12 +126,14 @@ public class AppController extends Application {
     //private ImageLoader mImageLoader;
     private static AppController mInstance;
     private Locale locale = null;
+    public static FirebaseAnalytics mFirebaseAnalytics;
 
 
     @Override
     public void onCreate() {
         super.onCreate();
         mInstance = this;
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         //Cheshmak.with(this);
         //Cheshmak.initTracker("XmuvSnFEbUhc1GVn2kxpJg==");

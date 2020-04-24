@@ -25,6 +25,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
+import com.crashlytics.android.Crashlytics;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.IndicatorView.draw.controller.DrawController;
 import com.smarteist.autoimageslider.SliderAnimations;
@@ -41,6 +43,7 @@ import ir.maziardev.chatrapp.network.DownloadData;
 import ir.maziardev.chatrapp.classes.SavePref;
 import ir.maziardev.chatrapp.models.Update;
 import ir.maziardev.chatrapp.network.AppController;
+import ir.maziardev.chatrapp.network.UpdateApp;
 import ir.maziardev.chatrapp.weather.WeatherActivity;
 import ir.mirrajabi.persiancalendar.PersianCalendarView;
 import ir.mirrajabi.persiancalendar.core.PersianCalendarHandler;
@@ -52,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private SavePref save;
+
 
     @BindView(R.id.swip_main)
     SwipeRefreshLayout swip_main;
@@ -89,6 +93,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         save = new SavePref(this);
+
+        AppController.mFirebaseAnalytics.setUserProperty("user_id", save.load(AppController.SAVE_USER_id, "id"));
+        AppController.mFirebaseAnalytics.setUserProperty("user_name", save.load(AppController.SAVE_USER_name, "name"));
+        AppController.mFirebaseAnalytics.setUserProperty("user_phone", save.load(AppController.SAVE_USER_phone, "phone"));
+
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, save.load(AppController.SAVE_USER_id, "id"));
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, save.load(AppController.SAVE_USER_name, "name"));
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "image");
+        AppController.mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
         initSlider_load();
 
@@ -196,24 +210,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         isStoragePermissionGranted();
-        //updatecheck();
+        updatecheck();
     }
-
-
-
-    /*private void gpsTracker() {
-
-        GPSTracker mGPS = new GPSTracker(this);
-        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            if (mGPS.canGetLocation()) {
-                mGPS.getLocation();
-                Toast.makeText(MainActivity.this, ("Lat" + mGPS.getLatitude() + "Lon" + mGPS.getLongitude()), Toast.LENGTH_SHORT).show();
-            } *//*else {
-                Toast.makeText(MainActivity.this, "Unabletofind", Toast.LENGTH_SHORT).show();
-            }*//*
-        }
-    }*/
 
 
     public boolean isStoragePermissionGranted() {
@@ -316,6 +314,9 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int id) {
                     if (isStoragePermissionGranted()) {
                         //downloadTask(update.getUrl());
+                        UpdateApp atualizaApp = new UpdateApp();
+                        atualizaApp.setContext(getApplicationContext());
+                        atualizaApp.execute(update.getUrl());
                     }
                 }
             });
@@ -327,12 +328,6 @@ public class MainActivity extends AppCompatActivity {
             AlertDialog dialog = builder.create();
             dialog.show();
         }
-    }
-
-
-    private void downloadTask(String url) {
-        //DownloadApk downloadApk = new DownloadApk(MainActivity.this);
-        //downloadApk.startDownloadingApk(url);
     }
 
 

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "520222391205",
+    "firebase_url": "https://chatr-eab26.firebaseio.com",
+    "project_id": "chatr-eab26",
+    "storage_bucket": "chatr-eab26.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:520222391205:android:d38b716f9bd0f342f4c64c",
+        "android_client_info": {
+          "package_name": "ir.maziardev.chatrapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "520222391205-b5k294lsd1jms3gak5mq23b63elfojdu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ir.maziardev.chatrapp",
+            "certificate_hash": "40126ad5a958eb6ac542e3ca9c92d0f8e9d6b0cd"
+          }
+        },
+        {
+          "client_id": "520222391205-ied234o5m9rqe2lgfuh0i6q6ef7l7ql0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFF8uL2CIQ3qzRHbt_IvNHjEkv3SQ2UkA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "520222391205-ied234o5m9rqe2lgfuh0i6q6ef7l7ql0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
