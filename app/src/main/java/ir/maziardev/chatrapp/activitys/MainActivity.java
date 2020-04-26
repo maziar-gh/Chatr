@@ -191,9 +191,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ProfileDialogClass pd = new ProfileDialogClass(MainActivity.this,
-                        save.load(AppController.SAVE_USER_dgree, ""),
-                        save.load(AppController.SAVE_USER_name, ""),
-                        save.load(AppController.SAVE_USER_pcode, "")
+                        save.load(AppController.SAVE_USER_name, "")
                 );
                 pd.show();
             }

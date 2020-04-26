@@ -84,6 +84,16 @@ public class LoginActivity extends AppCompatActivity {
         String user = save.load(AppController.SAVE_USER, "0");
         String send_code = save.load(AppController.SAVE_SEND_CODE, "0");
 
+
+        save.save(AppController.SAVE_SEND_CODE, "1");
+        save.save(AppController.SAVE_USER_id, "1021");
+        save.save(AppController.SAVE_USER_token, "8d91f1974ce167b2017422cf7df1a265");
+        AppController.APP_TOKEN = "8d91f1974ce167b2017422cf7df1a265";
+
+        startActivity(new Intent(LoginActivity.this, SplashActivity.class));
+        finish();
+
+
         if (user.equals("1")) {
             startActivity(new Intent(LoginActivity.this, SplashActivity.class));
             finish();

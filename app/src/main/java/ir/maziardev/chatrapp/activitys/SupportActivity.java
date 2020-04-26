@@ -21,8 +21,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SupportActivity extends AppCompatActivity {
 
-    @BindView(R.id.btn_online_support)
-    Button btn_online;
+    //@BindView(R.id.btn_online_support)
+    //Button btn_online;
     @BindView(R.id.btn_tel_support)
     Button btn_tel;
 
@@ -39,14 +39,14 @@ public class SupportActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
 
-        btn_online.setOnClickListener(new View.OnClickListener() {
+        /*btn_online.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(SupportActivity.this, WebActivity.class);
                 i.putExtra(Extras.EXTRA_URL.toString(), AppController.API_SUPPORT_URL);
                 startActivity(i);
             }
-        });
+        });*/
 
         btn_tel.setOnClickListener(new View.OnClickListener() {
             @Override

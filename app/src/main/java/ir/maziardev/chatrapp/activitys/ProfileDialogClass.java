@@ -19,7 +19,7 @@ public class ProfileDialogClass  extends Dialog implements
     public Dialog d;
     public TextView txt_dgree, txt_name, txt_pcode;
 
-    public ProfileDialogClass(Activity a, String dgree, String fullname, String pcode) {
+    public ProfileDialogClass(Activity a, String fullname) {
         super(a);
         // TODO Auto-generated constructor stub
         this.activity = a;
@@ -33,13 +33,13 @@ public class ProfileDialogClass  extends Dialog implements
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.profile_dialog);
-        txt_dgree = (TextView) findViewById(R.id.txt_dgree_profile);
+        //txt_dgree = (TextView) findViewById(R.id.txt_dgree_profile);
         txt_name = (TextView) findViewById(R.id.txt_fullname_profile);
-        txt_pcode = (TextView) findViewById(R.id.txt_pcode_profile);
+        //txt_pcode = (TextView) findViewById(R.id.txt_pcode_profile);
 
-        txt_dgree.setText(this.dgree);
+        //txt_dgree.setText(this.dgree);
         txt_name.setText(this.fullname);
-        txt_pcode.setText(this.pcode);
+        //txt_pcode.setText(this.pcode);
     }
 
     @Override

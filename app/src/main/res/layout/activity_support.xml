@@ -18,7 +18,7 @@
             android:layout_height="140dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
-            app:srcCompat="@drawable/logo" />
+            app:srcCompat="@drawable/ic_launcher" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView2"
@@ -29,11 +29,11 @@
             android:layout_marginEnd="16dp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
                 android:gravity="center"
-                android:text="اپلیکیشن رسمی اداره امور فرهنکی خانواده کارکنان فرماندهی انتظامی استان گیلان"
+                android:text="چتر سایه بانی برای بنیان خانواده"
                 android:textSize="15sp" />
         </androidx.cardview.widget.CardView>
 
@@ -46,11 +46,11 @@
             android:layout_marginEnd="16dp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
                 android:gravity="center"
-                android:text="آدرس: گیلان - رشت - بلوار شهید انصاری - جنب راهور رشت - طبقه فوقانی مها"
+                android:text="جهت هر گونه انتقاد یا پیشنهاد و یا گزارش مشکل از راه های زیر به ما اطلاع دهید"
                 android:textSize="15sp" />
         </androidx.cardview.widget.CardView>
 
@@ -69,17 +69,6 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/btn_online_support"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="20dp"
-                    android:layout_weight="1.5"
-                    android:background="@drawable/round_button"
-                    android:padding="5dp"
-                    android:text="ارتباط برخط با پشتیبانی"
-                    android:textColor="#FFFFFF" />
-
-                <Button
                     android:id="@+id/btn_tel_support"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -87,7 +76,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/round_button"
                     android:padding="5dp"
-                    android:text="تماس با اداره"
+                    android:text="تماس با پشتیبانی"
                     android:textColor="#FFFFFF" />
             </LinearLayout>
 
