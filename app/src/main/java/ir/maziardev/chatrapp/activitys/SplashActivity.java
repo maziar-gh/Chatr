@@ -150,6 +150,7 @@ public class SplashActivity extends AppCompatActivity {
 
         builder.setNegativeButton("متوجه شدم!", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+                save.save(AppController.SAVE_STORAGE_PERMISION, "1");
                 isStoragePermissionGranted();
                 dialog.dismiss();
             }
@@ -381,7 +382,7 @@ public class SplashActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
-                save.save(AppController.SAVE_STORAGE_PERMISION, "1");
+
                 return true;
             } else {
 

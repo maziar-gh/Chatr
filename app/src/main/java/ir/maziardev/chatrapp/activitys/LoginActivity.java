@@ -202,7 +202,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        showSmsDialog();
+        //showSmsDialog();
     }
 
     private void showSmsDialog() {

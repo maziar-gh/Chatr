@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -242,7 +243,7 @@ public class WeatherActivity extends AppCompatActivity {
         tv_temp.setText(AppController.weatherItem.getT() + " °C ");
         tv_senstemp.setText(AppController.weatherItem.getSensationTemperature() + " °C ");
         tv_humidity.setText(AppController.weatherItem.getU() + " % ");
-        tv_view.setText(calcView(AppController.weatherItem.getVv()));
+        tv_view.setText(calcView(AppController.weatherItem.getVv().equals("null") ? "10": AppController.weatherItem.getVv()));
         tv_temp.setText(AppController.weatherItem.getT() + " °C ");
         tv_maxtemp1.setText(AppController.weatherItem.getMaxtemp1() + " °C ");
         tv_maxtemp2.setText(AppController.weatherItem.getMaxtemp2() + " °C ");
@@ -252,10 +253,21 @@ public class WeatherActivity extends AppCompatActivity {
         tv_mintemp2.setText(AppController.weatherItem.getMintemp2() + " °C ");
         tv_mintemp3.setText(AppController.weatherItem.getMintemp3() + " °C ");
 
-        setImg(Integer.parseInt(AppController.weatherItem.getWeather()), img_weather, tv_weather_log);
-        setImg(Integer.parseInt(AppController.weatherItem.getDayph1()), img_weather1, tv_weather_log1);
-        setImg(Integer.parseInt(AppController.weatherItem.getDayph2()), img_weather2, tv_weather_log2);
-        setImg(Integer.parseInt(AppController.weatherItem.getDayph3()), img_weather3, tv_weather_log3);
+        try {
+            setImg(Integer.parseInt(AppController.weatherItem.getWeather()), img_weather, tv_weather_log);
+        }catch (Exception e){ e.printStackTrace(); }
+
+        try {
+            setImg(Integer.parseInt(AppController.weatherItem.getDayph1()), img_weather1, tv_weather_log1);
+        }catch (Exception e){ e.printStackTrace(); }
+
+        try {
+            setImg(Integer.parseInt(AppController.weatherItem.getDayph2()), img_weather2, tv_weather_log2);
+        }catch (Exception e){ e.printStackTrace(); }
+
+        try {
+            setImg(Integer.parseInt(AppController.weatherItem.getDayph3()), img_weather3, tv_weather_log3);
+        }catch (Exception e){ e.printStackTrace(); }
 
 
         tv_weather_today.setText("امروز");
@@ -265,7 +277,7 @@ public class WeatherActivity extends AppCompatActivity {
 
 
         Random rand = new Random();
-        tv_weather_wind.setText(String.valueOf(rand.nextInt(15)) + " km/h");
+        tv_weather_wind.setText(String.valueOf(rand.nextInt(11)) + " km/h");
 
     }
 
