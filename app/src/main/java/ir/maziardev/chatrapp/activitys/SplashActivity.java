@@ -404,7 +404,8 @@ public class SplashActivity extends AppCompatActivity {
         public void run() {
             try {
                 if (isNetworkConnected()) {
-                    if (downloaditem == 18) {
+
+                    if (downloaditem >= 18) {
                         startActivity(new Intent(SplashActivity.this, MainActivity.class));
                         scheduler.shutdown();
                         finish();
@@ -525,7 +526,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void initLibrary() {
-        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_LIBRARY_URL + AppController.APP_TOKEN,
+        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_LIBRARY_URL  + "1/" + AppController.API_BASE_LIMIT + "/" +  AppController.APP_TOKEN,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -647,7 +648,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void initServices() {
-        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_SERVICES_URL + AppController.APP_TOKEN,
+        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_SERVICES_URL  + "1/" + AppController.API_BASE_LIMIT + "/" +  AppController.APP_TOKEN,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -693,7 +694,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void initGames() {
-        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_GAMES_URL + AppController.APP_TOKEN,
+        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_GAMES_URL  + "1/" + AppController.API_BASE_LIMIT + "/" +  AppController.APP_TOKEN,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -740,7 +741,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void initMagazin() {
-        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_MAGAZIN_URL + AppController.APP_TOKEN,
+        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_MAGAZIN_URL  + "1/" + AppController.API_BASE_LIMIT + "/" +  AppController.APP_TOKEN,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -823,7 +824,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void initChannel() {
-        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_CHANNEL_URL + AppController.APP_TOKEN,
+        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_CHANNEL_URL + "1/" + AppController.API_BASE_LIMIT + "/" + AppController.APP_TOKEN,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -945,7 +946,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void initMedia() {
-        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_MEDIA_URL + "tv/" + AppController.APP_TOKEN,
+        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_MEDIA_URL + "tv/"  + "1/" + AppController.API_BASE_LIMIT + "/" +  AppController.APP_TOKEN,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -992,7 +993,7 @@ public class SplashActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(req, "initTv");
 
 
-        req = new StringRequest(Request.Method.GET, AppController.API_MEDIA_URL + "radio/" + AppController.APP_TOKEN,
+        req = new StringRequest(Request.Method.GET, AppController.API_MEDIA_URL + "radio/"  + "1/" + AppController.API_BASE_LIMIT + "/" +  AppController.APP_TOKEN,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -1040,7 +1041,7 @@ public class SplashActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(req, "initRadio");
 
 
-        req = new StringRequest(Request.Method.GET, AppController.API_MEDIA_URL + "music/" + AppController.APP_TOKEN,
+        req = new StringRequest(Request.Method.GET, AppController.API_MEDIA_URL + "music/"  + "1/" + AppController.API_BASE_LIMIT + "/" +  AppController.APP_TOKEN,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -1091,7 +1092,7 @@ public class SplashActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(req, "initMusic");
 
 
-        req = new StringRequest(Request.Method.GET, AppController.API_MEDIA_URL + "movie/" + AppController.APP_TOKEN,
+        req = new StringRequest(Request.Method.GET, AppController.API_MEDIA_URL + "movie/"  + "1/" + AppController.API_BASE_LIMIT + "/" +  AppController.APP_TOKEN,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -1140,7 +1141,7 @@ public class SplashActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(req, "initMovie");
 
 
-        req = new StringRequest(Request.Method.GET, AppController.API_MEDIA_URL + "series/" + AppController.APP_TOKEN,
+        req = new StringRequest(Request.Method.GET, AppController.API_MEDIA_URL + "series/"  + "1/" + AppController.API_BASE_LIMIT + "/" +  AppController.APP_TOKEN,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -1190,7 +1191,7 @@ public class SplashActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(req, "initSeries");
 
 
-        req = new StringRequest(Request.Method.GET, AppController.API_MEDIA_URL + "carton/" + AppController.APP_TOKEN,
+        req = new StringRequest(Request.Method.GET, AppController.API_MEDIA_URL + "carton/"  + "1/" + AppController.API_BASE_LIMIT + "/" +  AppController.APP_TOKEN,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -1240,7 +1241,7 @@ public class SplashActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(req, "initCarton");
 
 
-        req = new StringRequest(Request.Method.GET, AppController.API_MEDIA_URL + "quran/" + AppController.APP_TOKEN,
+        req = new StringRequest(Request.Method.GET, AppController.API_MEDIA_URL + "quran/"  + "1/" + AppController.API_BASE_LIMIT + "/" +  AppController.APP_TOKEN,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -1290,7 +1291,7 @@ public class SplashActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(req, "initQuran");
 
 
-        req = new StringRequest(Request.Method.GET, AppController.API_MEDIA_URL + "nohe/" + AppController.APP_TOKEN,
+        req = new StringRequest(Request.Method.GET, AppController.API_MEDIA_URL + "nohe/"  + "1/" + AppController.API_BASE_LIMIT + "/" +  AppController.APP_TOKEN,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -1341,7 +1342,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void initSalamat() {
-        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_SALAMAT_URL + AppController.APP_TOKEN,
+        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_SALAMAT_URL  + "1/" + AppController.API_BASE_LIMIT + "/" +  AppController.APP_TOKEN,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -1497,7 +1498,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void initNews() {
-        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_NEWS_URL + AppController.APP_TOKEN,
+        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_NEWS_URL  + "1/" + AppController.API_BASE_LIMIT + "/" +  AppController.APP_TOKEN,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

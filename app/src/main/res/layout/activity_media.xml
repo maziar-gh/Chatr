@@ -28,6 +28,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -38,11 +39,26 @@
                     android:text="پخش زنده تلوزیون"
                     android:textSize="15sp" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_tv_media"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right" />
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <ProgressBar
+                        android:id="@+id/progress_tv"
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        tools:visibility="gone" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_tv_media"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_weight="1" />
+
+                </LinearLayout>
 
 
             </LinearLayout>

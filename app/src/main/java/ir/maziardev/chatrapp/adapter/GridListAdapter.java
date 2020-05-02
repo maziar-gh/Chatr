@@ -26,6 +26,7 @@ import ir.maziardev.chatrapp.activitys.WebActivity;
 import ir.maziardev.chatrapp.classes.Pages;
 import ir.maziardev.chatrapp.enums.Extras;
 import ir.maziardev.chatrapp.models.GridList;
+import ir.maziardev.chatrapp.network.AppController;
 
 public class GridListAdapter extends RecyclerView.Adapter<GridListAdapter.MyViewHolder> {
 
@@ -68,7 +69,7 @@ public class GridListAdapter extends RecyclerView.Adapter<GridListAdapter.MyView
         GridList list = dataList.get(position);
 
         holder.tv_title.setText(list.getTitle());
-        Glide.with(mContext).load(list.getImg()).into(holder.img_main);
+        Glide.with(mContext).load(list.getImg()).override(AppController.SIZE_W, AppController.SIZE_H).into(holder.img_main);
 
         if (list.isMusic()) {
             holder.tv_actor.setText("خواننده: " + list.getActor());

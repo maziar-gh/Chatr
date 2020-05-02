@@ -25,6 +25,7 @@ import java.util.HashMap;
 import ir.maziardev.chatrapp.R;
 import ir.maziardev.chatrapp.activitys.WebActivity;
 import ir.maziardev.chatrapp.enums.Extras;
+import ir.maziardev.chatrapp.network.AppController;
 
 public class RssAdapter extends RecyclerView.Adapter<RssAdapter.ViewHolder> {
     private ArrayList<HashMap<String, String>> mDataset = new ArrayList<>();
@@ -82,6 +83,7 @@ public class RssAdapter extends RecyclerView.Adapter<RssAdapter.ViewHolder> {
         String imageurl = map.get("imageUrl");
         Glide.with(mContext)
                 .load(imageurl)
+                .override(AppController.SIZE_W, AppController.SIZE_H)
                 .centerCrop()
                 .placeholder(R.drawable.noimage)
                 .into(holder.iv_image);

@@ -40,6 +40,9 @@ public class AppController extends Application {
 
     public static String APP_VERSION_CODE = "-1";
 
+    public static int SIZE_W = 250;
+    public static int SIZE_H = 250;
+
     public static String APP_TOKEN = "APP_TOKEN";
 
     public static String SAVE_USER = "SAVE_USER";
@@ -62,6 +65,8 @@ public class AppController extends Application {
     public static final String API_AZAN_URL = "http://chatr.anzalepoxy.ir/azan/index.htm";
     public static final String API_EST_URL = "http://chatr.anzalepoxy.ir/estekhare/index.php";
     public static final String API_SUPPORT_URL = "http://chatr.anzalepoxy.ir/chat/spachat.php";
+
+    public static final String API_BASE_LIMIT = "7";
 
     public static final String API_BASE_URL = "http://chatr.anzalepoxy.ir/chatr/app/index.php/api/";
     public static final String API_UPDATE_URL = API_BASE_URL + "update/";
@@ -121,6 +126,11 @@ public class AppController extends Application {
     public static List<GridList> list_carton = new ArrayList<>();
     public static List<GridList> list_quran = new ArrayList<>();
     public static List<GridList> list_nohe = new ArrayList<>();
+
+
+    public static int PAGE_TV = 1;
+
+
 
     private RequestQueue mRequestQueue;
     //private ImageLoader mImageLoader;

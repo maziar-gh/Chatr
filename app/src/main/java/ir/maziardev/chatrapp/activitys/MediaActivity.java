@@ -3,15 +3,28 @@ package ir.maziardev.chatrapp.activitys;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.StringRequest;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +42,14 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MediaActivity extends AppCompatActivity {
 
+    private static final String TAG = MediaActivity.class.getSimpleName();
+    private boolean mLoading = false;
+    private boolean loading = true;
+    private int visibleThreshold = 5;
+    int firstVisibleItem, visibleItemCount, totalItemCount;
+
+    @BindView(R.id.progress_tv)
+    ProgressBar progress_tv;
 
     @BindView(R.id.recycler_tv_media)
     RecyclerView recycler_tv;
@@ -73,11 +94,14 @@ public class MediaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_media);
         ButterKnife.bind(this);
 
+        progress_tv.clearAnimation();
+        progress_tv.setVisibility(View.GONE);
+
         init();
 
     }
 
-    private void find(String charString){
+    private void find(String charString) {
         if (charString.isEmpty()) {
             backup_filter = menuList_tv;
         } else {
@@ -107,7 +131,8 @@ public class MediaActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
         recycler_tv.setLayoutManager(layoutManager);
-        recycler_tv.setItemAnimator(new DefaultItemAnimator());
+        //recycler_tv.setItemAnimator(new DefaultItemAnimator());
+        recycler_tv.setHasFixedSize(true);
         recycler_tv.setAdapter(mAdapter_tv);
 
         for (int i = 0; i < AppController.list_tel.size(); i++) {
@@ -120,6 +145,26 @@ public class MediaActivity extends AppCompatActivity {
             menuList_tv.add(mainlist);
         }
         mAdapter_tv.notifyDataSetChanged();
+
+
+        LinearLayoutManager finalLayoutManager = layoutManager;
+        recycler_tv.setOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int totalItem = finalLayoutManager.getItemCount();
+                int lastVisibleItem = finalLayoutManager.findLastVisibleItemPosition();
+
+                if (mAdapter_tv.getMoreDataAvailable() && !mLoading && lastVisibleItem == totalItem - 1) {
+                    mLoading = true;
+
+                    AppController.PAGE_TV += 1;
+                    loadMore(1, AppController.PAGE_TV);
+                }
+            }
+        });
+
 
 
         //__________________________________________RADIO
@@ -142,7 +187,7 @@ public class MediaActivity extends AppCompatActivity {
 
 
         //__________________________________________movie
-        mAdapter_movie= new ListTvAdapter(this, menuList_movie);
+        mAdapter_movie = new ListTvAdapter(this, menuList_movie);
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
         recycler_movie.setLayoutManager(layoutManager);
         recycler_movie.setItemAnimator(new DefaultItemAnimator());
@@ -161,7 +206,7 @@ public class MediaActivity extends AppCompatActivity {
 
 
         //__________________________________________series
-        mAdapter_series= new ListTvAdapter(this, menuList_series);
+        mAdapter_series = new ListTvAdapter(this, menuList_series);
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
         recycler_series.setLayoutManager(layoutManager);
         recycler_series.setItemAnimator(new DefaultItemAnimator());
@@ -180,7 +225,7 @@ public class MediaActivity extends AppCompatActivity {
 
 
         //__________________________________________carton
-        mAdapter_carton= new ListTvAdapter(this, menuList_carton);
+        mAdapter_carton = new ListTvAdapter(this, menuList_carton);
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
         recycler_carton.setLayoutManager(layoutManager);
         recycler_carton.setItemAnimator(new DefaultItemAnimator());
@@ -198,7 +243,7 @@ public class MediaActivity extends AppCompatActivity {
         mAdapter_carton.notifyDataSetChanged();
 
         //__________________________________________music
-        mAdapter_music= new ListTvAdapter(this, menuList_music);
+        mAdapter_music = new ListTvAdapter(this, menuList_music);
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
         recycler_music.setLayoutManager(layoutManager);
         recycler_music.setItemAnimator(new DefaultItemAnimator());
@@ -217,7 +262,7 @@ public class MediaActivity extends AppCompatActivity {
 
 
         //__________________________________________quran
-        mAdapter_quran= new ListTvAdapter(this, menuList_quran);
+        mAdapter_quran = new ListTvAdapter(this, menuList_quran);
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
         recycler_quran.setLayoutManager(layoutManager);
         recycler_quran.setItemAnimator(new DefaultItemAnimator());
@@ -236,7 +281,7 @@ public class MediaActivity extends AppCompatActivity {
 
 
         //__________________________________________nohe
-        mAdapter_nohe= new ListTvAdapter(this, menuList_nohe);
+        mAdapter_nohe = new ListTvAdapter(this, menuList_nohe);
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
         recycler_nohe.setLayoutManager(layoutManager);
         recycler_nohe.setItemAnimator(new DefaultItemAnimator());
@@ -252,6 +297,106 @@ public class MediaActivity extends AppCompatActivity {
             menuList_nohe.add(mainlist);
         }
         mAdapter_nohe.notifyDataSetChanged();
+    }
+
+
+    private void loadMore(int type, int index) {
+        switch (type) {
+            case 1:
+                progress_tv.clearAnimation();
+                progress_tv.setVisibility(View.VISIBLE);
+                loadMoreTV(index);
+                break;
+            case 2:
+
+                break;
+            case 3:
+
+                break;
+            case 4:
+
+                break;
+            case 5:
+
+                break;
+            case 6:
+
+                break;
+            case 7:
+
+                break;
+            case 8:
+
+                break;
+        }
+    }
+
+
+
+    private void loadMoreTV(int page){
+        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_MEDIA_URL + "tv/" + page + "/" + AppController.API_BASE_LIMIT + "/" + AppController.APP_TOKEN,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject obj = new JSONObject(response);
+                            JSONArray telArray = obj.getJSONArray("tel");
+
+                            if(telArray.length()== 0 || telArray.length()>= 10){
+                                mAdapter_tv.setMoreDataAvailable(false);
+                                AppController.PAGE_TV -= 1;
+                            }
+
+                            for (int i = 0; i < telArray.length(); i++) {
+                                JSONObject Object = telArray.getJSONObject(i);
+
+                                Lists media = new Lists();
+                                media.setTitle(Object.getString("title"));
+                                media.setImg(Object.getString("img"));
+                                media.setUrl(Object.getString("url"));
+
+                                media.setSite(true);
+                                media.setFlag(true);
+                                media.setTintcolor(true);
+
+                                /*dbHelperTvMedia.insertData(
+                                        media.getId_category(),
+                                        media.getTitle(),
+                                        media.getImg(),
+                                        media.getUrl(),
+                                        true
+                                );*/
+
+                                AppController.list_tel.add(media);
+                                Mainlist mainlist = new Mainlist();
+                                mainlist.setTitle(media.getTitle());
+                                mainlist.setUrl(media.getUrl());
+                                mainlist.setImg(media.getImg());
+                                mainlist.setMainType(MainType.TV);
+                                menuList_tv.add(mainlist);
+                            }
+
+
+                            mLoading = false;
+                            mAdapter_tv.notifyDataSetChanged();
+
+                            progress_tv.clearAnimation();
+                            progress_tv.setVisibility(View.GONE);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+            }
+        });
+        req.setShouldCache(false);
+        AppController.getInstance().addToRequestQueue(req, "loadMoreTv");
     }
 
 

@@ -48,12 +48,13 @@ public class SliderAdapterExample extends SliderViewAdapter<SliderAdapterExample
             }
         });
 
-        try{
+        try {
             viewHolder.textViewDescription.setText(AppController.arrayList_slider.get(position).getTitle());
             Glide.with(viewHolder.itemView)
                     .load(AppController.arrayList_slider.get(position).getImg())
+                    .override(AppController.SIZE_W + 200, AppController.SIZE_H + 100)
                     .into(viewHolder.imageViewBackground);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

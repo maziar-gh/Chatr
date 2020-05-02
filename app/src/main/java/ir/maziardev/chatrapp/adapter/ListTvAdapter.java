@@ -27,12 +27,14 @@ import ir.maziardev.chatrapp.classes.Pages;
 import ir.maziardev.chatrapp.enums.Extras;
 import ir.maziardev.chatrapp.enums.PageType;
 import ir.maziardev.chatrapp.models.Mainlist;
+import ir.maziardev.chatrapp.network.AppController;
 
 public class ListTvAdapter extends RecyclerView.Adapter<ListTvAdapter.ViewHolder> {
-
     private List<Mainlist> dataList;
     private Context mContext;
     private int lastPosition = -1;
+    boolean isMoreDataAvailable = true;
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView tv_title;
@@ -63,17 +65,18 @@ public class ListTvAdapter extends RecyclerView.Adapter<ListTvAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Animation animation = AnimationUtils.loadAnimation(mContext,
+        /*Animation animation = AnimationUtils.loadAnimation(mContext,
                 (position > lastPosition) ? R.anim.up_from_bottom
                         : R.anim.down_from_top);
         holder.itemView.startAnimation(animation);
-        lastPosition = position;
+        lastPosition = position;*/
 
         Mainlist mainlist = dataList.get(position);
 
         try{
             Glide.with(mContext)
                     .load(mainlist.getImg())
+                    .override(AppController.SIZE_W, AppController.SIZE_H)
                     .centerCrop()
                     .placeholder(R.drawable.noimage)
                     .into(holder.tv_image);
@@ -164,6 +167,15 @@ public class ListTvAdapter extends RecyclerView.Adapter<ListTvAdapter.ViewHolder
     @Override
     public int getItemCount() {
         return this.dataList.size();
+    }
+
+
+    public void setMoreDataAvailable(boolean moreDataAvailable) {
+        isMoreDataAvailable = moreDataAvailable;
+    }
+
+    public boolean getMoreDataAvailable() {
+        return isMoreDataAvailable;
     }
 
 }

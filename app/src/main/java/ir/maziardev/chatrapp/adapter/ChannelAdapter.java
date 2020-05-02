@@ -31,6 +31,7 @@ import ir.maziardev.chatrapp.activitys.ImageViewerActivity;
 import ir.maziardev.chatrapp.activitys.VideoActivity;
 import ir.maziardev.chatrapp.enums.Extras;
 import ir.maziardev.chatrapp.models.Channell;
+import ir.maziardev.chatrapp.network.AppController;
 
 
 public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.MyViewHolder> {
@@ -113,11 +114,11 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.MyViewHo
                 break;
             case PICTURE:
                 setVisiblity(holder, holder.linear_picture);
-                Glide.with(mContext).load(list.getImg()).into(holder.img_main);
+                Glide.with(mContext).load(list.getImg()).override(AppController.SIZE_W, AppController.SIZE_H).into(holder.img_main);
                 break;
             case MOVIE:
                 setVisiblity(holder, holder.frm_movie);
-                Glide.with(mContext).load(list.getImg()).into(holder.img_movie);
+                Glide.with(mContext).load(list.getImg()).override(AppController.SIZE_W, AppController.SIZE_H).into(holder.img_movie);
                 break;
             case MUSIC:
                 setVisiblity(holder, holder.linear_music);

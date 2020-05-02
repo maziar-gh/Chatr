@@ -115,14 +115,14 @@ public class MainActivity extends AppCompatActivity {
         ));
 
         calendar.setHighlightOfficialEvents(true);
-        String dayAndMonth = calendar.getWeekDayName(today) +" "+ calendar.formatNumber(today.getDayOfMonth())
-                +" "+ calendar.getMonthName(today);
+        String dayAndMonth = calendar.getWeekDayName(today) + " " + calendar.formatNumber(today.getDayOfMonth())
+                + " " + calendar.getMonthName(today);
         tv_calandar.setText(dayAndMonth + " " + calendar.formatNumber(today.getYear()));
 
         card_media.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,MediaActivity.class));
+                startActivity(new Intent(MainActivity.this, MediaActivity.class));
 
             }
         });
@@ -130,21 +130,21 @@ public class MainActivity extends AppCompatActivity {
         card_library.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,LibraryActivity.class));
+                startActivity(new Intent(MainActivity.this, LibraryActivity.class));
             }
         });
 
         card_games.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,GamesActivity.class));
+                startActivity(new Intent(MainActivity.this, GamesActivity.class));
             }
         });
 
         card_onlinepay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,OnlineServiceActivity.class));
+                startActivity(new Intent(MainActivity.this, OnlineServiceActivity.class));
             }
         });
 
@@ -294,7 +294,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void installupdate(Update update) {
-       if (Integer.parseInt(update.getVersion_code()) > Integer.parseInt(AppController.APP_VERSION_CODE)) {
+        if (Integer.parseInt(update.getVersion_code()) > Integer.parseInt(AppController.APP_VERSION_CODE)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
             builder.setMessage("" +
                     "نسخه جدید برنامه آماده دریافت می باشد" +

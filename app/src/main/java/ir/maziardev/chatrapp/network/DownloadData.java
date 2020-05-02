@@ -1,13 +1,20 @@
 package ir.maziardev.chatrapp.network;
 
 import android.content.Context;
+import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
+import com.mikepenz.fastadapter.IItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,6 +22,8 @@ import org.json.JSONObject;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
@@ -22,6 +31,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import ir.maziardev.chatrapp.adapter.ListTvAdapter;
 import ir.maziardev.chatrapp.classes.SavePref;
 import ir.maziardev.chatrapp.database.DBHelperCategory;
 import ir.maziardev.chatrapp.database.DBHelperChannel;
@@ -54,12 +64,14 @@ import ir.maziardev.chatrapp.database.salamat.DBHelperPray;
 import ir.maziardev.chatrapp.database.salamat.DBHelperPsychology;
 import ir.maziardev.chatrapp.database.salamat.DBHelperSport;
 import ir.maziardev.chatrapp.enums.ChannelType;
+import ir.maziardev.chatrapp.enums.MainType;
 import ir.maziardev.chatrapp.enums.PageType;
 import ir.maziardev.chatrapp.models.Categoryy;
 import ir.maziardev.chatrapp.models.Channell;
 import ir.maziardev.chatrapp.models.GridList;
 import ir.maziardev.chatrapp.models.Lists;
 import ir.maziardev.chatrapp.models.Magazin;
+import ir.maziardev.chatrapp.models.Mainlist;
 import ir.maziardev.chatrapp.models.Slider;
 import ir.maziardev.chatrapp.models.WeatherCity;
 
@@ -104,20 +116,20 @@ public class DownloadData {
     public DownloadData(Context context) {
         this.context = context;
         this.save = new SavePref(context);
-        initDb();
+        //initDb();
 
-        if (isNetworkConnected()) {
+        /*if (isNetworkConnected()) {
             initClearDb();
             init();
-        }else {
+        } else {
             Toast.makeText(this.context, "اتصال به اینترنت برقرار نیست!", Toast.LENGTH_LONG).show();
             clearOldData();
             getAllDataFromDB();
-        }
+        }*/
     }
 
 
-    private void initDb(){
+    private void initDb() {
         dbCategory = new DBHelperCategory(this.context);
         dbAudiobookLib = new DBHelperAudioBookLib(this.context);
         dbQuranLib = new DBHelperQuranLib(this.context);
@@ -149,38 +161,160 @@ public class DownloadData {
         dbHelperJamjam = new DBHelperJamjam(this.context);
         dbHelperTasnim = new DBHelperTasnim(this.context);
     }
-    private void initClearDb(){
-        try { dbCategory.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
-        try { dbAudiobookLib.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
-        try { dbQuranLib.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
-        try { dbMafatihLib.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
-        try { dbNahjLib.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
-        try { dbResaleLib.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
-        try { dbService.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
-        try { dbGames.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
-        try { dbMagazin.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
-        try { dbSlider.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
-        try { dbHelperChannel.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
-        try { dbHelperWeather.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
-        try { dbHelperTvMedia.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
-        try { dbHelperRadioMedia.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
-        try { dbHelperMusicMedia.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
-        try { dbHelperMovieMedia.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
-        try { dbHelperSeriesMedia.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
-        try { dbHelperCartonMedia.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
-        try { dbHelperQuranMedia.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
-        try { dbHelperNoheMedia.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
-        try { dbHelperChef.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
-        try { dbHelperEmploy.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
-        try { dbHelperSport.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
-        try { dbHelperFood.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
-        try { dbHelperPlant.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
-        try { dbHelperPray.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
-        try { dbHelperPsychology.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
-        try { dbHelperIsna.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
-        try { dbHelperJamjam.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
-        try { dbHelperTasnim.deleteAllRecord(); }catch (Exception e){e.printStackTrace();}
+
+    private void initClearDb() {
+        try {
+            dbCategory.deleteAllRecord();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            dbAudiobookLib.deleteAllRecord();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            dbQuranLib.deleteAllRecord();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            dbMafatihLib.deleteAllRecord();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            dbNahjLib.deleteAllRecord();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            dbResaleLib.deleteAllRecord();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            dbService.deleteAllRecord();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            dbGames.deleteAllRecord();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            dbMagazin.deleteAllRecord();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            dbSlider.deleteAllRecord();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            dbHelperChannel.deleteAllRecord();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            dbHelperWeather.deleteAllRecord();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            dbHelperTvMedia.deleteAllRecord();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            dbHelperRadioMedia.deleteAllRecord();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            dbHelperMusicMedia.deleteAllRecord();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            dbHelperMovieMedia.deleteAllRecord();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            dbHelperSeriesMedia.deleteAllRecord();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            dbHelperCartonMedia.deleteAllRecord();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            dbHelperQuranMedia.deleteAllRecord();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            dbHelperNoheMedia.deleteAllRecord();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            dbHelperChef.deleteAllRecord();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            dbHelperEmploy.deleteAllRecord();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            dbHelperSport.deleteAllRecord();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            dbHelperFood.deleteAllRecord();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            dbHelperPlant.deleteAllRecord();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            dbHelperPray.deleteAllRecord();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            dbHelperPsychology.deleteAllRecord();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            dbHelperIsna.deleteAllRecord();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            dbHelperJamjam.deleteAllRecord();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            dbHelperTasnim.deleteAllRecord();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
     private void getAllDataFromDB() {
         AppController.arrayList_category = dbCategory.getAllRows();
         AppController.list_li_audio = dbAudiobookLib.getAllRows();
@@ -219,7 +353,8 @@ public class DownloadData {
         clearOldData();
         initCategory();
     }
-    private void initAll(){
+
+    private void initAll() {
         initUser();
         initMagazin();
         initServices();
@@ -232,6 +367,7 @@ public class DownloadData {
         initNews();
         initWeatherCity();
     }
+
     private void clearOldData() {
         AppController.arrayList_weather_city.clear();
 
@@ -275,6 +411,7 @@ public class DownloadData {
         AppController.list_ne_varzeshnavad.clear();
         AppController.list_ne_yjc.clear();
     }
+
     private void initCategory() {
         StringRequest req = new StringRequest(Request.Method.GET, AppController.API_CATEGORY_URL + AppController.APP_TOKEN,
                 new Response.Listener<String>() {
@@ -316,6 +453,7 @@ public class DownloadData {
         req.setShouldCache(false);
         AppController.getInstance().addToRequestQueue(req, "initCategory");
     }
+
     private void initLibrary() {
         StringRequest req = new StringRequest(Request.Method.GET, AppController.API_LIBRARY_URL + AppController.APP_TOKEN,
                 new Response.Listener<String>() {
@@ -437,6 +575,7 @@ public class DownloadData {
         req.setShouldCache(false);
         AppController.getInstance().addToRequestQueue(req, "initLibrary");
     }
+
     private void initServices() {
         StringRequest req = new StringRequest(Request.Method.GET, AppController.API_SERVICES_URL + AppController.APP_TOKEN,
                 new Response.Listener<String>() {
@@ -482,6 +621,7 @@ public class DownloadData {
         req.setShouldCache(false);
         AppController.getInstance().addToRequestQueue(req, "initLibrary");
     }
+
     private void initGames() {
         StringRequest req = new StringRequest(Request.Method.GET, AppController.API_GAMES_URL + AppController.APP_TOKEN,
                 new Response.Listener<String>() {
@@ -528,6 +668,7 @@ public class DownloadData {
         req.setShouldCache(false);
         AppController.getInstance().addToRequestQueue(req, "initGames");
     }
+
     private void initMagazin() {
         StringRequest req = new StringRequest(Request.Method.GET, AppController.API_MAGAZIN_URL + AppController.APP_TOKEN,
                 new Response.Listener<String>() {
@@ -567,6 +708,7 @@ public class DownloadData {
         req.setShouldCache(false);
         AppController.getInstance().addToRequestQueue(req, "initMagazin");
     }
+
     private void initSlider() {
         StringRequest req = new StringRequest(Request.Method.GET, AppController.API_SLIDER_URL + AppController.APP_TOKEN,
                 new Response.Listener<String>() {
@@ -609,6 +751,7 @@ public class DownloadData {
         req.setShouldCache(false);
         AppController.getInstance().addToRequestQueue(req, "initSlider");
     }
+
     private void initChannel() {
         StringRequest req = new StringRequest(Request.Method.GET, AppController.API_CHANNEL_URL + AppController.APP_TOKEN,
                 new Response.Listener<String>() {
@@ -681,6 +824,7 @@ public class DownloadData {
         req.setShouldCache(false);
         AppController.getInstance().addToRequestQueue(req, "initChannel");
     }
+
     private void initWeatherCity() {
         StringRequest req = new StringRequest(Request.Method.GET, AppController.WEATHER_CITY_URL,
                 new Response.Listener<String>() {
@@ -729,6 +873,7 @@ public class DownloadData {
         req.setShouldCache(false);
         AppController.getInstance().addToRequestQueue(req, "initWeatherCity");
     }
+
     private void initMedia() {
         StringRequest req = new StringRequest(Request.Method.GET, AppController.API_MEDIA_URL + "tv/" + AppController.APP_TOKEN,
                 new Response.Listener<String>() {
@@ -1123,6 +1268,7 @@ public class DownloadData {
         req.setShouldCache(false);
         AppController.getInstance().addToRequestQueue(req, "initNohe");
     }
+
     private void initSalamat() {
         StringRequest req = new StringRequest(Request.Method.GET, AppController.API_SALAMAT_URL + AppController.APP_TOKEN,
                 new Response.Listener<String>() {
@@ -1278,6 +1424,7 @@ public class DownloadData {
         req.setShouldCache(false);
         AppController.getInstance().addToRequestQueue(req, "initSalamat");
     }
+
     private void initNews() {
         StringRequest req = new StringRequest(Request.Method.GET, AppController.API_NEWS_URL + AppController.APP_TOKEN,
                 new Response.Listener<String>() {
@@ -1420,6 +1567,7 @@ public class DownloadData {
         req.setShouldCache(false);
         AppController.getInstance().addToRequestQueue(req, "initNews");
     }
+
     private void initUser() {
         String uid = save.load(AppController.SAVE_USER_id, "0");
         StringRequest req = new StringRequest(Request.Method.GET, AppController.API_USER_URL + "/" + uid + "/" + AppController.APP_TOKEN,
@@ -1448,6 +1596,76 @@ public class DownloadData {
         });
         req.setShouldCache(false);
         AppController.getInstance().addToRequestQueue(req, "initUser");
+    }
+
+
+    public void loadMoreTv(int page, ListTvAdapter adapter, RecyclerView recyclerView, ProgressBar progressBar) {
+        List<Mainlist> menuList_tv = new ArrayList<>();
+        for (int i = 0; i < AppController.list_tel.size(); i++) {
+            Lists media = AppController.list_tel.get(i);
+            Mainlist mainlist = new Mainlist();
+            mainlist.setTitle(media.getTitle());
+            mainlist.setUrl(media.getUrl());
+            mainlist.setImg(media.getImg());
+            mainlist.setMainType(MainType.TV);
+            menuList_tv.add(mainlist);
+        }
+        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_MEDIA_URL + "tv/" + page + "/" + AppController.API_BASE_LIMIT + "/" + AppController.APP_TOKEN,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject obj = new JSONObject(response);
+                            JSONArray telArray = obj.getJSONArray("tel");
+
+                            for (int i = 0; i < telArray.length(); i++) {
+                                JSONObject Object = telArray.getJSONObject(i);
+
+                                Lists media = new Lists();
+                                media.setTitle(Object.getString("title"));
+                                media.setImg(Object.getString("img"));
+                                media.setUrl(Object.getString("url"));
+
+                                media.setSite(true);
+                                media.setFlag(true);
+                                media.setTintcolor(true);
+
+                                /*dbHelperTvMedia.insertData(
+                                        media.getId_category(),
+                                        media.getTitle(),
+                                        media.getImg(),
+                                        media.getUrl(),
+                                        true
+                                );*/
+                                Mainlist mainlist = new Mainlist();
+                                mainlist.setTitle(media.getTitle());
+                                mainlist.setUrl(media.getUrl());
+                                mainlist.setImg(media.getImg());
+                                mainlist.setMainType(MainType.TV);
+                                menuList_tv.add(mainlist);
+                            }
+
+                            ListTvAdapter mAdapter_tv = new ListTvAdapter(context, menuList_tv);
+                            recyclerView.setAdapter(mAdapter_tv);
+                            adapter.notifyDataSetChanged();
+
+                            progressBar.clearAnimation();
+                            progressBar.setVisibility(View.GONE);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+            }
+        });
+        req.setShouldCache(false);
+        AppController.getInstance().addToRequestQueue(req, "loadMoreTv");
     }
 
 
