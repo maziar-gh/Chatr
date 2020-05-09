@@ -78,11 +78,25 @@
                     android:text="پخش زنده رادیو"
                     android:textSize="15sp" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_radio_media"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right" />
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <ProgressBar
+                        android:id="@+id/progress_radio"
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        tools:visibility="gone" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_radio_media"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -101,11 +115,25 @@
                     android:text="فیلم سینمایی"
                     android:textSize="15sp" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_movie_media"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right" />
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <ProgressBar
+                        android:id="@+id/progress_movie"
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        tools:visibility="gone" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_movie_media"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -124,11 +152,25 @@
                     android:text="سریال"
                     android:textSize="15sp" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_series_media"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right" />
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <ProgressBar
+                        android:id="@+id/progress_series"
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        tools:visibility="gone" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_series_media"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -147,11 +189,25 @@
                     android:text="کارتون"
                     android:textSize="15sp" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_carton_media"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right" />
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <ProgressBar
+                        android:id="@+id/progress_carton"
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        tools:visibility="gone" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_carton_media"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -170,11 +226,25 @@
                     android:text="موسیقی"
                     android:textSize="15sp" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_music_media"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right" />
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <ProgressBar
+                        android:id="@+id/progress_music"
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        tools:visibility="gone" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_music_media"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -193,11 +263,25 @@
                     android:text="قرآن"
                     android:textSize="15sp" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_quran_media"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right" />
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <ProgressBar
+                        android:id="@+id/progress_quran"
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        tools:visibility="gone" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_quran_media"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -216,11 +300,25 @@
                     android:text="نوحه"
                     android:textSize="15sp" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_nohe_media"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right" />
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <ProgressBar
+                        android:id="@+id/progress_nohe"
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        tools:visibility="gone" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_nohe_media"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right" />
+
+                </LinearLayout>
 
             </LinearLayout>
 

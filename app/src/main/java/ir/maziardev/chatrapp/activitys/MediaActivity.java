@@ -3,11 +3,9 @@ package ir.maziardev.chatrapp.activitys;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -50,6 +48,20 @@ public class MediaActivity extends AppCompatActivity {
 
     @BindView(R.id.progress_tv)
     ProgressBar progress_tv;
+    @BindView(R.id.progress_radio)
+    ProgressBar progress_radio;
+    @BindView(R.id.progress_movie)
+    ProgressBar progress_movie;
+    @BindView(R.id.progress_music)
+    ProgressBar progress_music;
+    @BindView(R.id.progress_series)
+    ProgressBar progress_series;
+    @BindView(R.id.progress_carton)
+    ProgressBar progress_carton;
+    @BindView(R.id.progress_quran)
+    ProgressBar progress_quran;
+    @BindView(R.id.progress_nohe)
+    ProgressBar progress_nohe;
 
     @BindView(R.id.recycler_tv_media)
     RecyclerView recycler_tv;
@@ -96,6 +108,20 @@ public class MediaActivity extends AppCompatActivity {
 
         progress_tv.clearAnimation();
         progress_tv.setVisibility(View.GONE);
+        progress_radio.clearAnimation();
+        progress_radio.setVisibility(View.GONE);
+        progress_movie.clearAnimation();
+        progress_movie.setVisibility(View.GONE);
+        progress_series.clearAnimation();
+        progress_series.setVisibility(View.GONE);
+        progress_carton.clearAnimation();
+        progress_carton.setVisibility(View.GONE);
+        progress_music.clearAnimation();
+        progress_music.setVisibility(View.GONE);
+        progress_quran.clearAnimation();
+        progress_quran.setVisibility(View.GONE);
+        progress_nohe.clearAnimation();
+        progress_nohe.setVisibility(View.GONE);
 
         init();
 
@@ -147,14 +173,14 @@ public class MediaActivity extends AppCompatActivity {
         mAdapter_tv.notifyDataSetChanged();
 
 
-        LinearLayoutManager finalLayoutManager = layoutManager;
+        LinearLayoutManager finalLayoutManagertv = layoutManager;
         recycler_tv.setOnScrollListener(new RecyclerView.OnScrollListener() {
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                int totalItem = finalLayoutManager.getItemCount();
-                int lastVisibleItem = finalLayoutManager.findLastVisibleItemPosition();
+                int totalItem = finalLayoutManagertv.getItemCount();
+                int lastVisibleItem = finalLayoutManagertv.findLastVisibleItemPosition();
 
                 if (mAdapter_tv.getMoreDataAvailable() && !mLoading && lastVisibleItem == totalItem - 1) {
                     mLoading = true;
@@ -171,7 +197,7 @@ public class MediaActivity extends AppCompatActivity {
         mAdapter_radio = new ListTvAdapter(this, menuList_radio);
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
         recycler_radio.setLayoutManager(layoutManager);
-        recycler_radio.setItemAnimator(new DefaultItemAnimator());
+        //recycler_radio.setItemAnimator(new DefaultItemAnimator());
         recycler_radio.setAdapter(mAdapter_radio);
 
         for (int i = 0; i < AppController.list_radio.size(); i++) {
@@ -184,6 +210,25 @@ public class MediaActivity extends AppCompatActivity {
             menuList_radio.add(mainlist);
         }
         mAdapter_radio.notifyDataSetChanged();
+
+        LinearLayoutManager finalLayoutManagerradio = layoutManager;
+        recycler_radio.setOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int totalItem = finalLayoutManagerradio.getItemCount();
+                int lastVisibleItem = finalLayoutManagerradio.findLastVisibleItemPosition();
+                if (mAdapter_radio.getMoreDataAvailable() && !mLoading && lastVisibleItem == totalItem - 1) {
+                    mLoading = true;
+
+                    AppController.PAGE_RADIO += 1;
+                    loadMore(2, AppController.PAGE_RADIO);
+                }
+            }
+        });
+
+
 
 
         //__________________________________________movie
@@ -204,6 +249,23 @@ public class MediaActivity extends AppCompatActivity {
         }
         mAdapter_movie.notifyDataSetChanged();
 
+        LinearLayoutManager finalLayoutManagermovie = layoutManager;
+        recycler_movie.setOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int totalItem = finalLayoutManagermovie.getItemCount();
+                int lastVisibleItem = finalLayoutManagermovie.findLastVisibleItemPosition();
+                if (mAdapter_movie.getMoreDataAvailable() && !mLoading && lastVisibleItem == totalItem - 1) {
+                    mLoading = true;
+
+                    AppController.PAGE_MOVIE += 1;
+                    loadMore(3, AppController.PAGE_MOVIE);
+                }
+            }
+        });
+
 
         //__________________________________________series
         mAdapter_series = new ListTvAdapter(this, menuList_series);
@@ -222,6 +284,23 @@ public class MediaActivity extends AppCompatActivity {
             menuList_series.add(mainlist);
         }
         mAdapter_series.notifyDataSetChanged();
+
+        LinearLayoutManager finalLayoutManagerseries = layoutManager;
+        recycler_tv.setOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int totalItem = finalLayoutManagerseries.getItemCount();
+                int lastVisibleItem = finalLayoutManagerseries.findLastVisibleItemPosition();
+                if (mAdapter_tv.getMoreDataAvailable() && !mLoading && lastVisibleItem == totalItem - 1) {
+                    mLoading = true;
+
+                    AppController.PAGE_SERIES += 1;
+                    loadMore(4, AppController.PAGE_SERIES);
+                }
+            }
+        });
 
 
         //__________________________________________carton
@@ -242,6 +321,24 @@ public class MediaActivity extends AppCompatActivity {
         }
         mAdapter_carton.notifyDataSetChanged();
 
+        LinearLayoutManager finalLayoutManagercarton = layoutManager;
+        recycler_tv.setOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int totalItem = finalLayoutManagercarton.getItemCount();
+                int lastVisibleItem = finalLayoutManagercarton.findLastVisibleItemPosition();
+                if (mAdapter_tv.getMoreDataAvailable() && !mLoading && lastVisibleItem == totalItem - 1) {
+                    mLoading = true;
+
+                    AppController.PAGE_CARTON += 1;
+                    loadMore(5, AppController.PAGE_CARTON);
+                }
+            }
+        });
+
+
         //__________________________________________music
         mAdapter_music = new ListTvAdapter(this, menuList_music);
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
@@ -259,6 +356,23 @@ public class MediaActivity extends AppCompatActivity {
             menuList_music.add(mainlist);
         }
         mAdapter_music.notifyDataSetChanged();
+
+        LinearLayoutManager finalLayoutManagermusic = layoutManager;
+        recycler_tv.setOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int totalItem = finalLayoutManagermusic.getItemCount();
+                int lastVisibleItem = finalLayoutManagermusic.findLastVisibleItemPosition();
+                if (mAdapter_tv.getMoreDataAvailable() && !mLoading && lastVisibleItem == totalItem - 1) {
+                    mLoading = true;
+
+                    AppController.PAGE_MUSIC += 1;
+                    loadMore(6, AppController.PAGE_MUSIC);
+                }
+            }
+        });
 
 
         //__________________________________________quran
@@ -279,6 +393,23 @@ public class MediaActivity extends AppCompatActivity {
         }
         mAdapter_quran.notifyDataSetChanged();
 
+        LinearLayoutManager finalLayoutManagerquran = layoutManager;
+        recycler_tv.setOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int totalItem = finalLayoutManagerquran.getItemCount();
+                int lastVisibleItem = finalLayoutManagerquran.findLastVisibleItemPosition();
+                if (mAdapter_tv.getMoreDataAvailable() && !mLoading && lastVisibleItem == totalItem - 1) {
+                    mLoading = true;
+
+                    AppController.PAGE_QURAN += 1;
+                    loadMore(7, AppController.PAGE_QURAN);
+                }
+            }
+        });
+
 
         //__________________________________________nohe
         mAdapter_nohe = new ListTvAdapter(this, menuList_nohe);
@@ -297,6 +428,23 @@ public class MediaActivity extends AppCompatActivity {
             menuList_nohe.add(mainlist);
         }
         mAdapter_nohe.notifyDataSetChanged();
+
+        LinearLayoutManager finalLayoutManagernohe = layoutManager;
+        recycler_tv.setOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int totalItem = finalLayoutManagernohe.getItemCount();
+                int lastVisibleItem = finalLayoutManagernohe.findLastVisibleItemPosition();
+                if (mAdapter_tv.getMoreDataAvailable() && !mLoading && lastVisibleItem == totalItem - 1) {
+                    mLoading = true;
+
+                    AppController.PAGE_NOHE += 1;
+                    loadMore(8, AppController.PAGE_NOHE);
+                }
+            }
+        });
     }
 
 
@@ -308,25 +456,38 @@ public class MediaActivity extends AppCompatActivity {
                 loadMoreTV(index);
                 break;
             case 2:
-
+                progress_radio.clearAnimation();
+                progress_radio.setVisibility(View.VISIBLE);
+                loadMoreRadio(index);
                 break;
             case 3:
-
+                progress_movie.clearAnimation();
+                progress_movie.setVisibility(View.VISIBLE);
+                loadMoreTV(index);
                 break;
             case 4:
-
+                progress_series.clearAnimation();
+                progress_series.setVisibility(View.VISIBLE);
                 break;
             case 5:
-
+                progress_carton.clearAnimation();
+                progress_carton.setVisibility(View.VISIBLE);
+                loadMoreTV(index);
                 break;
             case 6:
-
+                progress_music.clearAnimation();
+                progress_music.setVisibility(View.VISIBLE);
+                loadMoreTV(index);
                 break;
             case 7:
-
+                progress_quran.clearAnimation();
+                progress_quran.setVisibility(View.VISIBLE);
+                loadMoreTV(index);
                 break;
             case 8:
-
+                progress_nohe.clearAnimation();
+                progress_nohe.setVisibility(View.VISIBLE);
+                loadMoreTV(index);
                 break;
         }
     }
@@ -359,13 +520,6 @@ public class MediaActivity extends AppCompatActivity {
                                 media.setFlag(true);
                                 media.setTintcolor(true);
 
-                                /*dbHelperTvMedia.insertData(
-                                        media.getId_category(),
-                                        media.getTitle(),
-                                        media.getImg(),
-                                        media.getUrl(),
-                                        true
-                                );*/
 
                                 AppController.list_tel.add(media);
                                 Mainlist mainlist = new Mainlist();
@@ -397,6 +551,66 @@ public class MediaActivity extends AppCompatActivity {
         });
         req.setShouldCache(false);
         AppController.getInstance().addToRequestQueue(req, "loadMoreTv");
+    }
+
+    private void loadMoreRadio(int page){
+        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_MEDIA_URL + "radio/"  + "1/" + AppController.API_BASE_LIMIT + "/" +  AppController.APP_TOKEN,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+                            JSONObject obj = new JSONObject(response);
+                            JSONArray radioArray = obj.getJSONArray("radio");
+
+                            if(radioArray.length()== 0 || radioArray.length()>= 10){
+                                mAdapter_radio.setMoreDataAvailable(false);
+                                AppController.PAGE_RADIO -= 1;
+                            }
+
+                            for (int i = 0; i < radioArray.length(); i++) {
+                                JSONObject Object = radioArray.getJSONObject(i);
+
+                                Lists media = new Lists();
+                                media.setTitle(Object.getString("title"));
+                                media.setImg(Object.getString("img"));
+                                media.setUrl(Object.getString("url"));
+
+                                media.setSite(true);
+                                media.setFlag(true);
+                                media.setRadio(true);
+
+                                AppController.list_radio.add(media);
+                                Mainlist mainlist = new Mainlist();
+                                mainlist.setTitle(media.getTitle());
+                                mainlist.setUrl(media.getUrl());
+                                mainlist.setImg(media.getImg());
+                                mainlist.setMainType(MainType.RADIO);
+                                menuList_radio.add(mainlist);
+                            }
+
+
+                            mLoading = false;
+                            mAdapter_radio.notifyDataSetChanged();
+
+                            progress_radio.clearAnimation();
+                            progress_radio.setVisibility(View.GONE);
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+            }
+        });
+        req.setShouldCache(false);
+        AppController.getInstance().addToRequestQueue(req, "loadMoreRadio");
     }
 
 

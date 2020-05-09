@@ -127,16 +127,16 @@ public class SplashActivity extends AppCompatActivity {
 
         if (save.load(AppController.SAVE_STORAGE_PERMISION, "0").equals("0")) showStorageDialog();
 
-        initDb();
+        //initDb();
         if (isNetworkConnected()) {
-            initClearDb();
+            //initClearDb();
             scheduler.scheduleAtFixedRate(new CustomTask(), 1000, 1000, TimeUnit.MILLISECONDS);
         } else {
             Toast.makeText(this, "اتصال به اینترنت برقرار نیست!", Toast.LENGTH_LONG).show();
-            getAllDataFromDB();
+           /* getAllDataFromDB();
             startActivity(new Intent(SplashActivity.this, MainActivity.class));
             scheduler.shutdown();
-            finish();
+            finish();*/
         }
 
     }
@@ -499,13 +499,13 @@ public class SplashActivity extends AppCompatActivity {
                                 category.setId(object.getString("id"));
                                 category.setTitle(object.getString("title"));
 
-                                dbCategory.insertData(
+                                /*dbCategory.insertData(
                                         category.getId(),
                                         category.getTitle()
-                                );
+                                );*/
                                 AppController.arrayList_category.add(category);
                             }
-                            dbCategory.close();
+                            //dbCategory.close();
 
                             initAll();
 
@@ -548,16 +548,16 @@ public class SplashActivity extends AppCompatActivity {
                                 library.setImg(object.getString("img"));
                                 library.setUrl(object.getString("url"));
 
-                                dbAudiobookLib.insertData(
+                                /*dbAudiobookLib.insertData(
                                         library.getId_category(),
                                         library.getTitle(),
                                         library.getImg(),
                                         library.getUrl(),
                                         library.isSite()
-                                );
+                                );*/
                                 AppController.list_li_audio.add(library);
                             }
-                            dbAudiobookLib.close();
+                            //dbAudiobookLib.close();
 
                             for (int i = 0; i < quranJsonList.length(); i++) {
                                 JSONObject object = quranJsonList.getJSONObject(i);
@@ -567,16 +567,16 @@ public class SplashActivity extends AppCompatActivity {
                                 library.setImg(object.getString("img"));
                                 library.setUrl(object.getString("url"));
 
-                                dbQuranLib.insertData(
+                                /*dbQuranLib.insertData(
                                         library.getTitle(),
                                         library.getImg(),
                                         library.getUrl(),
                                         library.isSite()
-                                );
+                                );*/
 
                                 AppController.list_li_quran.add(library);
                             }
-                            dbQuranLib.close();
+                            //dbQuranLib.close();
 
                             for (int i = 0; i < mafatihJsonList.length(); i++) {
                                 JSONObject object = mafatihJsonList.getJSONObject(i);
@@ -586,15 +586,15 @@ public class SplashActivity extends AppCompatActivity {
                                 library.setImg(object.getString("img"));
                                 library.setUrl(object.getString("url"));
 
-                                dbMafatihLib.insertData(
+                                /*dbMafatihLib.insertData(
                                         library.getTitle(),
                                         library.getImg(),
                                         library.getUrl(),
                                         library.isSite()
-                                );
+                                );*/
                                 AppController.list_li_mafatih.add(library);
                             }
-                            dbMafatihLib.close();
+                            //dbMafatihLib.close();
 
                             for (int i = 0; i < nahjJsonList.length(); i++) {
                                 JSONObject object = nahjJsonList.getJSONObject(i);
@@ -604,15 +604,15 @@ public class SplashActivity extends AppCompatActivity {
                                 library.setImg(object.getString("img"));
                                 library.setUrl(object.getString("url"));
 
-                                dbNahjLib.insertData(
+                                /*dbNahjLib.insertData(
                                         library.getTitle(),
                                         library.getImg(),
                                         library.getUrl(),
                                         library.isSite()
-                                );
+                                );*/
                                 AppController.list_li_nahj.add(library);
                             }
-                            dbNahjLib.close();
+                            //dbNahjLib.close();
 
                             for (int i = 0; i < resaleJsonList.length(); i++) {
                                 JSONObject object = resaleJsonList.getJSONObject(i);
@@ -622,15 +622,15 @@ public class SplashActivity extends AppCompatActivity {
                                 library.setImg(object.getString("img"));
                                 library.setUrl(object.getString("url"));
 
-                                dbResaleLib.insertData(
+                                /*dbResaleLib.insertData(
                                         library.getTitle(),
                                         library.getImg(),
                                         library.getUrl(),
                                         library.isSite()
-                                );
+                                );*/
                                 AppController.list_li_resale.add(library);
                             }
-                            dbResaleLib.close();
+                            //dbResaleLib.close();
 
                             downloaditem++;
                         } catch (JSONException e) {
@@ -666,16 +666,16 @@ public class SplashActivity extends AppCompatActivity {
                                 service.setImg(object.getString("img"));
                                 service.setUrl(object.getString("url"));
 
-                                dbService.insertData(
+                                /*dbService.insertData(
                                         service.getId_category(),
                                         service.getTitle(),
                                         service.getImg(),
                                         service.getUrl(),
                                         service.isSite()
-                                );
+                                );*/
                                 AppController.list_services.add(service);
                             }
-                            dbService.close();
+                            //dbService.close();
 
                             downloaditem++;
 
@@ -714,16 +714,16 @@ public class SplashActivity extends AppCompatActivity {
                                 game.setId_category(object.getString("id_category"));
                                 game.setUrl(object.getString("url"));
 
-                                dbGames.insertData(
+                                /*dbGames.insertData(
                                         game.getId_category(),
                                         game.getTitle(),
                                         game.getImg(),
                                         game.getUrl(),
                                         game.isSite()
-                                );
+                                );*/
                                 AppController.list_games.add(game);
                             }
-                            dbGames.close();
+                            //dbGames.close();
 
                             downloaditem++;
                         } catch (JSONException e) {
@@ -757,13 +757,13 @@ public class SplashActivity extends AppCompatActivity {
                                 magazin.setTitle(object.getString("title"));
                                 magazin.setUrl(object.getString("url"));
 
-                                dbMagazin.insertData(
+                                /*dbMagazin.insertData(
                                         magazin.getTitle(),
                                         magazin.getUrl()
-                                );
+                                );*/
                                 AppController.arrayList_magazin.add(magazin);
                             }
-                            dbMagazin.close();
+                            //dbMagazin.close();
 
                             downloaditem++;
                         } catch (JSONException e) {
@@ -798,15 +798,15 @@ public class SplashActivity extends AppCompatActivity {
                                 slider.setImg(sliderObject.getString("img"));
                                 slider.setAction(sliderObject.getString("action"));
 
-                                dbSlider.insertData(
+                                /*dbSlider.insertData(
                                         slider.getTitle(),
                                         slider.getDescription(),
                                         slider.getImg(),
                                         slider.getAction()
-                                );
+                                );*/
                                 AppController.arrayList_slider.add(slider);
                             }
-                            dbSlider.close();
+                            //dbSlider.close();
 
                             downloaditem++;
                         } catch (JSONException e) {
@@ -869,16 +869,16 @@ public class SplashActivity extends AppCompatActivity {
                                         break;
                                 }
 
-                                dbHelperChannel.insertData(
-                                        channel.getTitle(),
-                                        channel.getImg(),
-                                        channel.getMusic(),
-                                        channel.getMovie(),
-                                        channel.getSurvey(),
-                                        channel.getLocation(),
-                                        channel.getPhone(),
-                                        channelObject.getString("type")
-                                );
+//                                dbHelperChannel.insertData(
+//                                        channel.getTitle(),
+//                                        channel.getImg(),
+//                                        channel.getMusic(),
+//                                        channel.getMovie(),
+//                                        channel.getSurvey(),
+//                                        channel.getLocation(),
+//                                        channel.getPhone(),
+//                                        channelObject.getString("type")
+//                                );
                                 AppController.arrayList_channel.add(channel);
                             }
                             downloaditem++;
@@ -917,15 +917,15 @@ public class SplashActivity extends AppCompatActivity {
                                 weatherCity.setLat(object.getString("lat"));
                                 weatherCity.setLng(object.getString("lng"));
 
-                                dbHelperWeather.insertData(
-                                        weatherCity.getProvince(),
-                                        weatherCity.getStationEn(),
-                                        weatherCity.getStationFa(),
-                                        weatherCity.getStationNumber(),
-                                        weatherCity.getiCAO(),
-                                        weatherCity.getLat(),
-                                        weatherCity.getLng()
-                                );
+//                                dbHelperWeather.insertData(
+//                                        weatherCity.getProvince(),
+//                                        weatherCity.getStationEn(),
+//                                        weatherCity.getStationFa(),
+//                                        weatherCity.getStationNumber(),
+//                                        weatherCity.getiCAO(),
+//                                        weatherCity.getLat(),
+//                                        weatherCity.getLng()
+//                                );
                                 AppController.arrayList_weather_city.add(weatherCity);
                             }
 
@@ -966,13 +966,13 @@ public class SplashActivity extends AppCompatActivity {
                                 media.setFlag(true);
                                 media.setTintcolor(true);
 
-                                dbHelperTvMedia.insertData(
+                                /*dbHelperTvMedia.insertData(
                                         media.getId_category(),
                                         media.getTitle(),
                                         media.getImg(),
                                         media.getUrl(),
                                         media.isSite()
-                                );
+                                );*/
                                 AppController.list_tel.add(media);
                             }
                             downloaditem++;
@@ -1014,13 +1014,13 @@ public class SplashActivity extends AppCompatActivity {
                                 media.setFlag(true);
                                 media.setRadio(true);
 
-                                dbHelperRadioMedia.insertData(
+                                /*dbHelperRadioMedia.insertData(
                                         media.getId_category(),
                                         media.getTitle(),
                                         media.getImg(),
                                         media.getUrl(),
                                         media.isSite()
-                                );
+                                );*/
                                 AppController.list_radio.add(media);
                             }
                             downloaditem++;
@@ -1064,14 +1064,14 @@ public class SplashActivity extends AppCompatActivity {
                                 Categoryy category = AppController.arrayList_category.get(Integer.parseInt(Object.getString("id_category")));
                                 media.setCategory(category.getTitle());
 
-                                dbHelperMusicMedia.insertData(
+                                /*dbHelperMusicMedia.insertData(
                                         media.getCategory(),
                                         media.getTitle(),
                                         media.getImg(),
                                         media.getUrl(),
                                         media.getActor(),
                                         media.isSite()
-                                );
+                                );*/
                                 AppController.list_music.add(media);
                             }
                             downloaditem++;
@@ -1113,14 +1113,14 @@ public class SplashActivity extends AppCompatActivity {
                                 Categoryy category = AppController.arrayList_category.get(Integer.parseInt(Object.getString("id_category")));
                                 media.setCategory(category.getTitle());
 
-                                dbHelperMovieMedia.insertData(
+                                /*dbHelperMovieMedia.insertData(
                                         media.getCategory(),
                                         media.getTitle(),
                                         media.getImg(),
                                         media.getUrl(),
                                         "",
                                         false
-                                );
+                                );*/
                                 AppController.list_movie.add(media);
                             }
                             downloaditem++;
@@ -1163,14 +1163,14 @@ public class SplashActivity extends AppCompatActivity {
                                 media.setCategory(category.getTitle());
                                 media.setSeriesname(Object.getString("seriesname"));
 
-                                dbHelperSeriesMedia.insertData(
-                                        media.getCategory(),
-                                        media.getTitle(),
-                                        media.getImg(),
-                                        media.getUrl(),
-                                        media.getSeriesname(),
-                                        false
-                                );
+//                                dbHelperSeriesMedia.insertData(
+//                                        media.getCategory(),
+//                                        media.getTitle(),
+//                                        media.getImg(),
+//                                        media.getUrl(),
+//                                        media.getSeriesname(),
+//                                        false
+//                                );
                                 AppController.list_series.add(media);
                             }
                             downloaditem++;
@@ -1213,14 +1213,14 @@ public class SplashActivity extends AppCompatActivity {
                                 media.setCategory(category.getTitle());
                                 media.setSeriesname(Object.getString("seriesname"));
 
-                                dbHelperCartonMedia.insertData(
+                                /*dbHelperCartonMedia.insertData(
                                         media.getCategory(),
                                         media.getTitle(),
                                         media.getImg(),
                                         media.getUrl(),
                                         media.getSeriesname(),
                                         false
-                                );
+                                );*/
                                 AppController.list_carton.add(media);
                             }
                             downloaditem++;
@@ -1263,14 +1263,14 @@ public class SplashActivity extends AppCompatActivity {
                                 media.setSite(true);
                                 media.setMusic(true);
 
-                                dbHelperQuranMedia.insertData(
+                                /*dbHelperQuranMedia.insertData(
                                         media.getCategory(),
                                         media.getTitle(),
                                         media.getImg(),
                                         media.getUrl(),
                                         media.getActor(),
                                         false
-                                );
+                                );*/
                                 AppController.list_quran.add(media);
                             }
                             downloaditem++;
@@ -1313,14 +1313,14 @@ public class SplashActivity extends AppCompatActivity {
                                 media.setSite(true);
                                 media.setMusic(true);
 
-                                dbHelperNoheMedia.insertData(
+                                /*dbHelperNoheMedia.insertData(
                                         media.getCategory(),
                                         media.getTitle(),
                                         media.getImg(),
                                         media.getUrl(),
                                         media.getActor(),
                                         false
-                                );
+                                );*/
                                 AppController.list_nohe.add(media);
                             }
                             downloaditem++;
@@ -1365,12 +1365,12 @@ public class SplashActivity extends AppCompatActivity {
                                 media.setUrl(Object.getString("url"));
                                 media.setAction(Object.getString("action"));
 
-                                dbHelperChef.insertData(
+                                /*dbHelperChef.insertData(
                                         media.getTitle(),
                                         "",
                                         media.getImg(),
                                         media.getAction()
-                                );
+                                );*/
                                 AppController.list_sa_chef.add(media);
                             }
 
@@ -1383,12 +1383,12 @@ public class SplashActivity extends AppCompatActivity {
                                 media.setUrl(Object.getString("url"));
                                 media.setAction(Object.getString("action"));
 
-                                dbHelperEmploy.insertData(
+                                /*dbHelperEmploy.insertData(
                                         media.getTitle(),
                                         "",
                                         media.getImg(),
                                         media.getAction()
-                                );
+                                );*/
                                 AppController.list_sa_employ.add(media);
                             }
 
@@ -1401,12 +1401,12 @@ public class SplashActivity extends AppCompatActivity {
                                 media.setUrl(Object.getString("url"));
                                 media.setAction(Object.getString("action"));
 
-                                dbHelperSport.insertData(
+                                /*dbHelperSport.insertData(
                                         media.getTitle(),
                                         "",
                                         media.getImg(),
                                         media.getAction()
-                                );
+                                );*/
                                 AppController.list_sa_sport.add(media);
                             }
 
@@ -1419,12 +1419,12 @@ public class SplashActivity extends AppCompatActivity {
                                 media.setUrl(Object.getString("url"));
                                 media.setAction(Object.getString("action"));
 
-                                dbHelperFood.insertData(
+                                /*dbHelperFood.insertData(
                                         media.getTitle(),
                                         "",
                                         media.getImg(),
                                         media.getAction()
-                                );
+                                );*/
                                 AppController.list_sa_food.add(media);
                             }
 
@@ -1437,12 +1437,12 @@ public class SplashActivity extends AppCompatActivity {
                                 media.setUrl(Object.getString("url"));
                                 media.setAction(Object.getString("action"));
 
-                                dbHelperPlant.insertData(
+                                /*dbHelperPlant.insertData(
                                         media.getTitle(),
                                         "",
                                         media.getImg(),
                                         media.getAction()
-                                );
+                                );*/
                                 AppController.list_sa_plant.add(media);
                             }
 
@@ -1455,12 +1455,12 @@ public class SplashActivity extends AppCompatActivity {
                                 media.setUrl(Object.getString("url"));
                                 media.setAction(Object.getString("action"));
 
-                                dbHelperPray.insertData(
+                                /*dbHelperPray.insertData(
                                         media.getTitle(),
                                         "",
                                         media.getImg(),
                                         media.getAction()
-                                );
+                                );*/
                                 AppController.list_sa_pray.add(media);
                             }
 
@@ -1473,12 +1473,12 @@ public class SplashActivity extends AppCompatActivity {
                                 media.setUrl(Object.getString("url"));
                                 media.setAction(Object.getString("action"));
 
-                                dbHelperPsychology.insertData(
+                                /*dbHelperPsychology.insertData(
                                         media.getTitle(),
                                         "",
                                         media.getImg(),
                                         media.getAction()
-                                );
+                                );*/
                                 AppController.list_sa_psychology.add(media);
                             }
 
@@ -1535,13 +1535,13 @@ public class SplashActivity extends AppCompatActivity {
                                 media.setImg(Object.getString("img"));
                                 media.setUrl(Object.getString("url"));
 
-                                dbHelperIsna.insertData(
+                                /*dbHelperIsna.insertData(
                                         "1",
                                         media.getTitle(),
                                         media.getImg(),
                                         media.getUrl(),
                                         true
-                                );
+                                );*/
                                 AppController.list_ne_isna.add(media);
                             }
 
@@ -1553,13 +1553,13 @@ public class SplashActivity extends AppCompatActivity {
                                 media.setImg(Object.getString("img"));
                                 media.setUrl(Object.getString("url"));
 
-                                dbHelperJamjam.insertData(
+                                /*dbHelperJamjam.insertData(
                                         "1",
                                         media.getTitle(),
                                         media.getImg(),
                                         media.getUrl(),
                                         true
-                                );
+                                );*/
                                 AppController.list_ne_jamjam.add(media);
                             }
 
@@ -1571,13 +1571,13 @@ public class SplashActivity extends AppCompatActivity {
                                 media.setImg(Object.getString("img"));
                                 media.setUrl(Object.getString("url"));
 
-                                dbHelperTasnim.insertData(
+                                /*dbHelperTasnim.insertData(
                                         "1",
                                         media.getTitle(),
                                         media.getImg(),
                                         media.getUrl(),
                                         true
-                                );
+                                );*/
                                 AppController.list_ne_tasnim.add(media);
                             }
 

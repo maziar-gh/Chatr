@@ -62,13 +62,13 @@ public class AppController extends Application {
     public static final String WEATHER_CITY_URL = "http://mobileapp.irimo.ir/WeatherServer/GetStationList";
     public static final String WEATHER_BY_CITY_URL = "http://mobileapp.irimo.ir/WeatherServer/GetStationData/";
 
-    public static final String API_AZAN_URL = "http://chatr.anzalepoxy.ir/azan/index.htm";
-    public static final String API_EST_URL = "http://chatr.anzalepoxy.ir/estekhare/index.php";
-    public static final String API_SUPPORT_URL = "http://chatr.anzalepoxy.ir/chat/spachat.php";
+    public static final String API_AZAN_URL = "https://numberfa.ir/azan/index.htm";
+    public static final String API_EST_URL = "https://numberfa.ir/estekhare/index.php";
+    public static final String API_SUPPORT_URL = "https://numberfa.ir/chat/spachat.php";
 
     public static final String API_BASE_LIMIT = "7";
 
-    public static final String API_BASE_URL = "http://chatr.anzalepoxy.ir/chatr/app/index.php/api/";
+    public static final String API_BASE_URL = "https://numberfa.ir/chatr/app/index.php/api/";
     public static final String API_UPDATE_URL = API_BASE_URL + "update/";
     public static final String API_SLIDER_URL = API_BASE_URL + "slider/detail/";
     public static final String API_CHANNEL_URL = API_BASE_URL + "channel/detail/";
@@ -129,6 +129,13 @@ public class AppController extends Application {
 
 
     public static int PAGE_TV = 1;
+    public static int PAGE_RADIO = 1;
+    public static int PAGE_MOVIE = 1;
+    public static int PAGE_SERIES = 1;
+    public static int PAGE_CARTON = 1;
+    public static int PAGE_MUSIC = 1;
+    public static int PAGE_QURAN = 1;
+    public static int PAGE_NOHE = 1;
 
 
 
