@@ -32,6 +32,7 @@ import butterknife.ButterKnife;
 import ir.maziardev.chatrapp.R;
 import ir.maziardev.chatrapp.adapter.ListTvAdapter;
 import ir.maziardev.chatrapp.enums.MainType;
+import ir.maziardev.chatrapp.models.ChannelModel;
 import ir.maziardev.chatrapp.models.GridList;
 import ir.maziardev.chatrapp.models.Lists;
 import ir.maziardev.chatrapp.models.Mainlist;
@@ -42,63 +43,31 @@ public class MediaActivity extends AppCompatActivity {
 
     private static final String TAG = MediaActivity.class.getSimpleName();
     private boolean mLoading = false;
-    private boolean loading = true;
-    private int visibleThreshold = 5;
-    int firstVisibleItem, visibleItemCount, totalItemCount;
 
-    @BindView(R.id.progress_tv)
-    ProgressBar progress_tv;
-    @BindView(R.id.progress_radio)
-    ProgressBar progress_radio;
-    @BindView(R.id.progress_movie)
-    ProgressBar progress_movie;
-    @BindView(R.id.progress_music)
-    ProgressBar progress_music;
-    @BindView(R.id.progress_series)
-    ProgressBar progress_series;
-    @BindView(R.id.progress_carton)
-    ProgressBar progress_carton;
-    @BindView(R.id.progress_quran)
-    ProgressBar progress_quran;
-    @BindView(R.id.progress_nohe)
-    ProgressBar progress_nohe;
+    @BindView(R.id.recycler_media_it)
+    RecyclerView recycler_it;
 
-    @BindView(R.id.recycler_tv_media)
-    RecyclerView recycler_tv;
-    @BindView(R.id.recycler_radio_media)
-    RecyclerView recycler_radio;
-    @BindView(R.id.recycler_movie_media)
+    @BindView(R.id.recycler_media_kodak)
+    RecyclerView recycler_media_kodak;
+
+    @BindView(R.id.recycler_media_movie)
     RecyclerView recycler_movie;
-    @BindView(R.id.recycler_series_media)
-    RecyclerView recycler_series;
-    @BindView(R.id.recycler_carton_media)
-    RecyclerView recycler_carton;
-    @BindView(R.id.recycler_music_media)
-    RecyclerView recycler_music;
-    @BindView(R.id.recycler_quran_media)
-    RecyclerView recycler_quran;
-    @BindView(R.id.recycler_nohe_media)
-    RecyclerView recycler_nohe;
 
-    private List<Mainlist> menuList_tv = new ArrayList<>();
-    private List<Mainlist> menuList_radio = new ArrayList<>();
-    private List<Mainlist> menuList_movie = new ArrayList<>();
-    private List<Mainlist> menuList_series = new ArrayList<>();
-    private List<Mainlist> menuList_carton = new ArrayList<>();
-    private List<Mainlist> menuList_music = new ArrayList<>();
-    private List<Mainlist> menuList_quran = new ArrayList<>();
-    private List<Mainlist> menuList_nohe = new ArrayList<>();
-    private ListTvAdapter mAdapter_tv, mAdapter_radio,
-            mAdapter_movie, mAdapter_series,
-            mAdapter_carton, mAdapter_music,
-            mAdapter_quran, mAdapter_nohe;
+    @BindView(R.id.recycler_media_tv)
+    RecyclerView recycler_tv;
 
-    private List<Mainlist> menuList_filter = new ArrayList<>();
-    private List<Mainlist> backup_filter = new ArrayList<>();
+    @BindView(R.id.recycler_media_radio)
+    RecyclerView recycler_radio;
 
-    private FloatingActionButton fab_search;
-    private BottomSheetBehavior sheetBehavior;
-    private LinearLayout bottom_sheet;
+
+    private List<ChannelModel> menuList_kodak = new ArrayList<>();
+    private List<ChannelModel> menuList_tv = new ArrayList<>();
+    private List<ChannelModel> menuList_radio = new ArrayList<>();
+    private List<ChannelModel> menuList_it = new ArrayList<>();
+    private List<ChannelModel> menuList_movie = new ArrayList<>();
+    private ListTvAdapter mAdapter_kodak, mAdapter_tv, mAdapter_radio, mAdapter_it, mAdapter_movie;
+
+    LinearLayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,52 +75,27 @@ public class MediaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_media);
         ButterKnife.bind(this);
 
-        progress_tv.clearAnimation();
-        progress_tv.setVisibility(View.GONE);
-        progress_radio.clearAnimation();
-        progress_radio.setVisibility(View.GONE);
-        progress_movie.clearAnimation();
-        progress_movie.setVisibility(View.GONE);
-        progress_series.clearAnimation();
-        progress_series.setVisibility(View.GONE);
-        progress_carton.clearAnimation();
-        progress_carton.setVisibility(View.GONE);
-        progress_music.clearAnimation();
-        progress_music.setVisibility(View.GONE);
-        progress_quran.clearAnimation();
-        progress_quran.setVisibility(View.GONE);
-        progress_nohe.clearAnimation();
-        progress_nohe.setVisibility(View.GONE);
-
-        init();
-
-    }
-
-    private void find(String charString) {
-        if (charString.isEmpty()) {
-            backup_filter = menuList_tv;
-        } else {
-            List<Mainlist> filteredList = new ArrayList<>();
-            for (Mainlist row : backup_filter) {
-
-                // name match condition. this might differ depending on your requirement
-                // here we are looking for name or phone number match
-                if (row.getTitle().toLowerCase().contains(charString.toLowerCase())) {
-                    filteredList.add(row);
-                }
+        for (int i = 0; i < AppController.list_channel.size(); i++) {
+            String id_category = AppController.list_channel.get(i).getId_category();
+            switch (id_category){
+                case "2": //movie and music
+                    menuList_movie.add(AppController.list_channel.get(i));
+                    break;
+                case "3": //it & education
+                    menuList_it.add(AppController.list_channel.get(i));
+                    break;
+                case "4": //kodak
+                    menuList_kodak.add(AppController.list_channel.get(i));
+                    break;
             }
-
-            menuList_filter = filteredList;
-
-            menuList_tv.clear();
-            menuList_tv = menuList_filter;
-
-            mAdapter_tv.notifyDataSetChanged();
         }
 
+        init();
     }
 
+
     private void init() {
+
         //________________________________________TV
         mAdapter_tv = new ListTvAdapter(this, menuList_tv);
         LinearLayoutManager layoutManager
@@ -161,36 +105,22 @@ public class MediaActivity extends AppCompatActivity {
         recycler_tv.setHasFixedSize(true);
         recycler_tv.setAdapter(mAdapter_tv);
 
-        for (int i = 0; i < AppController.list_tel.size(); i++) {
-            Lists media = AppController.list_tel.get(i);
-            Mainlist mainlist = new Mainlist();
+        for (int i = 0; i < AppController.list_tv.size(); i++) {
+            Lists media = AppController.list_tv.get(i);
+
+            ChannelModel list = new ChannelModel();
+            list.setCname(media.getTitle());
+            list.setImg(media.getImg());
+            list.setId_category("tv");
+
+            /*Mainlist mainlist = new Mainlist();
             mainlist.setTitle(media.getTitle());
             mainlist.setUrl(media.getUrl());
             mainlist.setImg(media.getImg());
-            mainlist.setMainType(MainType.TV);
-            menuList_tv.add(mainlist);
+            mainlist.setMainType(MainType.TV);*/
+            menuList_tv.add(list);
         }
         mAdapter_tv.notifyDataSetChanged();
-
-
-        LinearLayoutManager finalLayoutManagertv = layoutManager;
-        recycler_tv.setOnScrollListener(new RecyclerView.OnScrollListener() {
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                int totalItem = finalLayoutManagertv.getItemCount();
-                int lastVisibleItem = finalLayoutManagertv.findLastVisibleItemPosition();
-
-                if (mAdapter_tv.getMoreDataAvailable() && !mLoading && lastVisibleItem == totalItem - 1) {
-                    mLoading = true;
-
-                    AppController.PAGE_TV += 1;
-                    loadMore(1, AppController.PAGE_TV);
-                }
-            }
-        });
-
 
 
         //__________________________________________RADIO
@@ -202,415 +132,50 @@ public class MediaActivity extends AppCompatActivity {
 
         for (int i = 0; i < AppController.list_radio.size(); i++) {
             Lists media = AppController.list_radio.get(i);
-            Mainlist mainlist = new Mainlist();
+
+            ChannelModel list = new ChannelModel();
+            list.setCname(media.getTitle());
+            list.setImg(media.getImg());
+            list.setId_category("radio");
+
+            /*Mainlist mainlist = new Mainlist();
             mainlist.setTitle(media.getTitle());
             mainlist.setImg(media.getImg());
             mainlist.setUrl(media.getUrl());
-            mainlist.setMainType(MainType.RADIO);
-            menuList_radio.add(mainlist);
+            mainlist.setMainType(MainType.RADIO);*/
+            menuList_radio.add(list);
         }
         mAdapter_radio.notifyDataSetChanged();
 
-        LinearLayoutManager finalLayoutManagerradio = layoutManager;
-        recycler_radio.setOnScrollListener(new RecyclerView.OnScrollListener() {
 
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                int totalItem = finalLayoutManagerradio.getItemCount();
-                int lastVisibleItem = finalLayoutManagerradio.findLastVisibleItemPosition();
-                if (mAdapter_radio.getMoreDataAvailable() && !mLoading && lastVisibleItem == totalItem - 1) {
-                    mLoading = true;
-
-                    AppController.PAGE_RADIO += 1;
-                    loadMore(2, AppController.PAGE_RADIO);
-                }
-            }
-        });
-
-
-
-
-        //__________________________________________movie
+        //__________________________________________movie and music
         mAdapter_movie = new ListTvAdapter(this, menuList_movie);
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
         recycler_movie.setLayoutManager(layoutManager);
-        recycler_movie.setItemAnimator(new DefaultItemAnimator());
+        //recycler_tv.setItemAnimator(new DefaultItemAnimator());
+        recycler_movie.setHasFixedSize(true);
         recycler_movie.setAdapter(mAdapter_movie);
-
-        for (int i = 0; i < AppController.list_movie.size(); i++) {
-            GridList media = AppController.list_movie.get(i);
-            Mainlist mainlist = new Mainlist();
-            mainlist.setTitle(media.getTitle());
-            mainlist.setImg(media.getImg());
-            mainlist.setUrl(media.getUrl());
-            mainlist.setMainType(MainType.MOVIE);
-            menuList_movie.add(mainlist);
-        }
         mAdapter_movie.notifyDataSetChanged();
 
-        LinearLayoutManager finalLayoutManagermovie = layoutManager;
-        recycler_movie.setOnScrollListener(new RecyclerView.OnScrollListener() {
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                int totalItem = finalLayoutManagermovie.getItemCount();
-                int lastVisibleItem = finalLayoutManagermovie.findLastVisibleItemPosition();
-                if (mAdapter_movie.getMoreDataAvailable() && !mLoading && lastVisibleItem == totalItem - 1) {
-                    mLoading = true;
-
-                    AppController.PAGE_MOVIE += 1;
-                    loadMore(3, AppController.PAGE_MOVIE);
-                }
-            }
-        });
-
-
-        //__________________________________________series
-        mAdapter_series = new ListTvAdapter(this, menuList_series);
+        //________________________________________it & education
+        mAdapter_it = new ListTvAdapter(this, menuList_it);
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
-        recycler_series.setLayoutManager(layoutManager);
-        recycler_series.setItemAnimator(new DefaultItemAnimator());
-        recycler_series.setAdapter(mAdapter_series);
-
-        for (int i = 0; i < AppController.list_series.size(); i++) {
-            GridList media = AppController.list_series.get(i);
-            Mainlist mainlist = new Mainlist();
-            mainlist.setTitle(media.getTitle());
-            mainlist.setImg(media.getImg());
-            mainlist.setUrl(media.getUrl());
-            mainlist.setMainType(MainType.SERIES);
-            menuList_series.add(mainlist);
-        }
-        mAdapter_series.notifyDataSetChanged();
-
-        LinearLayoutManager finalLayoutManagerseries = layoutManager;
-        recycler_tv.setOnScrollListener(new RecyclerView.OnScrollListener() {
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                int totalItem = finalLayoutManagerseries.getItemCount();
-                int lastVisibleItem = finalLayoutManagerseries.findLastVisibleItemPosition();
-                if (mAdapter_tv.getMoreDataAvailable() && !mLoading && lastVisibleItem == totalItem - 1) {
-                    mLoading = true;
-
-                    AppController.PAGE_SERIES += 1;
-                    loadMore(4, AppController.PAGE_SERIES);
-                }
-            }
-        });
+        recycler_it.setLayoutManager(layoutManager);
+        //recycler_tv.setItemAnimator(new DefaultItemAnimator());
+        recycler_it.setHasFixedSize(true);
+        recycler_it.setAdapter(mAdapter_it);
+        mAdapter_it.notifyDataSetChanged();
 
 
-        //__________________________________________carton
-        mAdapter_carton = new ListTvAdapter(this, menuList_carton);
+        //________________________________________kodak
+        mAdapter_kodak = new ListTvAdapter(this, menuList_kodak);
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
-        recycler_carton.setLayoutManager(layoutManager);
-        recycler_carton.setItemAnimator(new DefaultItemAnimator());
-        recycler_carton.setAdapter(mAdapter_carton);
+        recycler_media_kodak.setLayoutManager(layoutManager);
+        //recycler_tv.setItemAnimator(new DefaultItemAnimator());
+        recycler_media_kodak.setHasFixedSize(true);
+        recycler_media_kodak.setAdapter(mAdapter_kodak);
+        mAdapter_kodak.notifyDataSetChanged();
 
-        for (int i = 0; i < AppController.list_carton.size(); i++) {
-            GridList media = AppController.list_carton.get(i);
-            Mainlist mainlist = new Mainlist();
-            mainlist.setTitle(media.getTitle());
-            mainlist.setImg(media.getImg());
-            mainlist.setUrl(media.getUrl());
-            mainlist.setMainType(MainType.CARTON);
-            menuList_carton.add(mainlist);
-        }
-        mAdapter_carton.notifyDataSetChanged();
-
-        LinearLayoutManager finalLayoutManagercarton = layoutManager;
-        recycler_tv.setOnScrollListener(new RecyclerView.OnScrollListener() {
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                int totalItem = finalLayoutManagercarton.getItemCount();
-                int lastVisibleItem = finalLayoutManagercarton.findLastVisibleItemPosition();
-                if (mAdapter_tv.getMoreDataAvailable() && !mLoading && lastVisibleItem == totalItem - 1) {
-                    mLoading = true;
-
-                    AppController.PAGE_CARTON += 1;
-                    loadMore(5, AppController.PAGE_CARTON);
-                }
-            }
-        });
-
-
-        //__________________________________________music
-        mAdapter_music = new ListTvAdapter(this, menuList_music);
-        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
-        recycler_music.setLayoutManager(layoutManager);
-        recycler_music.setItemAnimator(new DefaultItemAnimator());
-        recycler_music.setAdapter(mAdapter_music);
-
-        for (int i = 0; i < AppController.list_music.size(); i++) {
-            GridList media = AppController.list_music.get(i);
-            Mainlist mainlist = new Mainlist();
-            mainlist.setTitle(media.getTitle());
-            mainlist.setImg(media.getImg());
-            mainlist.setUrl(media.getUrl());
-            mainlist.setMainType(MainType.MUSIC);
-            menuList_music.add(mainlist);
-        }
-        mAdapter_music.notifyDataSetChanged();
-
-        LinearLayoutManager finalLayoutManagermusic = layoutManager;
-        recycler_tv.setOnScrollListener(new RecyclerView.OnScrollListener() {
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                int totalItem = finalLayoutManagermusic.getItemCount();
-                int lastVisibleItem = finalLayoutManagermusic.findLastVisibleItemPosition();
-                if (mAdapter_tv.getMoreDataAvailable() && !mLoading && lastVisibleItem == totalItem - 1) {
-                    mLoading = true;
-
-                    AppController.PAGE_MUSIC += 1;
-                    loadMore(6, AppController.PAGE_MUSIC);
-                }
-            }
-        });
-
-
-        //__________________________________________quran
-        mAdapter_quran = new ListTvAdapter(this, menuList_quran);
-        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
-        recycler_quran.setLayoutManager(layoutManager);
-        recycler_quran.setItemAnimator(new DefaultItemAnimator());
-        recycler_quran.setAdapter(mAdapter_quran);
-
-        for (int i = 0; i < AppController.list_quran.size(); i++) {
-            GridList media = AppController.list_quran.get(i);
-            Mainlist mainlist = new Mainlist();
-            mainlist.setTitle(media.getTitle());
-            mainlist.setImg(media.getImg());
-            mainlist.setUrl(media.getUrl());
-            mainlist.setMainType(MainType.QURAN);
-            menuList_quran.add(mainlist);
-        }
-        mAdapter_quran.notifyDataSetChanged();
-
-        LinearLayoutManager finalLayoutManagerquran = layoutManager;
-        recycler_tv.setOnScrollListener(new RecyclerView.OnScrollListener() {
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                int totalItem = finalLayoutManagerquran.getItemCount();
-                int lastVisibleItem = finalLayoutManagerquran.findLastVisibleItemPosition();
-                if (mAdapter_tv.getMoreDataAvailable() && !mLoading && lastVisibleItem == totalItem - 1) {
-                    mLoading = true;
-
-                    AppController.PAGE_QURAN += 1;
-                    loadMore(7, AppController.PAGE_QURAN);
-                }
-            }
-        });
-
-
-        //__________________________________________nohe
-        mAdapter_nohe = new ListTvAdapter(this, menuList_nohe);
-        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
-        recycler_nohe.setLayoutManager(layoutManager);
-        recycler_nohe.setItemAnimator(new DefaultItemAnimator());
-        recycler_nohe.setAdapter(mAdapter_nohe);
-
-        for (int i = 0; i < AppController.list_nohe.size(); i++) {
-            GridList media = AppController.list_nohe.get(i);
-            Mainlist mainlist = new Mainlist();
-            mainlist.setTitle(media.getTitle());
-            mainlist.setImg(media.getImg());
-            mainlist.setUrl(media.getUrl());
-            mainlist.setMainType(MainType.NOHE);
-            menuList_nohe.add(mainlist);
-        }
-        mAdapter_nohe.notifyDataSetChanged();
-
-        LinearLayoutManager finalLayoutManagernohe = layoutManager;
-        recycler_tv.setOnScrollListener(new RecyclerView.OnScrollListener() {
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                int totalItem = finalLayoutManagernohe.getItemCount();
-                int lastVisibleItem = finalLayoutManagernohe.findLastVisibleItemPosition();
-                if (mAdapter_tv.getMoreDataAvailable() && !mLoading && lastVisibleItem == totalItem - 1) {
-                    mLoading = true;
-
-                    AppController.PAGE_NOHE += 1;
-                    loadMore(8, AppController.PAGE_NOHE);
-                }
-            }
-        });
-    }
-
-
-    private void loadMore(int type, int index) {
-        switch (type) {
-            case 1:
-                progress_tv.clearAnimation();
-                progress_tv.setVisibility(View.VISIBLE);
-                loadMoreTV(index);
-                break;
-            case 2:
-                progress_radio.clearAnimation();
-                progress_radio.setVisibility(View.VISIBLE);
-                loadMoreRadio(index);
-                break;
-            case 3:
-                progress_movie.clearAnimation();
-                progress_movie.setVisibility(View.VISIBLE);
-                loadMoreTV(index);
-                break;
-            case 4:
-                progress_series.clearAnimation();
-                progress_series.setVisibility(View.VISIBLE);
-                break;
-            case 5:
-                progress_carton.clearAnimation();
-                progress_carton.setVisibility(View.VISIBLE);
-                loadMoreTV(index);
-                break;
-            case 6:
-                progress_music.clearAnimation();
-                progress_music.setVisibility(View.VISIBLE);
-                loadMoreTV(index);
-                break;
-            case 7:
-                progress_quran.clearAnimation();
-                progress_quran.setVisibility(View.VISIBLE);
-                loadMoreTV(index);
-                break;
-            case 8:
-                progress_nohe.clearAnimation();
-                progress_nohe.setVisibility(View.VISIBLE);
-                loadMoreTV(index);
-                break;
-        }
-    }
-
-
-
-    private void loadMoreTV(int page){
-        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_MEDIA_URL + "tv/" + page + "/" + AppController.API_BASE_LIMIT + "/" + AppController.APP_TOKEN,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject obj = new JSONObject(response);
-                            JSONArray telArray = obj.getJSONArray("tel");
-
-                            if(telArray.length()== 0 || telArray.length()>= 10){
-                                mAdapter_tv.setMoreDataAvailable(false);
-                                AppController.PAGE_TV -= 1;
-                            }
-
-                            for (int i = 0; i < telArray.length(); i++) {
-                                JSONObject Object = telArray.getJSONObject(i);
-
-                                Lists media = new Lists();
-                                media.setTitle(Object.getString("title"));
-                                media.setImg(Object.getString("img"));
-                                media.setUrl(Object.getString("url"));
-
-                                media.setSite(true);
-                                media.setFlag(true);
-                                media.setTintcolor(true);
-
-
-                                AppController.list_tel.add(media);
-                                Mainlist mainlist = new Mainlist();
-                                mainlist.setTitle(media.getTitle());
-                                mainlist.setUrl(media.getUrl());
-                                mainlist.setImg(media.getImg());
-                                mainlist.setMainType(MainType.TV);
-                                menuList_tv.add(mainlist);
-                            }
-
-
-                            mLoading = false;
-                            mAdapter_tv.notifyDataSetChanged();
-
-                            progress_tv.clearAnimation();
-                            progress_tv.setVisibility(View.GONE);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d(TAG, "Error: " + error.getMessage());
-            }
-        });
-        req.setShouldCache(false);
-        AppController.getInstance().addToRequestQueue(req, "loadMoreTv");
-    }
-
-    private void loadMoreRadio(int page){
-        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_MEDIA_URL + "radio/"  + "1/" + AppController.API_BASE_LIMIT + "/" +  AppController.APP_TOKEN,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                        try {
-                            JSONObject obj = new JSONObject(response);
-                            JSONArray radioArray = obj.getJSONArray("radio");
-
-                            if(radioArray.length()== 0 || radioArray.length()>= 10){
-                                mAdapter_radio.setMoreDataAvailable(false);
-                                AppController.PAGE_RADIO -= 1;
-                            }
-
-                            for (int i = 0; i < radioArray.length(); i++) {
-                                JSONObject Object = radioArray.getJSONObject(i);
-
-                                Lists media = new Lists();
-                                media.setTitle(Object.getString("title"));
-                                media.setImg(Object.getString("img"));
-                                media.setUrl(Object.getString("url"));
-
-                                media.setSite(true);
-                                media.setFlag(true);
-                                media.setRadio(true);
-
-                                AppController.list_radio.add(media);
-                                Mainlist mainlist = new Mainlist();
-                                mainlist.setTitle(media.getTitle());
-                                mainlist.setUrl(media.getUrl());
-                                mainlist.setImg(media.getImg());
-                                mainlist.setMainType(MainType.RADIO);
-                                menuList_radio.add(mainlist);
-                            }
-
-
-                            mLoading = false;
-                            mAdapter_radio.notifyDataSetChanged();
-
-                            progress_radio.clearAnimation();
-                            progress_radio.setVisibility(View.GONE);
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d(TAG, "Error: " + error.getMessage());
-            }
-        });
-        req.setShouldCache(false);
-        AppController.getInstance().addToRequestQueue(req, "loadMoreRadio");
     }
 
 

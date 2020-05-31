@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +19,15 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
+import org.sufficientlysecure.htmltextview.HtmlHttpImageGetter;
+import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.util.ArrayList;
 
@@ -29,79 +35,167 @@ import ir.maziardev.chatrapp.R;
 import ir.maziardev.chatrapp.activitys.ChannelActivity;
 import ir.maziardev.chatrapp.activitys.ImageViewerActivity;
 import ir.maziardev.chatrapp.activitys.VideoActivity;
+import ir.maziardev.chatrapp.classes.BlurRender;
+import ir.maziardev.chatrapp.enums.ChannelType;
 import ir.maziardev.chatrapp.enums.Extras;
-import ir.maziardev.chatrapp.models.Channell;
+import ir.maziardev.chatrapp.models.ChannelList;
+import ir.maziardev.chatrapp.models.ChannelModel;
 import ir.maziardev.chatrapp.network.AppController;
+import jp.wasabeef.glide.transformations.BlurTransformation;
 
 
-public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.MyViewHolder> {
+public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ViewHolder> {
 
-    private ArrayList<Channell> dataList;
+    private ArrayList<ChannelList> dataList;
     private Context mContext;
     private boolean btnPlay = false;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        public ImageView img_main, img_movie, img_music;
-        public TextView txt_channel, tv_time, tv_phone, tv_location, tv_music;
-        public CardView card_items;
-        public LinearLayout linear_music, linear_picture,
-                linear_survey, linear_location, linear_phone;
-        public FrameLayout frm_movie;
-        public RadioButton rb_one, rb_two, rb_three, rb_four;
-        public Button btn_sendSurvey;
-        public RadioGroup rb_group;
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView img_main_img;
+        HtmlTextView txt_channel_img;
+        CardView cardView_img;
 
-        public MyViewHolder(View view) {
+        ImageView img_main_video;
+        HtmlTextView txt_channel_video;
+        CardView cardView_video;
+
+        HtmlTextView txt_channel_music, tv_music_text_channel_music;
+        ImageView img_music_controll;
+        CardView cardView_music;
+
+        HtmlTextView txt_channel_txt;
+        CardView cardView_txt;
+
+        public ViewHolder(View view) {
             super(view);
-            card_items = (CardView) view.findViewById(R.id.card_channel_main);
+            txt_channel_img = (HtmlTextView) view.findViewById(R.id.tv_channel_image);
+            img_main_img = (ImageView) view.findViewById(R.id.img_picture_channel);
+            cardView_img = (CardView) view.findViewById(R.id.card_channel_image);
 
-            txt_channel = (TextView) view.findViewById(R.id.tv_channel_main);
-            tv_time = (TextView) view.findViewById(R.id.tv_time_channel);
+            txt_channel_video = (HtmlTextView) view.findViewById(R.id.tv_channel_video);
+            img_main_video = (ImageView) view.findViewById(R.id.img_video_channel);
+            cardView_video = (CardView) view.findViewById(R.id.card_channel_video);
 
-            linear_music = (LinearLayout) view.findViewById(R.id.linear_music_channel);
-            tv_music = (TextView) view.findViewById(R.id.tv_music_channel);
-            img_music = (ImageView) view.findViewById(R.id.img_music_channel);
+            txt_channel_music = (HtmlTextView) view.findViewById(R.id.tv_music_channel);
+            tv_music_text_channel_music = (HtmlTextView) view.findViewById(R.id.tv_music_text_channel);
+            img_music_controll = (ImageView) view.findViewById(R.id.img_music_controll);
+            cardView_music = (CardView) view.findViewById(R.id.card_channel_music);
 
-            frm_movie = (FrameLayout) view.findViewById(R.id.frm_video_channel);
-            img_movie = (ImageView) view.findViewById(R.id.img_video_channel);
-
-            linear_picture = (LinearLayout) view.findViewById(R.id.linear_image_channel);
-            img_main = (ImageView) view.findViewById(R.id.img_picture_channel);
-
-            linear_survey = (LinearLayout) view.findViewById(R.id.linear_survey_channel);
-            rb_group = (RadioGroup) view.findViewById(R.id.rb_group_channel);
-            rb_one = (RadioButton) view.findViewById(R.id.rb_one_channel);
-            rb_two = (RadioButton) view.findViewById(R.id.rb_two_channel);
-            rb_three = (RadioButton) view.findViewById(R.id.rb_three_channel);
-            rb_four = (RadioButton) view.findViewById(R.id.rb_four_channel);
-            btn_sendSurvey = (Button) view.findViewById(R.id.btn_sendsurvey_channel);
-
-            linear_location = (LinearLayout) view.findViewById(R.id.linear_location_channel);
-            tv_location = (TextView) view.findViewById(R.id.tv_location_channel);
-
-            linear_phone = (LinearLayout) view.findViewById(R.id.linear_contact_channel);
-            tv_phone = (TextView) view.findViewById(R.id.tv_phone_channel);
+            txt_channel_txt = (HtmlTextView) view.findViewById(R.id.tv_text_channel);
+            cardView_txt = (CardView) view.findViewById(R.id.card_channel_text);
         }
     }
 
-    public ChannelAdapter(Context context, ArrayList<Channell> dataList) {
+    public ChannelAdapter(Context context, ArrayList<ChannelList> dataList) {
         this.dataList = dataList;
         this.mContext = context;
-
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_channel_item, parent, false);
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.image_type, parent, false);
 
-        return new MyViewHolder(itemView);
+        ViewHolder vh = new ViewHolder(v);
+        return vh;
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        ChannelList object = dataList.get(position);
+        if (object != null) {
+            switch (object.getType()) {
+                case 1:
+                    Glide.with(mContext)
+                            .load(object.getImgtmp())
+                            .apply(RequestOptions.bitmapTransform(new BlurTransformation(100, 100)))
+                            .centerCrop()
+                            .into(holder.img_main_img);
+
+                    holder.txt_channel_img.setHtml(object.getTitle(),
+                            new HtmlHttpImageGetter(holder.txt_channel_img));
+
+                    holder.cardView_img.setVisibility(View.VISIBLE);
+                    holder.cardView_video.setVisibility(View.GONE);
+                    holder.cardView_music.setVisibility(View.GONE);
+                    holder.cardView_txt.setVisibility(View.GONE);
+                    break;
+
+                case 2:
+                    Glide.with(mContext)
+                            .load(object.getImgtmp())
+                            .apply(RequestOptions.bitmapTransform(new BlurTransformation(100, 100)))
+                            .centerCrop()
+                            .into(holder.img_main_video);
+                    holder.txt_channel_video.setHtml(object.getTitle(),
+                            new HtmlHttpImageGetter(holder.txt_channel_video));
+
+                    holder.cardView_img.setVisibility(View.GONE);
+                    holder.cardView_video.setVisibility(View.VISIBLE);
+                    holder.cardView_music.setVisibility(View.GONE);
+                    holder.cardView_txt.setVisibility(View.GONE);
+                    break;
+
+                case 3:
+                    holder.tv_music_text_channel_music.setHtml(object.getTitle(),
+                            new HtmlHttpImageGetter(holder.tv_music_text_channel_music));
+                    holder.txt_channel_music.setHtml(object.getTitle(),
+                            new HtmlHttpImageGetter(holder.txt_channel_music));
+
+                    holder.cardView_img.setVisibility(View.GONE);
+                    holder.cardView_video.setVisibility(View.GONE);
+                    holder.cardView_music.setVisibility(View.VISIBLE);
+                    holder.cardView_txt.setVisibility(View.GONE);
+                    break;
+
+                default:
+                    holder.txt_channel_txt.setHtml(object.getTitle(),
+                            new HtmlHttpImageGetter(holder.txt_channel_music));
+
+                    holder.cardView_img.setVisibility(View.GONE);
+                    holder.cardView_video.setVisibility(View.GONE);
+                    holder.cardView_music.setVisibility(View.GONE);
+                    holder.cardView_txt.setVisibility(View.VISIBLE);
+                    break;
+            }
+        }
+
+
+        holder.cardView_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, ImageViewerActivity.class);
+                intent.putExtra(Extras.EXTRA_URL.toString(), object.getImg());
+                intent.putExtra(Extras.EXTRA_TITLE.toString(), "");
+                mContext.startActivity(intent);
+            }
+        });
+
+
+        holder.cardView_video.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, VideoActivity.class);
+                intent.putExtra(Extras.EXTRA_TITLE.toString(), "");
+                intent.putExtra(Extras.EXTRA_URL.toString(), object.getVideo());
+                mContext.startActivity(intent);
+            }
+        });
+
+        holder.cardView_music.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                player(mContext, object.getMusic(), holder.img_music_controll );
+            }
+        });
     }
 
 
-    @Override
+
+
+    /*@Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Channell list = dataList.get(position);
+        ChannelModel list = dataList.get(position);
 
         switch (list.getType()) {
             case PHONE:
@@ -146,9 +240,9 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.MyViewHo
             }
         });
 
-        /*if(list.isTintcolor()){
+        *//*if(list.isTintcolor()){
             holder.card_items.setCardBackgroundColor(Color.parseColor("#93E0D4"));
-        }*/
+        }*//*
 
         holder.card_items.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,27 +283,8 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.MyViewHo
             }
 
         });
-    }
+    }*/
 
-    private void setVisiblity(MyViewHolder holder, ViewGroup linearLayout) {
-        holder.linear_phone.setVisibility(View.GONE);
-        holder.linear_location.setVisibility(View.GONE);
-        holder.linear_picture.setVisibility(View.GONE);
-        holder.frm_movie.setVisibility(View.GONE);
-        holder.linear_music.setVisibility(View.GONE);
-        holder.linear_survey.setVisibility(View.GONE);
-
-        linearLayout.setVisibility(View.VISIBLE);
-    }
-
-    private void allGone(MyViewHolder holder) {
-        holder.linear_phone.setVisibility(View.GONE);
-        holder.linear_location.setVisibility(View.GONE);
-        holder.linear_picture.setVisibility(View.GONE);
-        holder.frm_movie.setVisibility(View.GONE);
-        holder.linear_music.setVisibility(View.GONE);
-        holder.linear_survey.setVisibility(View.GONE);
-    }
 
     private void player(Context mContext, String url, ImageView img_music) {
         if (btnPlay) { //pause
@@ -267,6 +342,7 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.MyViewHo
         });
         mediaPlayer.start();*/
     }
+
 
 
 

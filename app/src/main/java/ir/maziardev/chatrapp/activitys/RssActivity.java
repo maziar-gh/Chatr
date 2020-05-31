@@ -17,6 +17,7 @@ import butterknife.ButterKnife;
 import ir.maziardev.chatrapp.R;
 import ir.maziardev.chatrapp.adapter.ListTvAdapter;
 import ir.maziardev.chatrapp.enums.MainType;
+import ir.maziardev.chatrapp.models.ChannelModel;
 import ir.maziardev.chatrapp.models.Lists;
 import ir.maziardev.chatrapp.models.Mainlist;
 import ir.maziardev.chatrapp.network.AppController;
@@ -24,8 +25,10 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class RssActivity extends AppCompatActivity {
 
-    /*@BindView(R.id.recycler_fars_news)
-    RecyclerView recycler_fars;*/
+    @BindView(R.id.recycler_media_official)
+    RecyclerView recycler_official;
+    @BindView(R.id.recycler_news_channel)
+    RecyclerView recycler_news_channel;
     @BindView(R.id.recycler_isna_news)
     RecyclerView recycler_isna;
     @BindView(R.id.recycler_jamjam_news)
@@ -41,15 +44,16 @@ public class RssActivity extends AppCompatActivity {
     /*@BindView(R.id.recycler_yjc_news)
     RecyclerView recycler_yjc;*/
 
-    private List<Mainlist> menuList_fars = new ArrayList<>();
-    private List<Mainlist> menuList_isna = new ArrayList<>();
-    private List<Mainlist> menuList_jamjam = new ArrayList<>();
-    private List<Mainlist> menuList_tabnak = new ArrayList<>();
-    private List<Mainlist> menuList_tasnim = new ArrayList<>();
-    private List<Mainlist> menuList_varzesh90 = new ArrayList<>();
-    private List<Mainlist> menuList_varzesh3 = new ArrayList<>();
-    private List<Mainlist> menuList_yjc = new ArrayList<>();
-    private ListTvAdapter mAdapter_fars, mAdapter_isna, mAdapter_jamjam, mAdapter_tabnak
+    private List<ChannelModel> menuList_official = new ArrayList<>();
+    private List<ChannelModel> menuList_channel = new ArrayList<>();
+    private List<ChannelModel> menuList_isna = new ArrayList<>();
+    private List<ChannelModel> menuList_jamjam = new ArrayList<>();
+    private List<ChannelModel> menuList_tabnak = new ArrayList<>();
+    private List<ChannelModel> menuList_tasnim = new ArrayList<>();
+    private List<ChannelModel> menuList_varzesh90 = new ArrayList<>();
+    private List<ChannelModel> menuList_varzesh3 = new ArrayList<>();
+    private List<ChannelModel> menuList_yjc = new ArrayList<>();
+    private ListTvAdapter mAdapter_channel, mAdapter_isna, mAdapter_jamjam, mAdapter_official, mAdapter_tabnak
             , mAdapter_tasnim, mAdapter_varzesh90, mAdapter_varzesh3, mAdapter_yjc;
 
     LinearLayoutManager layoutManager;
@@ -61,10 +65,42 @@ public class RssActivity extends AppCompatActivity {
         setContentView(R.layout.activity_rss);
         ButterKnife.bind(this);
 
+        for (int i = 0; i < AppController.list_channel.size(); i++) {
+            String id_category = AppController.list_channel.get(i).getId_category();
+            switch (id_category){
+                case "8": //movie and music
+                    menuList_channel.add(AppController.list_channel.get(i));
+                    break;
+                case "10": //official
+                    menuList_official.add(AppController.list_channel.get(i));
+                    break;
+            }
+        }
+
         init();
     }
 
     private void init() {
+
+        //__________________________________________news
+        mAdapter_channel = new ListTvAdapter(this, menuList_channel);
+        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
+        recycler_news_channel.setLayoutManager(layoutManager);
+        //recycler_tv.setItemAnimator(new DefaultItemAnimator());
+        recycler_news_channel.setHasFixedSize(true);
+        recycler_news_channel.setAdapter(mAdapter_channel);
+        mAdapter_channel.notifyDataSetChanged();
+
+
+        //________________________________________official
+        mAdapter_official = new ListTvAdapter(this, menuList_official);
+        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
+        recycler_official.setLayoutManager(layoutManager);
+        //recycler_tv.setItemAnimator(new DefaultItemAnimator());
+        recycler_official.setHasFixedSize(true);
+        recycler_official.setAdapter(mAdapter_official);
+        mAdapter_official.notifyDataSetChanged();
+
 
         //________________________________________fars
         /*mAdapter_fars = new ListTvAdapter(this, menuList_fars);
@@ -97,12 +133,18 @@ public class RssActivity extends AppCompatActivity {
 
         for (int i = 0; i < AppController.list_ne_isna.size(); i++) {
             Lists news = AppController.list_ne_isna.get(i);
-            Mainlist mainlist = new Mainlist();
+
+            ChannelModel list = new ChannelModel();
+            list.setCname(news.getTitle());
+            list.setImg(news.getImg());
+            list.setId_category("isna");
+
+            /*Mainlist mainlist = new Mainlist();
             mainlist.setTitle(news.getTitle());
             mainlist.setImg(news.getImg());
             mainlist.setUrl(news.getUrl());
-            mainlist.setMainType(MainType.NEWS);
-            menuList_isna.add(mainlist);
+            mainlist.setMainType(MainType.NEWS);*/
+            menuList_isna.add(list);
         }
         mAdapter_isna.notifyDataSetChanged();
 
@@ -117,12 +159,18 @@ public class RssActivity extends AppCompatActivity {
 
         for (int i = 0; i < AppController.list_ne_jamjam.size(); i++) {
             Lists news = AppController.list_ne_jamjam.get(i);
-            Mainlist mainlist = new Mainlist();
+
+            ChannelModel list = new ChannelModel();
+            list.setCname(news.getTitle());
+            list.setImg(news.getImg());
+            list.setId_category("jamjam");
+
+            /*Mainlist mainlist = new Mainlist();
             mainlist.setTitle(news.getTitle());
             mainlist.setImg(news.getImg());
             mainlist.setUrl(news.getUrl());
-            mainlist.setMainType(MainType.NEWS);
-            menuList_jamjam.add(mainlist);
+            mainlist.setMainType(MainType.NEWS);*/
+            menuList_jamjam.add(list);
         }
         mAdapter_jamjam.notifyDataSetChanged();
 
@@ -157,12 +205,18 @@ public class RssActivity extends AppCompatActivity {
 
         for (int i = 0; i < AppController.list_ne_tasnim.size(); i++) {
             Lists news = AppController.list_ne_tasnim.get(i);
-            Mainlist mainlist = new Mainlist();
+
+            ChannelModel list = new ChannelModel();
+            list.setCname(news.getTitle());
+            list.setImg(news.getImg());
+            list.setId_category("tasnim");
+
+            /*Mainlist mainlist = new Mainlist();
             mainlist.setTitle(news.getTitle());
             mainlist.setImg(news.getImg());
             mainlist.setUrl(news.getUrl());
-            mainlist.setMainType(MainType.NEWS);
-            menuList_tasnim.add(mainlist);
+            mainlist.setMainType(MainType.NEWS);*/
+            menuList_tasnim.add(list);
         }
         mAdapter_tasnim.notifyDataSetChanged();
 

@@ -6,13 +6,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,22 +25,22 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
-import com.crashlytics.android.Crashlytics;
+import com.bumptech.glide.Glide;
+import com.denzcoskun.imageslider.ImageSlider;
+import com.denzcoskun.imageslider.interfaces.ItemClickListener;
+import com.denzcoskun.imageslider.models.SlideModel;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.smarteist.autoimageslider.IndicatorAnimations;
-import com.smarteist.autoimageslider.IndicatorView.draw.controller.DrawController;
-import com.smarteist.autoimageslider.SliderAnimations;
-import com.smarteist.autoimageslider.SliderView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ir.maziardev.chatrapp.R;
-import ir.maziardev.chatrapp.adapter.SliderAdapterExample;
-import ir.maziardev.chatrapp.network.DownloadData;
 import ir.maziardev.chatrapp.classes.SavePref;
+import ir.maziardev.chatrapp.enums.Extras;
 import ir.maziardev.chatrapp.models.Update;
 import ir.maziardev.chatrapp.network.AppController;
 import ir.maziardev.chatrapp.network.UpdateApp;
@@ -59,8 +59,8 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.swip_main)
     SwipeRefreshLayout swip_main;
-    @BindView(R.id.imageSlider_2)
-    SliderView sliderView;
+    @BindView(R.id.imageSlider)
+    ImageSlider sliderView;
     @BindView(R.id.linear_support_main)
     LinearLayout linear_support;
     @BindView(R.id.linear_profile_main)
@@ -151,7 +151,9 @@ public class MainActivity extends AppCompatActivity {
         card_channel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, ChannelActivity.class));
+                Intent intent = new Intent(MainActivity.this, ChannelActivity.class);
+                intent.putExtra("CHANNELID", "1");
+                startActivity(intent);
             }
         });
 
@@ -201,8 +203,7 @@ public class MainActivity extends AppCompatActivity {
         swip_main.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new DownloadData(MainActivity.this);
-                swip_main.setRefreshing(false);
+                Toast.makeText(MainActivity.this, "refresh", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -241,22 +242,36 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void initSlider_load() {
-        final SliderAdapterExample adapter = new SliderAdapterExample(this);
-        sliderView.setSliderAdapter(adapter);
 
-        sliderView.setIndicatorAnimation(IndicatorAnimations.SLIDE); //set indicator animation by using SliderLayout.IndicatorAnimations. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
-        sliderView.setSliderTransformAnimation(SliderAnimations.CUBEINROTATIONTRANSFORMATION);
-        sliderView.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH);
-        sliderView.setIndicatorSelectedColor(Color.WHITE);
-        sliderView.setIndicatorUnselectedColor(Color.GRAY);
-        sliderView.startAutoCycle();
+        ArrayList<SlideModel> imageList = new ArrayList<>();
+        for (int i = 0; i < AppController.arrayList_slider.size()-1; i++) {
 
-        sliderView.setOnIndicatorClickListener(new DrawController.ClickListener() {
+            imageList.add(
+                    new SlideModel(
+                        AppController.arrayList_slider.get(i).getImg(),
+                        AppController.arrayList_slider.get(i).getTitle(),
+                            true
+                    )
+            );
+        }
+        sliderView.setImageList(imageList, true);
+
+
+
+        sliderView.setItemClickListener(new ItemClickListener() {
             @Override
-            public void onIndicatorClicked(int position) {
-                sliderView.setCurrentPagePosition(position);
+            public void onItemSelected(int i) {
+                Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                intent.putExtra(Extras.EXTRA_URL.toString(), AppController.arrayList_slider.get(i).getImg());
+                intent.putExtra(Extras.EXTRA_ACTION.toString(), AppController.arrayList_slider.get(i).getAction());
+                intent.putExtra(Extras.EXTRA_TITLE.toString(), "تیتر روز");
+                intent.putExtra(Extras.EXTRA_OP.toString(), AppController.arrayList_slider.get(i).getAction());
+                intent.putExtra(Extras.EXTRA_DESCRIPTION.toString(), AppController.arrayList_slider.get(i).getDescription());
+                intent.putExtra(Extras.EXTRA_DETAIL.toString(), AppController.arrayList_slider.get(i).getTitle());
+                startActivity(intent);
             }
         });
+
     }
 
     private void updatecheck() {

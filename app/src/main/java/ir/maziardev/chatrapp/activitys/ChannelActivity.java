@@ -13,27 +13,39 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.StringRequest;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ir.maziardev.chatrapp.R;
 import ir.maziardev.chatrapp.adapter.ChannelAdapter;
-import ir.maziardev.chatrapp.models.Channell;
+import ir.maziardev.chatrapp.models.ChannelList;
 import ir.maziardev.chatrapp.network.AppController;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ChannelActivity extends AppCompatActivity {
+
+    private static final String TAG = ChannelActivity.class.getSimpleName();
+
 
     @BindView(R.id.recycler_list_channel)
     RecyclerView recyclerView;
     @BindView(R.id.fab_list_channel)
     FloatingActionButton fab_list;
 
-
-    public ArrayList<Channell> arrayList = new ArrayList<>();
+    public ArrayList<ChannelList> arrayList = new ArrayList<>();
     public static MediaPlayer mediaPlayer = new MediaPlayer();
     private ChannelAdapter mAdapter;
 
@@ -47,14 +59,20 @@ public class ChannelActivity extends AppCompatActivity {
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        arrayList.addAll(AppController.arrayList_channel);
 
-        mAdapter = new ChannelAdapter(this, arrayList);
+        arrayList.clear();
+        Bundle ex = getIntent().getExtras();
+        if (ex != null) {
+            String id = ex.getString("CHANNELID", "0");
+            initList(id);
+        }
+
+        mAdapter = new ChannelAdapter(ChannelActivity.this, arrayList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
-        mAdapter.notifyDataSetChanged();
+
 
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -76,10 +94,27 @@ public class ChannelActivity extends AppCompatActivity {
         fab_list.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recyclerView.smoothScrollToPosition(AppController.arrayList_channel.size() - 1);
+                recyclerView.smoothScrollToPosition(arrayList.size() - 1);
             }
         });
     }
+
+
+    private List<ChannelList> getSampleData() {
+        List<ChannelList> dataSet = new ArrayList<>();
+
+        for (int i = 1; i <= 4; i++) {
+            ChannelList data = new ChannelList();
+            data.setTitle("title");
+            data.setImgtmp("https://cdn.eso.org/images/thumb300y/eso1907a.jpg");
+
+            dataSet.add(data);
+        }
+
+        return dataSet;
+    }
+
+
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -102,5 +137,55 @@ public class ChannelActivity extends AppCompatActivity {
     protected void onDestroy() {
         ChannelActivity.mediaPlayer.stop();
         super.onDestroy();
+    }
+
+
+
+    private void initList(String tbl) {
+        StringRequest req = new StringRequest(Request.Method.GET,
+                "https://numberfa.ir/chatr/app/index.php/api/channel/data/"+ tbl+"/1/30/8d91f1974ce167b2017422cf7df1a265",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject obj = new JSONObject(response);
+                            JSONArray listArray = obj.getJSONArray("list");
+                            List<ChannelList> lists = new ArrayList<>();
+                            ChannelList list;
+
+                            for (int i = 0; i < listArray.length(); i++) {
+                                JSONObject Object = listArray.getJSONObject(i);
+
+                                list = new ChannelList();
+                                list.setId(Object.getString("id"));
+                                list.setType(Integer.parseInt(Object.getString("type")));
+                                list.setTitle(Object.getString("title"));
+                                list.setImg(Object.getString("img"));
+                                list.setImgtmp(Object.getString("imgtmp"));
+                                list.setVideo(Object.getString("video"));
+                                list.setMusic(Object.getString("music"));
+                                list.setFiles(Object.getString("files"));
+
+                                lists.add(list);
+                            }
+
+                            arrayList.addAll(lists);
+                            mAdapter.notifyDataSetChanged();
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+            }
+        });
+        req.setShouldCache(false);
+        AppController.getInstance().addToRequestQueue(req, "initList");
+
     }
 }

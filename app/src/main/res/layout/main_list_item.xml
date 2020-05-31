@@ -35,13 +35,14 @@
                     app:srcCompat="@drawable/noimage"
                     app:tintMode="multiply" />
 
-                <TextView
+                <org.sufficientlysecure.htmltextview.HtmlTextView
                     android:id="@+id/tv_list_main"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="7dp"
                     android:layout_marginBottom="7dp"
                     android:gravity="center"
+                    android:textAppearance="@android:style/TextAppearance.Small"
                     android:maxLines="2"
                     android:minLines="2"
                     android:text="شبکه 1"

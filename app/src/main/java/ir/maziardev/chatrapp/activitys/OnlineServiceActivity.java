@@ -16,6 +16,7 @@ import butterknife.ButterKnife;
 import ir.maziardev.chatrapp.R;
 import ir.maziardev.chatrapp.adapter.ListTvAdapter;
 import ir.maziardev.chatrapp.enums.MainType;
+import ir.maziardev.chatrapp.models.ChannelModel;
 import ir.maziardev.chatrapp.models.Lists;
 import ir.maziardev.chatrapp.models.Mainlist;
 import ir.maziardev.chatrapp.network.AppController;
@@ -29,8 +30,8 @@ public class OnlineServiceActivity extends AppCompatActivity {
     RecyclerView recycler_ticket;
 
 
-    private List<Mainlist> menuList_payment = new ArrayList<>();
-    private List<Mainlist> menuList_ticket = new ArrayList<>();
+    private List<ChannelModel> menuList_payment = new ArrayList<>();
+    private List<ChannelModel> menuList_ticket = new ArrayList<>();
     private ListTvAdapter mAdapter_payment, mAdapter_ticket;
 
     @Override
@@ -44,6 +45,7 @@ public class OnlineServiceActivity extends AppCompatActivity {
 
     private void init() {
 
+
         //________________________________________payment
         mAdapter_payment = new ListTvAdapter(this, menuList_payment);
         LinearLayoutManager layoutManager
@@ -55,12 +57,20 @@ public class OnlineServiceActivity extends AppCompatActivity {
         for (int i = 0; i < AppController.list_services.size(); i++) {
             Lists service = AppController.list_services.get(i);
             if(service.getId_category().equals("14")){
-                Mainlist mainlist = new Mainlist();
+
+                ChannelModel list = new ChannelModel();
+                list.setCname(service.getTitle());
+                list.setImg(service.getImg());
+                list.setId_category("pay");
+
+                AppController.list_services_pay.add(service);
+
+               /* Mainlist mainlist = new Mainlist();
                 mainlist.setTitle(service.getTitle());
                 mainlist.setImg(service.getImg());
                 mainlist.setUrl(service.getUrl());
-                mainlist.setMainType(MainType.SERVICE);
-                menuList_payment.add(mainlist);
+                mainlist.setMainType(MainType.SERVICE);*/
+                menuList_payment.add(list);
             }
         }
         mAdapter_payment.notifyDataSetChanged();
@@ -77,12 +87,21 @@ public class OnlineServiceActivity extends AppCompatActivity {
         for (int i = 0; i < AppController.list_services.size(); i++) {
             Lists service = AppController.list_services.get(i);
             if(service.getId_category().equals("15")){
-                Mainlist mainlist = new Mainlist();
+
+                ChannelModel list = new ChannelModel();
+                list.setCname(service.getTitle());
+                list.setImg(service.getImg());
+                list.setId_category("ticket");
+
+                AppController.list_services_ticket.add(service);
+
+
+                /*Mainlist mainlist = new Mainlist();
                 mainlist.setTitle(service.getTitle());
                 mainlist.setImg(service.getImg());
                 mainlist.setUrl(service.getUrl());
-                mainlist.setMainType(MainType.SERVICE);
-                menuList_ticket.add(mainlist);
+                mainlist.setMainType(MainType.SERVICE);*/
+                menuList_ticket.add(list);
             }
         }
         mAdapter_ticket.notifyDataSetChanged();

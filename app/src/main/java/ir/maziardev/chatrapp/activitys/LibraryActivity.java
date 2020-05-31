@@ -17,6 +17,8 @@ import butterknife.ButterKnife;
 import ir.maziardev.chatrapp.R;
 import ir.maziardev.chatrapp.adapter.ListTvAdapter;
 import ir.maziardev.chatrapp.enums.MainType;
+import ir.maziardev.chatrapp.models.ChannelList;
+import ir.maziardev.chatrapp.models.ChannelModel;
 import ir.maziardev.chatrapp.models.Lists;
 import ir.maziardev.chatrapp.models.Mainlist;
 import ir.maziardev.chatrapp.network.AppController;
@@ -24,6 +26,10 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class LibraryActivity extends AppCompatActivity {
 
+    @BindView(R.id.recycler_library_din)
+    RecyclerView recycler_library_din;
+    @BindView(R.id.recycler_lib_dars)
+    RecyclerView recycler_lib_dars;
     @BindView(R.id.recycler_goya_library)
     RecyclerView recycler_goya;
     @BindView(R.id.recycler_nahj_library)
@@ -36,12 +42,14 @@ public class LibraryActivity extends AppCompatActivity {
     RecyclerView recycler_mafatih;
 
 
-    private List<Mainlist> menuList_goya = new ArrayList<>();
-    private List<Mainlist> menuList_nahj = new ArrayList<>();
-    private List<Mainlist> menuList_quran = new ArrayList<>();
-    private List<Mainlist> menuList_resaleh = new ArrayList<>();
-    private List<Mainlist> menuList_mafatih = new ArrayList<>();
-    private ListTvAdapter mAdapter_goya, mAdapter_nahj,
+    private List<ChannelModel> menuList_din = new ArrayList<>();
+    private List<ChannelModel> menuList_dars = new ArrayList<>();
+    private List<ChannelModel> menuList_goya = new ArrayList<>();
+    private List<ChannelModel> menuList_nahj = new ArrayList<>();
+    private List<ChannelModel> menuList_quran = new ArrayList<>();
+    private List<ChannelModel> menuList_resaleh = new ArrayList<>();
+    private List<ChannelModel> menuList_mafatih = new ArrayList<>();
+    private ListTvAdapter mAdapter_din, mAdapter_dars, mAdapter_goya, mAdapter_nahj,
             mAdapter_quran, mAdapter_resaleh,
             mAdapter_mafatih;
 
@@ -51,13 +59,44 @@ public class LibraryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_library);
         ButterKnife.bind(this);
 
+        for (int i = 0; i < AppController.list_channel.size(); i++) {
+            String id_category = AppController.list_channel.get(i).getId_category();
+            switch (id_category){
+                case "11": //movie and music
+                    menuList_dars.add(AppController.list_channel.get(i));
+                    break;
+                case "9": //din
+                    menuList_din.add(AppController.list_channel.get(i));
+                    break;
+            }
+        }
+
         init();
     }
 
     private void init() {
+
+        //__________________________________________din
+        mAdapter_din = new ListTvAdapter(this, menuList_din);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
+        recycler_library_din.setLayoutManager(layoutManager);
+        //recycler_tv.setItemAnimator(new DefaultItemAnimator());
+        recycler_library_din.setHasFixedSize(true);
+        recycler_library_din.setAdapter(mAdapter_din);
+        mAdapter_din.notifyDataSetChanged();
+
+        //__________________________________________dars
+        mAdapter_dars = new ListTvAdapter(this, menuList_dars);
+        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
+        recycler_lib_dars.setLayoutManager(layoutManager);
+        //recycler_tv.setItemAnimator(new DefaultItemAnimator());
+        recycler_lib_dars.setHasFixedSize(true);
+        recycler_lib_dars.setAdapter(mAdapter_dars);
+        mAdapter_dars.notifyDataSetChanged();
+
         //________________________________________goya
         mAdapter_goya = new ListTvAdapter(this, menuList_goya);
-        LinearLayoutManager layoutManager
+        layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
         recycler_goya.setLayoutManager(layoutManager);
         recycler_goya.setItemAnimator(new DefaultItemAnimator());
@@ -65,12 +104,20 @@ public class LibraryActivity extends AppCompatActivity {
 
         for (int i = 0; i < AppController.list_li_audio.size(); i++) {
             Lists media = AppController.list_li_audio.get(i);
-            Mainlist mainlist = new Mainlist();
+
+            ChannelModel list = new ChannelModel();
+            list.setCname(media.getTitle());
+            list.setImg(media.getImg());
+            list.setId_category("audio");
+
+            /*Mainlist mainlist = new Mainlist();
             mainlist.setTitle(media.getTitle());
             mainlist.setImg(media.getImg());
             mainlist.setUrl(media.getUrl());
-            mainlist.setMainType(MainType.GOYABOOK);
-            menuList_goya.add(mainlist);
+            mainlist.setMainType(MainType.GOYABOOK);*/
+            menuList_goya.add(list);
+
+
         }
         mAdapter_goya.notifyDataSetChanged();
 
@@ -85,12 +132,18 @@ public class LibraryActivity extends AppCompatActivity {
 
         for (int i = 0; i < AppController.list_li_quran.size(); i++) {
             Lists media = AppController.list_li_quran.get(i);
-            Mainlist mainlist = new Mainlist();
+
+            ChannelModel list = new ChannelModel();
+            list.setCname(media.getTitle());
+            list.setImg(media.getImg());
+            list.setId_category("quran");
+
+            /*Mainlist mainlist = new Mainlist();
             mainlist.setTitle(media.getTitle());
             mainlist.setImg(media.getImg());
             mainlist.setUrl(media.getUrl());
-            mainlist.setMainType(MainType.LI_QURAN);
-            menuList_quran.add(mainlist);
+            mainlist.setMainType(MainType.LI_QURAN);*/
+            menuList_quran.add(list);
         }
         mAdapter_quran.notifyDataSetChanged();
 
@@ -105,12 +158,18 @@ public class LibraryActivity extends AppCompatActivity {
 
         for (int i = 0; i < AppController.list_li_mafatih.size(); i++) {
             Lists media = AppController.list_li_mafatih.get(i);
-            Mainlist mainlist = new Mainlist();
+
+            ChannelModel list = new ChannelModel();
+            list.setCname(media.getTitle());
+            list.setImg(media.getImg());
+            list.setId_category("mafatih");
+
+            /*Mainlist mainlist = new Mainlist();
             mainlist.setTitle(media.getTitle());
             mainlist.setImg(media.getImg());
             mainlist.setUrl(media.getUrl());
-            mainlist.setMainType(MainType.LI_MAFATIH);
-            menuList_mafatih.add(mainlist);
+            mainlist.setMainType(MainType.LI_MAFATIH);*/
+            menuList_mafatih.add(list);
         }
         mAdapter_mafatih.notifyDataSetChanged();
 
@@ -125,12 +184,18 @@ public class LibraryActivity extends AppCompatActivity {
 
         for (int i = 0; i < AppController.list_li_nahj.size(); i++) {
             Lists media = AppController.list_li_nahj.get(i);
-            Mainlist mainlist = new Mainlist();
+
+            ChannelModel list = new ChannelModel();
+            list.setCname(media.getTitle());
+            list.setImg(media.getImg());
+            list.setId_category("nahj");
+
+            /*Mainlist mainlist = new Mainlist();
             mainlist.setTitle(media.getTitle());
             mainlist.setImg(media.getImg());
             mainlist.setUrl(media.getUrl());
-            mainlist.setMainType(MainType.LI_NAHJ);
-            menuList_nahj.add(mainlist);
+            mainlist.setMainType(MainType.LI_NAHJ);*/
+            menuList_nahj.add(list);
         }
         mAdapter_nahj.notifyDataSetChanged();
 
@@ -145,12 +210,18 @@ public class LibraryActivity extends AppCompatActivity {
 
         for (int i = 0; i < AppController.list_li_resale.size(); i++) {
             Lists media = AppController.list_li_resale.get(i);
-            Mainlist mainlist = new Mainlist();
+
+            ChannelModel list = new ChannelModel();
+            list.setCname(media.getTitle());
+            list.setImg(media.getImg());
+            list.setId_category("resaleh");
+
+            /*Mainlist mainlist = new Mainlist();
             mainlist.setTitle(media.getTitle());
             mainlist.setImg(media.getImg());
             mainlist.setUrl(media.getUrl());
-            mainlist.setMainType(MainType.LI_RESALE);
-            menuList_resaleh.add(mainlist);
+            mainlist.setMainType(MainType.LI_RESALE);*/
+            menuList_resaleh.add(list);
         }
         mAdapter_resaleh.notifyDataSetChanged();
 

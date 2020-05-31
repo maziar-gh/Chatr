@@ -1,11 +1,8 @@
 package ir.maziardev.chatrapp.enums;
 
 public enum ChannelType {
-    TEXT,
-    MOVIE,
+    IMAGE,
+    VIDEO,
     MUSIC,
-    PICTURE,
-    SURVEY,
-    LOCATION,
-    PHONE
+    TEXT
 }

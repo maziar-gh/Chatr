@@ -2,28 +2,23 @@ package ir.maziardev.chatrapp.network;
 
 
 import android.app.Application;
-import android.app.DownloadManager;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.bumptech.glide.util.Util;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import ir.maziardev.chatrapp.BuildConfig;
 import ir.maziardev.chatrapp.R;
 import ir.maziardev.chatrapp.models.Categoryy;
-import ir.maziardev.chatrapp.models.Channell;
+import ir.maziardev.chatrapp.models.ChannelList;
+import ir.maziardev.chatrapp.models.ChannelModel;
 import ir.maziardev.chatrapp.models.GridList;
 import ir.maziardev.chatrapp.models.Lists;
 import ir.maziardev.chatrapp.models.Magazin;
@@ -66,13 +61,15 @@ public class AppController extends Application {
     public static final String API_EST_URL = "https://numberfa.ir/estekhare/index.php";
     public static final String API_SUPPORT_URL = "https://numberfa.ir/chat/spachat.php";
 
-    public static final String API_BASE_LIMIT = "7";
+    public static final String API_BASE_LIMIT = "50";
 
     public static final String API_BASE_URL = "https://numberfa.ir/chatr/app/index.php/api/";
     public static final String API_UPDATE_URL = API_BASE_URL + "update/";
     public static final String API_SLIDER_URL = API_BASE_URL + "slider/detail/";
     public static final String API_CHANNEL_URL = API_BASE_URL + "channel/detail/";
-    public static final String API_MEDIA_URL = API_BASE_URL + "media/";
+    public static final String API_CHANNEL_LIST_URL = API_BASE_URL + "channel/data/";
+    public static final String API_TV_URL = API_BASE_URL + "media/tv/";
+    public static final String API_RADIO_URL = API_BASE_URL + "media/radio/";
     public static final String API_CATEGORY_URL = API_BASE_URL + "category/detail/";
     public static final String API_LIBRARY_URL = API_BASE_URL + "library/detail/";
     public static final String API_SERVICES_URL = API_BASE_URL + "services/detail/";
@@ -84,7 +81,7 @@ public class AppController extends Application {
     public static final String API_USER_URL = API_BASE_URL + "user/detail/";
 
     public static ArrayList<Slider> arrayList_slider = new ArrayList<>();
-    public static ArrayList<Channell> arrayList_channel = new ArrayList<>();
+    public static ArrayList<ChannelModel> arrayList_channel = new ArrayList<>();
     public static ArrayList<Categoryy> arrayList_category = new ArrayList<>();
     public static ArrayList<Update> arrayList_update = new ArrayList<>();
     public static ArrayList<Magazin> arrayList_magazin = new ArrayList<>();
@@ -108,9 +105,18 @@ public class AppController extends Application {
     public static List<Lists> list_li_resale = new ArrayList<>();
     public static List<Lists> list_li_audio = new ArrayList<>();
     public static List<Lists> list_services = new ArrayList<>();
-    public static List<Lists> list_tel = new ArrayList<>();
+    public static List<Lists> list_services_pay = new ArrayList<>();
+    public static List<Lists> list_services_ticket = new ArrayList<>();
+
+    public static List<ChannelModel> list_channel = new ArrayList<>();
+    public static List<ChannelList> list_items_channel = new ArrayList<>();
+
+    public static List<Lists> list_tv = new ArrayList<>();
     public static List<Lists> list_radio = new ArrayList<>();
     public static List<Lists> list_games = new ArrayList<>();
+    public static List<Lists> list_games_teen = new ArrayList<>();
+    public static List<Lists> list_games_other = new ArrayList<>();
+    public static List<Lists> list_games_child = new ArrayList<>();
     public static List<Lists> list_ne_fars = new ArrayList<>();
     public static List<Lists> list_ne_isna = new ArrayList<>();
     public static List<Lists> list_ne_jamjam = new ArrayList<>();
