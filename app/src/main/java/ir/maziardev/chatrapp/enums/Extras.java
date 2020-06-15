@@ -13,5 +13,6 @@ public enum Extras {
     EXTRA_PAGE_MASTER,
     EXTRA_PAGE_MASTER_SV,
     FULLSCREEN_ACTIVITY,
-    CHANNEL
+    CHANNEL,
+    PORTRATE
 }

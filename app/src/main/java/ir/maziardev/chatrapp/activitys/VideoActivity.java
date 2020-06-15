@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -73,12 +75,26 @@ public class VideoActivity extends AppCompatActivity implements UniversalVideoVi
 
         Bundle ex = getIntent().getExtras();
         if (ex != null) {
-            setVideoAreaSize(ex.getString(Extras.EXTRA_URL.toString()));
+
             //tv1();
 
             if (mSeekPosition > 0) {
                 mVideoView.seekTo(mSeekPosition);
             }
+            if(ex.getString(Extras.PORTRATE.toString()) != null && ex.getString(Extras.PORTRATE.toString()).equals("1")){
+                LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT
+                );
+                mVideoLayout.setLayoutParams(param);
+                mVideoView.setVideoPath(ex.getString(Extras.EXTRA_URL.toString()));
+                mVideoView.requestFocus();
+
+
+            }else {
+                setVideoAreaSize(ex.getString(Extras.EXTRA_URL.toString()));
+            }
+
             mVideoView.start();
             mMediaController.setTitle(ex.getString(Extras.EXTRA_TITLE.toString()));
         }

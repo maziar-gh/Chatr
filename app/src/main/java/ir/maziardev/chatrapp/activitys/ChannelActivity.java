@@ -143,7 +143,7 @@ public class ChannelActivity extends AppCompatActivity {
 
     private void initList(String tbl) {
         StringRequest req = new StringRequest(Request.Method.GET,
-                "https://numberfa.ir/chatr/app/index.php/api/channel/data/"+ tbl+"/1/30/8d91f1974ce167b2017422cf7df1a265",
+                AppController.API_BASE_URL + "channel/data/"+ tbl+"/1/30/8d91f1974ce167b2017422cf7df1a265",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

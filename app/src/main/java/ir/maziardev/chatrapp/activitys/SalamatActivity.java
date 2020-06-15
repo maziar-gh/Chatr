@@ -25,6 +25,14 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SalamatActivity extends AppCompatActivity {
 
+    LinearLayoutManager layoutManager;
+
+    @BindView(R.id.recycler_salamat_it)
+    RecyclerView recycler_salamat_it;
+    @BindView(R.id.recycler_salamat_edu)
+    RecyclerView recycler_salamat_edu;
+    @BindView(R.id.recycler_salamat_oshagh)
+    RecyclerView recycler_salamat_oshagh;
     @BindView(R.id.recycler_salamat_sabk)
     RecyclerView recycler_salamat_sabk;
     @BindView(R.id.recycler_salamat_sport)
@@ -34,34 +42,30 @@ public class SalamatActivity extends AppCompatActivity {
 
     @BindView(R.id.recycler_chef_salamat)
     RecyclerView recycler_chef;
-    @BindView(R.id.recycler_employ_salamat)
-    RecyclerView recycler_employ;
     @BindView(R.id.recycler_pray_salamat)
     RecyclerView recycler_pray;
-    @BindView(R.id.recycler_plant_salamat)
-    RecyclerView recycler_plant;
-    @BindView(R.id.recycler_sport_salamat)
-    RecyclerView recycler_sport;
-    @BindView(R.id.recycler_food_salamat)
-    RecyclerView recycler_food;
-    @BindView(R.id.recycler_psychology_salamat)
-    RecyclerView recycler_psychology;
+    /*@BindView(R.id.recycler_sport_salamat)
+    RecyclerView recycler_sport;*/
+    /*@BindView(R.id.recycler_food_salamat)
+    RecyclerView recycler_food;*/
+/*    @BindView(R.id.recycler_psychology_salamat)
+    RecyclerView recycler_psychology;*/
 
+    private List<ChannelModel> menuList_channel_it = new ArrayList<>();
+    private List<ChannelModel> menuList_channel_edu = new ArrayList<>();
+    private List<ChannelModel> menuList_channel_oshagh = new ArrayList<>();
     private List<ChannelModel> menuList_channel_sabk = new ArrayList<>();
     private List<ChannelModel> menuList_channel_sport = new ArrayList<>();
     private List<ChannelModel> menuList_channel_work = new ArrayList<>();
 
     private List<ChannelModel> menuList_chef = new ArrayList<>();
-    private List<ChannelModel> menuList_employ = new ArrayList<>();
     private List<ChannelModel> menuList_pray = new ArrayList<>();
-    private List<ChannelModel> menuList_plant = new ArrayList<>();
     private List<ChannelModel> menuList_sport = new ArrayList<>();
     private List<ChannelModel> menuList_food = new ArrayList<>();
     private List<ChannelModel> menuList_psychology = new ArrayList<>();
-    private ListTvAdapter mAdapter_channel_sabk, mAdapter_channel_sport, mAdapter_channel_work, mAdapter_chef, mAdapter_employ,
-            mAdapter_pray, mAdapter_plant,
-            mAdapter_sport, mAdapter_food,
-            mAdapter_psychology;
+    private ListTvAdapter mAdapter_channel_it, mAdapter_channel_edu, mAdapter_channel_oghagh, mAdapter_channel_sabk,
+            mAdapter_channel_sport, mAdapter_channel_work, mAdapter_chef,
+            mAdapter_pray, mAdapter_sport, mAdapter_food, mAdapter_psychology;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +76,9 @@ public class SalamatActivity extends AppCompatActivity {
         for (int i = 0; i < AppController.list_channel.size(); i++) {
             String id_category = AppController.list_channel.get(i).getId_category();
             switch (id_category){
+                case "14": //movie and music
+                    menuList_channel_oshagh.add(AppController.list_channel.get(i));
+                    break;
                 case "6": //movie and music
                     menuList_channel_sabk.add(AppController.list_channel.get(i));
                     break;
@@ -81,6 +88,15 @@ public class SalamatActivity extends AppCompatActivity {
                 case "5": //it & education
                     menuList_channel_work.add(AppController.list_channel.get(i));
                     break;
+                case "3": //it & education
+                    menuList_channel_edu.add(AppController.list_channel.get(i));
+                    break;
+                case "13": //it & education
+                    menuList_channel_it.add(AppController.list_channel.get(i));
+                    break;
+                case "15": //it & education
+                    menuList_chef.add(AppController.list_channel.get(i));
+                    break;
             }
         }
 
@@ -89,9 +105,47 @@ public class SalamatActivity extends AppCompatActivity {
 
     private void init() {
 
+        //__________________________________________channel_chef
+        mAdapter_chef = new ListTvAdapter(this, menuList_chef);
+        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
+        recycler_chef.setLayoutManager(layoutManager);
+        //recycler_tv.setItemAnimator(new DefaultItemAnimator());
+        recycler_chef.setHasFixedSize(true);
+        recycler_chef.setAdapter(mAdapter_chef);
+        mAdapter_chef.notifyDataSetChanged();
+
+        //__________________________________________channel_it
+        mAdapter_channel_it = new ListTvAdapter(this, menuList_channel_it);
+        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
+        recycler_salamat_it.setLayoutManager(layoutManager);
+        //recycler_tv.setItemAnimator(new DefaultItemAnimator());
+        recycler_salamat_it.setHasFixedSize(true);
+        recycler_salamat_it.setAdapter(mAdapter_channel_it);
+        mAdapter_channel_it.notifyDataSetChanged();
+
+
+        //__________________________________________channel_edu
+        mAdapter_channel_edu = new ListTvAdapter(this, menuList_channel_edu);
+        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
+        recycler_salamat_edu.setLayoutManager(layoutManager);
+        //recycler_tv.setItemAnimator(new DefaultItemAnimator());
+        recycler_salamat_edu.setHasFixedSize(true);
+        recycler_salamat_edu.setAdapter(mAdapter_channel_edu);
+        mAdapter_channel_edu.notifyDataSetChanged();
+
+
+        //__________________________________________channel_oshagh
+        mAdapter_channel_oghagh = new ListTvAdapter(this, menuList_channel_oshagh);
+        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
+        recycler_salamat_oshagh.setLayoutManager(layoutManager);
+        //recycler_tv.setItemAnimator(new DefaultItemAnimator());
+        recycler_salamat_oshagh.setHasFixedSize(true);
+        recycler_salamat_oshagh.setAdapter(mAdapter_channel_oghagh);
+        mAdapter_channel_oghagh.notifyDataSetChanged();
+
         //__________________________________________channel_sport
         mAdapter_channel_sport = new ListTvAdapter(this, menuList_channel_sport);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
+        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
         recycler_salamat_sport.setLayoutManager(layoutManager);
         //recycler_tv.setItemAnimator(new DefaultItemAnimator());
         recycler_salamat_sport.setHasFixedSize(true);
@@ -119,59 +173,6 @@ public class SalamatActivity extends AppCompatActivity {
         mAdapter_channel_work.notifyDataSetChanged();
 
 
-        //________________________________________chef
-        mAdapter_chef = new ListTvAdapter(this, menuList_chef);
-        layoutManager
-                = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
-        recycler_chef.setLayoutManager(layoutManager);
-        recycler_chef.setItemAnimator(new DefaultItemAnimator());
-        recycler_chef.setAdapter(mAdapter_chef);
-
-        for (int i = 0; i < AppController.list_sa_chef.size(); i++) {
-            Lists media = AppController.list_sa_chef.get(i);
-
-            ChannelModel list = new ChannelModel();
-            list.setCname(media.getTitle());
-            list.setImg(media.getImg());
-            list.setId_category("chef");
-
-            /*Mainlist mainlist = new Mainlist();
-            mainlist.setTitle(media.getTitle());
-            mainlist.setUrl(media.getUrl());
-            mainlist.setAction(media.getAction());
-            mainlist.setImg(media.getImg());
-            mainlist.setMainType(MainType.MOVIE);*/
-            menuList_chef.add(list);
-        }
-        mAdapter_chef.notifyDataSetChanged();
-
-
-        //__________________________________________employ
-        mAdapter_employ = new ListTvAdapter(this, menuList_employ);
-        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
-        recycler_employ.setLayoutManager(layoutManager);
-        recycler_employ.setItemAnimator(new DefaultItemAnimator());
-        recycler_employ.setAdapter(mAdapter_employ);
-
-        for (int i = 0; i < AppController.list_sa_employ.size(); i++) {
-            Lists media = AppController.list_sa_employ.get(i);
-
-            ChannelModel list = new ChannelModel();
-            list.setCname(media.getTitle());
-            list.setImg(media.getImg());
-            list.setId_category("employ");
-
-            /*Mainlist mainlist = new Mainlist();
-            mainlist.setTitle(media.getTitle());
-            mainlist.setImg(media.getImg());
-            mainlist.setUrl(media.getUrl());
-            mainlist.setAction(media.getAction());
-            mainlist.setMainType(MainType.MOVIE);*/
-            menuList_employ.add(list);
-        }
-        mAdapter_employ.notifyDataSetChanged();
-
-
         //__________________________________________pray
         mAdapter_pray= new ListTvAdapter(this, menuList_pray);
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
@@ -197,35 +198,8 @@ public class SalamatActivity extends AppCompatActivity {
         }
         mAdapter_pray.notifyDataSetChanged();
 
-
-        //__________________________________________plant
-        mAdapter_plant = new ListTvAdapter(this, menuList_plant);
-        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
-        recycler_plant.setLayoutManager(layoutManager);
-        recycler_plant.setItemAnimator(new DefaultItemAnimator());
-        recycler_plant.setAdapter(mAdapter_plant);
-
-        for (int i = 0; i < AppController.list_sa_plant.size(); i++) {
-            Lists media = AppController.list_sa_plant.get(i);
-
-            ChannelModel list = new ChannelModel();
-            list.setCname(media.getTitle());
-            list.setImg(media.getImg());
-            list.setId_category("plant");
-
-            /*Mainlist mainlist = new Mainlist();
-            mainlist.setTitle(media.getTitle());
-            mainlist.setImg(media.getImg());
-            mainlist.setUrl(media.getUrl());
-            mainlist.setAction(media.getAction());
-            mainlist.setMainType(MainType.MOVIE);*/
-            menuList_plant.add(list);
-        }
-        mAdapter_plant.notifyDataSetChanged();
-
-
         //__________________________________________sport
-        mAdapter_sport= new ListTvAdapter(this, menuList_sport);
+        /*mAdapter_sport= new ListTvAdapter(this, menuList_sport);
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
         recycler_sport.setLayoutManager(layoutManager);
         recycler_sport.setItemAnimator(new DefaultItemAnimator());
@@ -239,18 +213,18 @@ public class SalamatActivity extends AppCompatActivity {
             list.setImg(media.getImg());
             list.setId_category("sport");
 
-            /*Mainlist mainlist = new Mainlist();
+            *//*Mainlist mainlist = new Mainlist();
             mainlist.setTitle(media.getTitle());
             mainlist.setImg(media.getImg());
             mainlist.setUrl(media.getUrl());
             mainlist.setAction(media.getAction());
-            mainlist.setMainType(MainType.MOVIE);*/
+            mainlist.setMainType(MainType.MOVIE);*//*
             menuList_sport.add(list);
         }
-        mAdapter_sport.notifyDataSetChanged();
+        mAdapter_sport.notifyDataSetChanged();*/
 
         //__________________________________________food
-        mAdapter_food= new ListTvAdapter(this, menuList_food);
+        /*mAdapter_food= new ListTvAdapter(this, menuList_food);
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
         recycler_food.setLayoutManager(layoutManager);
         recycler_food.setItemAnimator(new DefaultItemAnimator());
@@ -264,19 +238,19 @@ public class SalamatActivity extends AppCompatActivity {
             list.setImg(media.getImg());
             list.setId_category("food");
 
-            /*Mainlist mainlist = new Mainlist();
+            *//*Mainlist mainlist = new Mainlist();
             mainlist.setTitle(media.getTitle());
             mainlist.setImg(media.getImg());
             mainlist.setUrl(media.getUrl());
             mainlist.setAction(media.getAction());
-            mainlist.setMainType(MainType.MOVIE);*/
+            mainlist.setMainType(MainType.MOVIE);*//*
             menuList_food.add(list);
         }
-        mAdapter_food.notifyDataSetChanged();
+        mAdapter_food.notifyDataSetChanged();*/
 
 
         //__________________________________________psychology
-        mAdapter_psychology= new ListTvAdapter(this, menuList_psychology);
+        /*mAdapter_psychology= new ListTvAdapter(this, menuList_psychology);
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
         recycler_psychology.setLayoutManager(layoutManager);
         recycler_psychology.setItemAnimator(new DefaultItemAnimator());
@@ -290,15 +264,15 @@ public class SalamatActivity extends AppCompatActivity {
             list.setImg(media.getImg());
             list.setId_category("psychology");
 
-            /*Mainlist mainlist = new Mainlist();
+            *//*Mainlist mainlist = new Mainlist();
             mainlist.setTitle(media.getTitle());
             mainlist.setImg(media.getImg());
             mainlist.setUrl(media.getUrl());
             mainlist.setAction(media.getAction());
-            mainlist.setMainType(MainType.MOVIE);*/
+            mainlist.setMainType(MainType.MOVIE);*//*
             menuList_psychology.add(list);
         }
-        mAdapter_psychology.notifyDataSetChanged();
+        mAdapter_psychology.notifyDataSetChanged();*/
     }
 
 

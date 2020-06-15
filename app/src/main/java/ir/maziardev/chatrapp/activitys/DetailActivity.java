@@ -13,6 +13,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -125,6 +126,42 @@ public class DetailActivity extends AppCompatActivity {
                         gridList.setSeries(false);
                         //Log.e("TAG-----------",all[i]);
 
+                        this.gridList.add(gridList);
+                    }
+                    mAdapter.notifyDataSetChanged();
+
+                }else if(ex.getString(Extras.EXTRA_ACTION.toString()).equals("4")){
+
+                    Intent intent = new Intent(DetailActivity.this, VideoActivity.class);
+                    intent.putExtra(Extras.EXTRA_URL.toString(), ex.getString(Extras.EXTRA_DESCRIPTION.toString()));
+                    intent.putExtra(Extras.EXTRA_TITLE.toString(), "پخش زنده");
+                    intent.putExtra(Extras.PORTRATE.toString(), "1");
+                    startActivity(intent);
+                    finish();
+
+                }else if(ex.getString(Extras.EXTRA_ACTION.toString()).equals("5")){
+                    //txt_detail.setText(ex.getString(AppController.EXTRA_DESCRIPTION));
+                    cardDetail.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+
+                    mAdapter = new GridListAdapter(this, gridList);
+                    GridLayoutManager gridVertical = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
+                    RecyclerView.LayoutManager mLayoutManager = gridVertical;
+                    //RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+                    recyclerView.setLayoutManager(mLayoutManager);
+                    recyclerView.setItemAnimator(new DefaultItemAnimator());
+                    recyclerView.setAdapter(mAdapter);
+
+                    nested_scroll.setVisibility(View.GONE);
+
+                    String[] names = ex.getString(Extras.EXTRA_DETAIL.toString()).split("!");
+                    String[] all = ex.getString(Extras.EXTRA_DESCRIPTION.toString()).split("!");
+                    for (int i = 0; i < all.length; i++) {
+                        GridList gridList = new GridList();
+                        gridList.setTitle(names[i]);
+                        gridList.setImg(all[i]);
+
+                        gridList.setSeries(false);
                         this.gridList.add(gridList);
                     }
                     mAdapter.notifyDataSetChanged();

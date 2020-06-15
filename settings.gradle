@@ -1,2 +1,3 @@
 include ':app'
+include ':sample', ':librestreaming'
 rootProject.name='Chatr'

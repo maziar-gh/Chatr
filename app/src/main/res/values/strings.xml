@@ -2,6 +2,9 @@
 
     <string name="app_name">چتر</string>
 
+    <string name="introduction">land:Landscape video stream.\nport:Portrait video stream.\nsoft:cpu image filter mode.\nhard:gpu image filter mode using opengles.</string>
+    <string name="url">https://github.com/lakeinchina/librestreaming</string>
+
 
     <string name="login" translatable="false">Login</string>
 

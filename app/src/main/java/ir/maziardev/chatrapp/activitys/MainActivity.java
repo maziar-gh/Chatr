@@ -25,7 +25,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
-import com.bumptech.glide.Glide;
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.interfaces.ItemClickListener;
 import com.denzcoskun.imageslider.models.SlideModel;
@@ -41,6 +40,7 @@ import butterknife.ButterKnife;
 import ir.maziardev.chatrapp.R;
 import ir.maziardev.chatrapp.classes.SavePref;
 import ir.maziardev.chatrapp.enums.Extras;
+import ir.maziardev.chatrapp.live.LiveActivity;
 import ir.maziardev.chatrapp.models.Update;
 import ir.maziardev.chatrapp.network.AppController;
 import ir.maziardev.chatrapp.network.UpdateApp;
@@ -56,6 +56,13 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private SavePref save;
 
+    private static final int REQUEST_STREAM = 1203;
+    boolean authorized = false;
+    private static String[] PERMISSIONS_STREAM = {
+            Manifest.permission.CAMERA,
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
 
     @BindView(R.id.swip_main)
     SwipeRefreshLayout swip_main;
@@ -79,6 +86,8 @@ public class MainActivity extends AppCompatActivity {
     CardView card_weather;
     @BindView(R.id.card_channel_main)
     CardView card_channel;
+    @BindView(R.id.card_live_main)
+    CardView card_live;
     @BindView(R.id.card_calendar_main)
     CardView card_calendar;
     @BindView(R.id.card_rss_main)
@@ -157,6 +166,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        card_live.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAuthorizedDialog();
+            }
+        });
+
         card_weather.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -210,6 +226,96 @@ public class MainActivity extends AppCompatActivity {
 
         isStoragePermissionGranted();
         updatecheck();
+
+    }
+
+    public boolean isAuthorizedGranted() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.CAMERA)
+                    == PackageManager.PERMISSION_GRANTED &&
+                    checkSelfPermission(Manifest.permission.RECORD_AUDIO)
+                            == PackageManager.PERMISSION_GRANTED&&
+                    checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            == PackageManager.PERMISSION_GRANTED) {
+
+                return true;
+            } else {
+
+                //showStorageDialog();
+                //ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                return false;
+            }
+        } else { //permission is automatically granted on sdk<23 upon installation
+            Log.v(TAG, "Permission is granted");
+            return true;
+        }
+    }
+
+    public void verifyPermissions() {
+        if(isAuthorizedGranted()){
+            Intent intent = new Intent(MainActivity.this, LiveActivity.class);
+            //intent.putExtra("CHANNELID", "1");
+            startActivity(intent);
+        }else {
+            int CAMERA_permission = ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA);
+            int RECORD_AUDIO_permission = ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.RECORD_AUDIO);
+            int WRITE_EXTERNAL_STORAGE_permission = ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            if (CAMERA_permission != PackageManager.PERMISSION_GRANTED ||
+                    RECORD_AUDIO_permission != PackageManager.PERMISSION_GRANTED ||
+                    WRITE_EXTERNAL_STORAGE_permission != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(
+                        MainActivity.this,
+                        PERMISSIONS_STREAM,
+                        REQUEST_STREAM
+                );
+                authorized = false;
+            } else {
+                authorized = true;
+
+                Intent intent = new Intent(MainActivity.this, LiveActivity.class);
+                //intent.putExtra("CHANNELID", "1");
+                startActivity(intent);
+            }
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_STREAM && resultCode == RESULT_OK) {
+            if(isAuthorizedGranted()){
+                Intent intent = new Intent(MainActivity.this, LiveActivity.class);
+                //intent.putExtra("CHANNELID", "1");
+                startActivity(intent);
+            }
+        }
+    }
+
+
+    private void showAuthorizedDialog() {
+        if(isAuthorizedGranted()){
+            Intent intent = new Intent(MainActivity.this, LiveActivity.class);
+            //intent.putExtra("CHANNELID", "1");
+            startActivity(intent);
+        }else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setMessage("\n" +
+                    "برای شروع پخش زنده نیاز به دسترسی های دوربین و صدا می باشد." +
+                    "\n"
+            ).setTitle("راهنما").setIcon(android.R.drawable.ic_menu_info_details);
+
+            builder.setNegativeButton("متوجه شدم!", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    save.save(AppController.SAVE_CAMERA_AUDIO_PERMISION, "1");
+                    verifyPermissions();
+                    dialog.dismiss();
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+
     }
 
 
@@ -264,10 +370,10 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, DetailActivity.class);
                 intent.putExtra(Extras.EXTRA_URL.toString(), AppController.arrayList_slider.get(i).getImg());
                 intent.putExtra(Extras.EXTRA_ACTION.toString(), AppController.arrayList_slider.get(i).getAction());
-                intent.putExtra(Extras.EXTRA_TITLE.toString(), "تیتر روز");
+                intent.putExtra(Extras.EXTRA_TITLE.toString(), AppController.arrayList_slider.get(i).getTitle());
                 intent.putExtra(Extras.EXTRA_OP.toString(), AppController.arrayList_slider.get(i).getAction());
                 intent.putExtra(Extras.EXTRA_DESCRIPTION.toString(), AppController.arrayList_slider.get(i).getDescription());
-                intent.putExtra(Extras.EXTRA_DETAIL.toString(), AppController.arrayList_slider.get(i).getTitle());
+                intent.putExtra(Extras.EXTRA_DETAIL.toString(), AppController.arrayList_slider.get(i).getDetail());
                 startActivity(intent);
             }
         });

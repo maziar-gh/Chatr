@@ -44,7 +44,7 @@ public class MediaActivity extends AppCompatActivity {
     private static final String TAG = MediaActivity.class.getSimpleName();
     private boolean mLoading = false;
 
-    @BindView(R.id.recycler_media_it)
+    @BindView(R.id.recycler_media_music)
     RecyclerView recycler_it;
 
     @BindView(R.id.recycler_media_kodak)
@@ -63,9 +63,9 @@ public class MediaActivity extends AppCompatActivity {
     private List<ChannelModel> menuList_kodak = new ArrayList<>();
     private List<ChannelModel> menuList_tv = new ArrayList<>();
     private List<ChannelModel> menuList_radio = new ArrayList<>();
-    private List<ChannelModel> menuList_it = new ArrayList<>();
+    private List<ChannelModel> menuList_music = new ArrayList<>();
     private List<ChannelModel> menuList_movie = new ArrayList<>();
-    private ListTvAdapter mAdapter_kodak, mAdapter_tv, mAdapter_radio, mAdapter_it, mAdapter_movie;
+    private ListTvAdapter mAdapter_kodak, mAdapter_tv, mAdapter_radio, mAdapter_music, mAdapter_movie;
 
     LinearLayoutManager layoutManager;
 
@@ -81,8 +81,8 @@ public class MediaActivity extends AppCompatActivity {
                 case "2": //movie and music
                     menuList_movie.add(AppController.list_channel.get(i));
                     break;
-                case "3": //it & education
-                    menuList_it.add(AppController.list_channel.get(i));
+                case "12": //it & education
+                    menuList_music.add(AppController.list_channel.get(i));
                     break;
                 case "4": //kodak
                     menuList_kodak.add(AppController.list_channel.get(i));
@@ -158,13 +158,13 @@ public class MediaActivity extends AppCompatActivity {
         mAdapter_movie.notifyDataSetChanged();
 
         //________________________________________it & education
-        mAdapter_it = new ListTvAdapter(this, menuList_it);
+        mAdapter_music = new ListTvAdapter(this, menuList_music);
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
         recycler_it.setLayoutManager(layoutManager);
         //recycler_tv.setItemAnimator(new DefaultItemAnimator());
         recycler_it.setHasFixedSize(true);
-        recycler_it.setAdapter(mAdapter_it);
-        mAdapter_it.notifyDataSetChanged();
+        recycler_it.setAdapter(mAdapter_music);
+        mAdapter_music.notifyDataSetChanged();
 
 
         //________________________________________kodak

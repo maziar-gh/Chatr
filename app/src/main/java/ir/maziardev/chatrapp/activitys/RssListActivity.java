@@ -229,7 +229,14 @@ public class RssListActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         ArrayList<HashMap<String, String>> result = new ArrayList<>();
-                        InputStream stream = new ByteArrayInputStream(response.getBytes(StandardCharsets.UTF_8));
+                        InputStream stream = null;
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+                            stream = new ByteArrayInputStream(response.getBytes(StandardCharsets.UTF_8));
+                        }else {
+                            stream = new ByteArrayInputStream(response.getBytes());
+                        }
+
+
                         try {
                             result = parseXML(stream);
 

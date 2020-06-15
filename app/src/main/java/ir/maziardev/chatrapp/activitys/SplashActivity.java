@@ -38,6 +38,7 @@ import java.util.concurrent.TimeoutException;
 import ir.maziardev.chatrapp.R;
 import ir.maziardev.chatrapp.classes.SavePref;
 
+import ir.maziardev.chatrapp.classes.Utility;
 import ir.maziardev.chatrapp.models.Categoryy;
 import ir.maziardev.chatrapp.models.ChannelModel;
 import ir.maziardev.chatrapp.models.Lists;
@@ -45,6 +46,10 @@ import ir.maziardev.chatrapp.models.Magazin;
 import ir.maziardev.chatrapp.models.Slider;
 import ir.maziardev.chatrapp.models.WeatherCity;
 import ir.maziardev.chatrapp.network.AppController;
+import ir.mirrajabi.persiancalendar.PersianCalendarView;
+import ir.mirrajabi.persiancalendar.core.PersianCalendarHandler;
+import ir.mirrajabi.persiancalendar.core.models.CalendarEvent;
+import ir.mirrajabi.persiancalendar.core.models.PersianDate;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SplashActivity extends AppCompatActivity {
@@ -53,6 +58,7 @@ public class SplashActivity extends AppCompatActivity {
     private byte downloaditem = 0;
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private SavePref save;
+    private Utility utility;
 
 
     @Override
@@ -60,6 +66,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         save = new SavePref(this);
+        utility = new Utility();
 
         AppController.APP_TOKEN = save.load(AppController.SAVE_USER_token, "0");
 
@@ -96,8 +103,6 @@ public class SplashActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
-
 
 
     public boolean isStoragePermissionGranted() {
@@ -247,7 +252,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void initLibrary() {
-        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_LIBRARY_URL  + "1/" + AppController.API_BASE_LIMIT + "/" +  AppController.APP_TOKEN,
+        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_LIBRARY_URL + "1/" + AppController.API_BASE_LIMIT + "/" + AppController.APP_TOKEN,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -369,7 +374,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void initServices() {
-        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_SERVICES_URL  + "1/" + AppController.API_BASE_LIMIT + "/" +  AppController.APP_TOKEN,
+        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_SERVICES_URL + "1/" + AppController.API_BASE_LIMIT + "/" + AppController.APP_TOKEN,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -415,7 +420,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void initGames() {
-        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_GAMES_URL  + "1/" + AppController.API_BASE_LIMIT + "/" +  AppController.APP_TOKEN,
+        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_GAMES_URL + "1/" + AppController.API_BASE_LIMIT + "/" + AppController.APP_TOKEN,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -464,7 +469,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void initMagazin() {
-        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_MAGAZIN_URL  + "1/" + AppController.API_BASE_LIMIT + "/" +  AppController.APP_TOKEN,
+        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_MAGAZIN_URL + "1/" + AppController.API_BASE_LIMIT + "/" + AppController.APP_TOKEN,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -512,26 +517,46 @@ public class SplashActivity extends AppCompatActivity {
                             JSONObject obj = new JSONObject(response);
                             JSONArray SliderArray = obj.getJSONArray("slider");
 
+                            //----------------------------------news paper
+                            String all = "";
+                            String names = "";
+                            String d = utility.getCurrentShamsidate();
+                            for (int i = 0; i < AppController.news.length; i++) {
+                                all += "https://www.pishkhan.com/Archive/"+
+                                        d.substring(0, d.length()-2)+
+                                        utility.getCurrentShamsidate().replace("/","")+
+                                        "/" + AppController.news[i] + ".jpg!";
+                                names +=AppController.name[i]+"!";
+                            }
+                            all = all.substring(0, all.length() - 1);
+                            names = names.substring(0, names.length() - 1);
+
+                            Slider slider = new Slider();
+                            slider.setTitle("");
+                            slider.setDetail(names);
+                            slider.setDescription(all);
+                            slider.setImg("http://chatr.anzalepoxy.ir/img/newsss.jpg");
+                            slider.setAction("5");
+
+                            AppController.arrayList_slider.add(slider);
+
+                            //----------------------------------news paper
+
                             for (int i = 0; i < SliderArray.length(); i++) {
                                 JSONObject sliderObject = SliderArray.getJSONObject(i);
 
                                 //Log.e("SLIDERRRRRRRRRRRR", sliderObject.getString("img"));
 
-                                Slider slider = new Slider();
+                                slider = new Slider();
                                 slider.setTitle(sliderObject.getString("title"));
                                 slider.setDescription(sliderObject.getString("description"));
                                 slider.setImg(sliderObject.getString("img"));
                                 slider.setAction(sliderObject.getString("action"));
 
-                                /*dbSlider.insertData(
-                                        slider.getTitle(),
-                                        slider.getDescription(),
-                                        slider.getImg(),
-                                        slider.getAction()
-                                );*/
                                 AppController.arrayList_slider.add(slider);
                             }
-                            //dbSlider.close();
+
+
 
                             downloaditem++;
                         } catch (JSONException e) {
@@ -599,7 +624,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void initMedia() {
-        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_CHANNEL_URL + "1/" + AppController.API_BASE_LIMIT + "/" +  AppController.APP_TOKEN,
+        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_CHANNEL_URL + "1/" + AppController.API_BASE_LIMIT + "/" + AppController.APP_TOKEN,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -610,13 +635,13 @@ public class SplashActivity extends AppCompatActivity {
                             for (int i = 0; i < channelArray.length(); i++) {
                                 JSONObject Object = channelArray.getJSONObject(i);
 
-                                //Log.e("TAG---", Object.getString("id_category"));
+                                //Log.e("TAG---", Object.getString("cname"));
 
                                 ChannelModel channel = new ChannelModel();
                                 channel.setId(Object.getString("id"));
                                 channel.setId_category(Object.getString("id_category"));
                                 channel.setCid(Object.getString("cid"));
-                                channel.setCname(Object.getString("cname"));
+                                channel.setCname(Object.getString("cname").replace("h1", "div"));
                                 channel.setImg(Object.getString("img"));
                                 channel.setDescription(Object.getString("description"));
 
@@ -640,7 +665,7 @@ public class SplashActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(req, "initMedia");
 
 
-        req = new StringRequest(Request.Method.GET, AppController.API_TV_URL + "1/" + AppController.API_BASE_LIMIT + "/" +  AppController.APP_TOKEN,
+        req = new StringRequest(Request.Method.GET, AppController.API_TV_URL + "1/" + AppController.API_BASE_LIMIT + "/" + AppController.APP_TOKEN,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -687,7 +712,7 @@ public class SplashActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(req, "initTv");
 
 
-        req = new StringRequest(Request.Method.GET, AppController.API_RADIO_URL  + "1/" + AppController.API_BASE_LIMIT + "/" +  AppController.APP_TOKEN,
+        req = new StringRequest(Request.Method.GET, AppController.API_RADIO_URL + "1/" + AppController.API_BASE_LIMIT + "/" + AppController.APP_TOKEN,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -737,21 +762,21 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void initSalamat() {
-        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_SALAMAT_URL  + "1/" + AppController.API_BASE_LIMIT + "/" +  AppController.APP_TOKEN,
+        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_SALAMAT_URL + "1/" + AppController.API_BASE_LIMIT + "/" + AppController.APP_TOKEN,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
                             JSONObject obj = new JSONObject(response);
-                            JSONArray chefArray = obj.getJSONArray("chef");
-                            JSONArray employArray = obj.getJSONArray("employ");
-                            JSONArray sportArray = obj.getJSONArray("sport");
-                            JSONArray foodArray = obj.getJSONArray("food");
-                            JSONArray plantArray = obj.getJSONArray("plant");
+                            //JSONArray chefArray = obj.getJSONArray("chef");
+                            //JSONArray employArray = obj.getJSONArray("employ");
+                            //JSONArray sportArray = obj.getJSONArray("sport");
+                            //JSONArray foodArray = obj.getJSONArray("food");
+                            //JSONArray plantArray = obj.getJSONArray("plant");
                             JSONArray prayArray = obj.getJSONArray("pray");
-                            JSONArray psychologyArray = obj.getJSONArray("psychology");
+                            //JSONArray psychologyArray = obj.getJSONArray("psychology");
 
-                            for (int i = 0; i < chefArray.length(); i++) {
+                            /*for (int i = 0; i < chefArray.length(); i++) {
                                 JSONObject Object = chefArray.getJSONObject(i);
 
                                 Lists media = new Lists();
@@ -760,16 +785,16 @@ public class SplashActivity extends AppCompatActivity {
                                 media.setUrl(Object.getString("url"));
                                 media.setAction(Object.getString("action"));
 
-                                /*dbHelperChef.insertData(
+                                *//*dbHelperChef.insertData(
                                         media.getTitle(),
                                         "",
                                         media.getImg(),
                                         media.getAction()
-                                );*/
+                                );*//*
                                 AppController.list_sa_chef.add(media);
-                            }
+                            }*/
 
-                            for (int i = 0; i < employArray.length(); i++) {
+                            /*for (int i = 0; i < employArray.length(); i++) {
                                 JSONObject Object = employArray.getJSONObject(i);
 
                                 Lists media = new Lists();
@@ -778,16 +803,16 @@ public class SplashActivity extends AppCompatActivity {
                                 media.setUrl(Object.getString("url"));
                                 media.setAction(Object.getString("action"));
 
-                                /*dbHelperEmploy.insertData(
+                                *//*dbHelperEmploy.insertData(
                                         media.getTitle(),
                                         "",
                                         media.getImg(),
                                         media.getAction()
-                                );*/
+                                );*//*
                                 AppController.list_sa_employ.add(media);
-                            }
+                            }*/
 
-                            for (int i = 0; i < sportArray.length(); i++) {
+                            /*for (int i = 0; i < sportArray.length(); i++) {
                                 JSONObject Object = sportArray.getJSONObject(i);
 
                                 Lists media = new Lists();
@@ -796,16 +821,16 @@ public class SplashActivity extends AppCompatActivity {
                                 media.setUrl(Object.getString("url"));
                                 media.setAction(Object.getString("action"));
 
-                                /*dbHelperSport.insertData(
+                                *//*dbHelperSport.insertData(
                                         media.getTitle(),
                                         "",
                                         media.getImg(),
                                         media.getAction()
-                                );*/
+                                );*//*
                                 AppController.list_sa_sport.add(media);
-                            }
+                            }*/
 
-                            for (int i = 0; i < foodArray.length(); i++) {
+                            /*for (int i = 0; i < foodArray.length(); i++) {
                                 JSONObject Object = foodArray.getJSONObject(i);
 
                                 Lists media = new Lists();
@@ -814,16 +839,16 @@ public class SplashActivity extends AppCompatActivity {
                                 media.setUrl(Object.getString("url"));
                                 media.setAction(Object.getString("action"));
 
-                                /*dbHelperFood.insertData(
+                                *//*dbHelperFood.insertData(
                                         media.getTitle(),
                                         "",
                                         media.getImg(),
                                         media.getAction()
-                                );*/
+                                );*//*
                                 AppController.list_sa_food.add(media);
-                            }
+                            }*/
 
-                            for (int i = 0; i < plantArray.length(); i++) {
+                            /*for (int i = 0; i < plantArray.length(); i++) {
                                 JSONObject Object = plantArray.getJSONObject(i);
 
                                 Lists media = new Lists();
@@ -832,14 +857,14 @@ public class SplashActivity extends AppCompatActivity {
                                 media.setUrl(Object.getString("url"));
                                 media.setAction(Object.getString("action"));
 
-                                /*dbHelperPlant.insertData(
+                                *//*dbHelperPlant.insertData(
                                         media.getTitle(),
                                         "",
                                         media.getImg(),
                                         media.getAction()
-                                );*/
+                                );*//*
                                 AppController.list_sa_plant.add(media);
-                            }
+                            }*/
 
                             for (int i = 0; i < prayArray.length(); i++) {
                                 JSONObject Object = prayArray.getJSONObject(i);
@@ -859,7 +884,7 @@ public class SplashActivity extends AppCompatActivity {
                                 AppController.list_sa_pray.add(media);
                             }
 
-                            for (int i = 0; i < psychologyArray.length(); i++) {
+                            /*for (int i = 0; i < psychologyArray.length(); i++) {
                                 JSONObject Object = psychologyArray.getJSONObject(i);
 
                                 Lists media = new Lists();
@@ -868,14 +893,14 @@ public class SplashActivity extends AppCompatActivity {
                                 media.setUrl(Object.getString("url"));
                                 media.setAction(Object.getString("action"));
 
-                                /*dbHelperPsychology.insertData(
+                                *//*dbHelperPsychology.insertData(
                                         media.getTitle(),
                                         "",
                                         media.getImg(),
                                         media.getAction()
-                                );*/
+                                );*//*
                                 AppController.list_sa_psychology.add(media);
-                            }
+                            }*/
 
                             downloaditem++;
                         } catch (JSONException e) {
@@ -893,7 +918,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void initNews() {
-        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_NEWS_URL  + "1/" + AppController.API_BASE_LIMIT + "/" +  AppController.APP_TOKEN,
+        StringRequest req = new StringRequest(Request.Method.GET, AppController.API_NEWS_URL + "1/" + AppController.API_BASE_LIMIT + "/" + AppController.APP_TOKEN,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

@@ -44,6 +44,7 @@ public class AppController extends Application {
     public static String SAVE_SEND_CODE = "SAVE_SEND_CODE";
     public static String SAVE_CODE = "SAVE_CODE";
     public static String SAVE_STORAGE_PERMISION = "SAVE_STORAGE_PERMISION";
+    public static String SAVE_CAMERA_AUDIO_PERMISION = "SAVE_CAMERA_AUDIO_PERMISION";
     public static String SAVE_USER_phone = "SAVE_USER_phone";
     public static String SAVE_USER_id = "SAVE_USER_id";
     public static String SAVE_USER_token = "SAVE_USER_token";
@@ -57,13 +58,13 @@ public class AppController extends Application {
     public static final String WEATHER_CITY_URL = "http://mobileapp.irimo.ir/WeatherServer/GetStationList";
     public static final String WEATHER_BY_CITY_URL = "http://mobileapp.irimo.ir/WeatherServer/GetStationData/";
 
-    public static final String API_AZAN_URL = "https://numberfa.ir/azan/index.htm";
-    public static final String API_EST_URL = "https://numberfa.ir/estekhare/index.php";
-    public static final String API_SUPPORT_URL = "https://numberfa.ir/chat/spachat.php";
+    public static final String API_AZAN_URL = "https://chatr.anzalepoxy.ir/azan/index.htm";
+    public static final String API_EST_URL = "https://chatr.anzalepoxy.ir/estekhare/index.php";
+    public static final String API_SUPPORT_URL = "https://chatr.anzalepoxy.ir/chat/spachat.php";
 
     public static final String API_BASE_LIMIT = "50";
 
-    public static final String API_BASE_URL = "https://numberfa.ir/chatr/app/index.php/api/";
+    public static final String API_BASE_URL = "https://chatr.anzalepoxy.ir/chatr/app/index.php/api/";
     public static final String API_UPDATE_URL = API_BASE_URL + "update/";
     public static final String API_SLIDER_URL = API_BASE_URL + "slider/detail/";
     public static final String API_CHANNEL_URL = API_BASE_URL + "channel/detail/";
@@ -134,14 +135,66 @@ public class AppController extends Application {
     public static List<GridList> list_nohe = new ArrayList<>();
 
 
-    public static int PAGE_TV = 1;
-    public static int PAGE_RADIO = 1;
-    public static int PAGE_MOVIE = 1;
-    public static int PAGE_SERIES = 1;
-    public static int PAGE_CARTON = 1;
-    public static int PAGE_MUSIC = 1;
-    public static int PAGE_QURAN = 1;
-    public static int PAGE_NOHE = 1;
+    public static String[] name = {
+            "روزنامه ایران ورزشی",
+            "روزنامه روزان",
+            "روزنامه اقتصاد ملی",
+            "روزنامه عصر اقتصاد",
+            "روزنامه آذربایجان",
+            "روزنامه گل",
+            "روزنامه خبر ورزشی",
+            "روزنامه كسب و كار",
+            "روزنامه شرق",
+            "روزنامه اعتماد",
+            "روزنامه شوت",
+            "روزنامه مستقل",
+            "روزنامه خراسان",
+            "روزنامه جام جم",
+            "روزنامه ابتکار",
+            "روزنامه دنیای اقتصاد",
+            "روزنامه قدس",
+            "روزنامه صبح امروز",
+            "روزنامه ستاره صبح",
+            "روزنامه رسالت",
+            "روزنامه جوان",
+            "روزنامه بهار",
+            "روزنامه ابرار ورزشى",
+            "روزنامه فرصت امروز",
+            "روزنامه عصر ایرانیان",
+            "روزنامه صمت",
+            "روزنامه صدای اصلاحات",
+            "روزنامه شهروند"
+    };
+    public static String[] news = {
+            "IranSport_s",
+            "Roozan_s",
+            "EghtesadeMeli_s",
+            "AsreEghtesad_s",
+            "Azarbaydgan_s",
+            "Gol_s",
+            "KhabarVarzeshi_s",
+            "KasboKarNews_s",
+            "Shargh_s",
+            "Etemaad_s",
+            "Shoot_s",
+            "Mostaghel_s",
+            "khorasannews_s",
+            "JaameJam_s",
+            "Ebtekaar_s",
+            "DonyayeEghtesad_s",
+            "Ghods_s",
+            "SobheEmrooz_s",
+            "SetarehSobh_s",
+            "Resalat_s",
+            "Javan_s",
+            "Bahar_s",
+            "AbrarSport_s",
+            "ForsatEmrooz_s",
+            "AsreIranian_s",
+            "GostareshSMT_s",
+            "SedayeEslahat_s",
+            "Shahrvand_s"
+    };
 
 
 
