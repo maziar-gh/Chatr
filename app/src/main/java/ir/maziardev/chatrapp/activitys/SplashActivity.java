@@ -518,7 +518,7 @@ public class SplashActivity extends AppCompatActivity {
                             JSONArray SliderArray = obj.getJSONArray("slider");
 
                             //----------------------------------news paper
-                            String all = "";
+                            /*String all = "";
                             String names = "";
                             String d = utility.getCurrentShamsidate();
                             for (int i = 0; i < AppController.news.length; i++) {
@@ -531,6 +531,8 @@ public class SplashActivity extends AppCompatActivity {
                             all = all.substring(0, all.length() - 1);
                             names = names.substring(0, names.length() - 1);
 
+                            Log.e("TAG----", all);
+
                             Slider slider = new Slider();
                             slider.setTitle("");
                             slider.setDetail(names);
@@ -538,7 +540,7 @@ public class SplashActivity extends AppCompatActivity {
                             slider.setImg("http://chatr.anzalepoxy.ir/img/newsss.jpg");
                             slider.setAction("5");
 
-                            AppController.arrayList_slider.add(slider);
+                            AppController.arrayList_slider.add(slider);*/
 
                             //----------------------------------news paper
 
@@ -547,7 +549,7 @@ public class SplashActivity extends AppCompatActivity {
 
                                 //Log.e("SLIDERRRRRRRRRRRR", sliderObject.getString("img"));
 
-                                slider = new Slider();
+                                Slider slider = new Slider();
                                 slider.setTitle(sliderObject.getString("title"));
                                 slider.setDescription(sliderObject.getString("description"));
                                 slider.setImg(sliderObject.getString("img"));

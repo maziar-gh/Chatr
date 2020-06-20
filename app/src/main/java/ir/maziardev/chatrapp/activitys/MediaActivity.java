@@ -44,6 +44,15 @@ public class MediaActivity extends AppCompatActivity {
     private static final String TAG = MediaActivity.class.getSimpleName();
     private boolean mLoading = false;
 
+    @BindView(R.id.recycler_media_quran)
+    RecyclerView recycler_quran;
+
+    @BindView(R.id.recycler_media_sokhan)
+    RecyclerView recycler_sokhan;
+
+    @BindView(R.id.recycler_media_madahi)
+    RecyclerView recycler_madahi;
+
     @BindView(R.id.recycler_media_music)
     RecyclerView recycler_it;
 
@@ -60,12 +69,15 @@ public class MediaActivity extends AppCompatActivity {
     RecyclerView recycler_radio;
 
 
+    private List<ChannelModel> menuList_quran = new ArrayList<>();
+    private List<ChannelModel> menuList_sokhan = new ArrayList<>();
+    private List<ChannelModel> menuList_madahi = new ArrayList<>();
     private List<ChannelModel> menuList_kodak = new ArrayList<>();
     private List<ChannelModel> menuList_tv = new ArrayList<>();
     private List<ChannelModel> menuList_radio = new ArrayList<>();
     private List<ChannelModel> menuList_music = new ArrayList<>();
     private List<ChannelModel> menuList_movie = new ArrayList<>();
-    private ListTvAdapter mAdapter_kodak, mAdapter_tv, mAdapter_radio, mAdapter_music, mAdapter_movie;
+    private ListTvAdapter   mAdapter_quran, mAdapter_sokhan, mAdapter_madahi, mAdapter_kodak, mAdapter_tv, mAdapter_radio, mAdapter_music, mAdapter_movie;
 
     LinearLayoutManager layoutManager;
 
@@ -86,6 +98,15 @@ public class MediaActivity extends AppCompatActivity {
                     break;
                 case "4": //kodak
                     menuList_kodak.add(AppController.list_channel.get(i));
+                    break;
+                case "16": //kodak
+                    menuList_madahi.add(AppController.list_channel.get(i));
+                    break;
+                case "17": //kodak
+                    menuList_sokhan.add(AppController.list_channel.get(i));
+                    break;
+                case "18": //kodak
+                    menuList_quran.add(AppController.list_channel.get(i));
                     break;
             }
         }
@@ -175,6 +196,36 @@ public class MediaActivity extends AppCompatActivity {
         recycler_media_kodak.setHasFixedSize(true);
         recycler_media_kodak.setAdapter(mAdapter_kodak);
         mAdapter_kodak.notifyDataSetChanged();
+
+
+        //________________________________________madahi
+        mAdapter_madahi = new ListTvAdapter(this, menuList_madahi);
+        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
+        recycler_madahi.setLayoutManager(layoutManager);
+        //recycler_tv.setItemAnimator(new DefaultItemAnimator());
+        recycler_madahi.setHasFixedSize(true);
+        recycler_madahi.setAdapter(mAdapter_madahi);
+        mAdapter_madahi.notifyDataSetChanged();
+
+
+        //________________________________________sokhan
+        mAdapter_sokhan = new ListTvAdapter(this, menuList_sokhan);
+        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
+        recycler_sokhan.setLayoutManager(layoutManager);
+        //recycler_tv.setItemAnimator(new DefaultItemAnimator());
+        recycler_sokhan.setHasFixedSize(true);
+        recycler_sokhan.setAdapter(mAdapter_sokhan);
+        mAdapter_sokhan.notifyDataSetChanged();
+
+
+        //________________________________________quran
+        mAdapter_quran = new ListTvAdapter(this, menuList_quran);
+        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
+        recycler_quran.setLayoutManager(layoutManager);
+        //recycler_tv.setItemAnimator(new DefaultItemAnimator());
+        recycler_quran.setHasFixedSize(true);
+        recycler_quran.setAdapter(mAdapter_quran);
+        mAdapter_quran.notifyDataSetChanged();
 
     }
 

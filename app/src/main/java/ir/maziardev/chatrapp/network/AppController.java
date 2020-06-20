@@ -62,7 +62,7 @@ public class AppController extends Application {
     public static final String API_EST_URL = "https://chatr.anzalepoxy.ir/estekhare/index.php";
     public static final String API_SUPPORT_URL = "https://chatr.anzalepoxy.ir/chat/spachat.php";
 
-    public static final String API_BASE_LIMIT = "50";
+    public static final String API_BASE_LIMIT = "100";
 
     public static final String API_BASE_URL = "https://chatr.anzalepoxy.ir/chatr/app/index.php/api/";
     public static final String API_UPDATE_URL = API_BASE_URL + "update/";
@@ -136,6 +136,7 @@ public class AppController extends Application {
 
 
     public static String[] name = {
+            "روزنامه کیهان",
             "روزنامه ایران ورزشی",
             "روزنامه روزان",
             "روزنامه اقتصاد ملی",
@@ -166,6 +167,7 @@ public class AppController extends Application {
             "روزنامه شهروند"
     };
     public static String[] news = {
+            "KayhanNews",
             "IranSport_s",
             "Roozan_s",
             "EghtesadeMeli_s",

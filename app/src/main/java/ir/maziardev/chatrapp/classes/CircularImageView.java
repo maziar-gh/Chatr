@@ -40,10 +40,15 @@ public class CircularImageView extends AppCompatImageView {
             return;
         }
         Bitmap b =  ((BitmapDrawable)drawable).getBitmap() ;
-        Bitmap bitmap = b.copy(Bitmap.Config.ARGB_8888, true);
+        try {
+            Bitmap bitmap = b.copy(Bitmap.Config.ARGB_8888, true);
 
-        Bitmap roundBitmap =  getCroppedBitmap(bitmap, getWidth());
-        canvas.drawBitmap(roundBitmap, 0, 0, null);
+            Bitmap roundBitmap =  getCroppedBitmap(bitmap, getWidth());
+            canvas.drawBitmap(roundBitmap, 0, 0, null);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public static Bitmap getCroppedBitmap(Bitmap bmp, int radius) {

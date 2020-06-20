@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,7 +65,7 @@ public class ListTvAdapter extends RecyclerView.Adapter<ListTvAdapter.ViewHolder
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public HtmlTextView tv_title;
-        public CircularImageView tv_image;
+        public ImageView tv_image;
         public CardView cardView;
 
         public ViewHolder(View v) {
