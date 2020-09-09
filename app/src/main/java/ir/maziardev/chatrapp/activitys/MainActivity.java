@@ -434,7 +434,7 @@ public class MainActivity extends AppCompatActivity {
                     if (isStoragePermissionGranted()) {
                         //downloadTask(update.getUrl());
                         UpdateApp atualizaApp = new UpdateApp();
-                        atualizaApp.setContext(getApplicationContext());
+                        atualizaApp.setContext(MainActivity.this);
                         atualizaApp.execute(update.getUrl());
                     }
                 }

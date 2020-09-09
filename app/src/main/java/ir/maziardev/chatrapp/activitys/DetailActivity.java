@@ -166,6 +166,13 @@ public class DetailActivity extends AppCompatActivity {
                     }
                     mAdapter.notifyDataSetChanged();
 
+                }else if(ex.getString(Extras.EXTRA_ACTION.toString()).equals("6")){
+                    Intent intent = new Intent(DetailActivity.this, WebActivity.class);
+                    intent.putExtra(Extras.EXTRA_URL.toString(), ex.getString(Extras.EXTRA_DESCRIPTION.toString()));
+                    intent.putExtra(Extras.EXTRA_PAGE_MASTER.toString(), "6");
+                    startActivity(intent);
+                    finish();
+
                 }
 
             }

@@ -21,13 +21,19 @@ import ir.maziardev.chatrapp.R;
 
 public class UpdateApp extends AsyncTask<String,Void,Void> {
     private Context context;
+    private ProgressDialog pd ;
     public void setContext(Context contextf){
         context = contextf;
+        pd = new ProgressDialog(contextf);
+        pd.setMessage("در حال بروز رسانی...");
+        pd.show();
     }
 
     @Override
     protected Void doInBackground(String... arg0) {
         try {
+
+
             URL url = new URL(arg0[0]);
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
             c.setRequestMethod("GET");
@@ -52,6 +58,8 @@ public class UpdateApp extends AsyncTask<String,Void,Void> {
             }
             fos.close();
             is.close();
+
+            pd.hide();
 
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setDataAndType(Uri.fromFile(new File("/mnt/sdcard/Download/chatr.apk")), "application/vnd.android.package-archive");

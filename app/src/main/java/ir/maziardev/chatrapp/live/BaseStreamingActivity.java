@@ -37,6 +37,7 @@ import me.lake.librestreaming.core.listener.RESVideoChangeListener;
 import me.lake.librestreaming.filter.softaudiofilter.BaseSoftAudioFilter;
 import me.lake.librestreaming.model.RESConfig;
 import me.lake.librestreaming.model.Size;
+import me.lake.librestreaming.tools.LogTools;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
@@ -53,7 +54,7 @@ public class BaseStreamingActivity extends AppCompatActivity implements RESConne
     protected Handler mainHander;
     protected Button btn_toggle;
     protected boolean started;
-    protected String rtmpaddr = "rtmp://88.99.114.172:1935/hls/test";
+    protected String rtmpaddr = "rtmp://46.4.162.91:1935/hls/test";
     protected int filtermode = RESConfig.FilterMode.SOFT;
     RESConfig resConfig;
 
@@ -247,7 +248,11 @@ public class BaseStreamingActivity extends AppCompatActivity implements RESConne
     @Override
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
         if (resClient != null) {
-            resClient.stopPreview(true);
+            try{
+                resClient.stopPreview(true);
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return false;
     }

@@ -10,14 +10,15 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:orientation="vertical">
+
         <EditText
             android:id="@+id/et_url"
-            android:text="rtmp://88.99.114.172:1935/hls/test"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:hint="RtmpAddr"/>
+            android:hint="RtmpAddr"
+            android:text="rtmp://46.4.162.91:1935/hls/test" />
 
         <RadioGroup
             android:id="@+id/rg_direction"

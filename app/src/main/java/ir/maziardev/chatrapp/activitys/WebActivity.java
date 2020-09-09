@@ -1,8 +1,12 @@
 package ir.maziardev.chatrapp.activitys;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.core.content.ContextCompat;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebChromeClient;
@@ -33,6 +37,24 @@ public class WebActivity extends AppCompatActivity {
 
 
             if(ex.getString(Extras.EXTRA_URL.toString(),"").contains("iranseda")){
+                web.setWebViewClient(new WebViewClient());
+                WebSettings webSettings = web.getSettings();
+                webSettings.setJavaScriptEnabled(true);
+                web.loadUrl(ex.getString(Extras.EXTRA_URL.toString(),""));
+                web.reload();
+            }else if(ex.getString(Extras.EXTRA_PAGE_MASTER.toString(),"").contains("6")){
+
+                Uri uri = Uri.parse(ex.getString(Extras.EXTRA_URL.toString(),""));
+                CustomTabsIntent.Builder intentBuilder = new CustomTabsIntent.Builder();
+                intentBuilder.setToolbarColor(ContextCompat.getColor(WebActivity.this, R.color.md_black_1000));
+                intentBuilder.setSecondaryToolbarColor(ContextCompat.getColor(WebActivity.this, R.color.colorPrimaryDark));
+                intentBuilder.setExitAnimations(WebActivity.this, android.R.anim.slide_in_left,
+                        android.R.anim.slide_out_right);
+                CustomTabsIntent customTabsIntent = intentBuilder.build();
+                customTabsIntent.launchUrl(WebActivity.this, uri);
+                finish();
+
+            }else if(ex.getString(Extras.EXTRA_PAGE_MASTER.toString(),"").contains("1")){
                 web.setWebViewClient(new WebViewClient());
                 WebSettings webSettings = web.getSettings();
                 webSettings.setJavaScriptEnabled(true);
