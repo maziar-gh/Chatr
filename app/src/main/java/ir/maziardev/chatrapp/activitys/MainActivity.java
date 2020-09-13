@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +20,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.Request;
@@ -28,17 +31,28 @@ import com.android.volley.toolbox.StringRequest;
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.interfaces.ItemClickListener;
 import com.denzcoskun.imageslider.models.SlideModel;
+import com.downloader.Error;
+import com.downloader.OnCancelListener;
+import com.downloader.OnDownloadListener;
+import com.downloader.OnPauseListener;
+import com.downloader.OnProgressListener;
+import com.downloader.OnStartOrResumeListener;
+import com.downloader.PRDownloader;
+import com.downloader.Progress;
+import com.downloader.Status;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ir.maziardev.chatrapp.R;
 import ir.maziardev.chatrapp.classes.SavePref;
+import ir.maziardev.chatrapp.classes.Utils;
 import ir.maziardev.chatrapp.enums.Extras;
 import ir.maziardev.chatrapp.live.LiveActivity;
 import ir.maziardev.chatrapp.models.Update;
@@ -63,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
             Manifest.permission.RECORD_AUDIO,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
+
+
 
     @BindView(R.id.swip_main)
     SwipeRefreshLayout swip_main;
@@ -433,9 +449,15 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int id) {
                     if (isStoragePermissionGranted()) {
                         //downloadTask(update.getUrl());
-                        UpdateApp atualizaApp = new UpdateApp();
+
+                        /*UpdateApp atualizaApp = new UpdateApp();
                         atualizaApp.setContext(MainActivity.this);
-                        atualizaApp.execute(update.getUrl());
+                        atualizaApp.execute(update.getUrl());*/
+
+                        Intent i = new Intent(MainActivity.this, DialogUpdateActivity.class);
+                        i.putExtra(Extras.EXTRA_URL.toString(), update.getUrl());
+                        startActivity(i);
+
                     }
                 }
             });

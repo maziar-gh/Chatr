@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.downloader.PRDownloader;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
@@ -221,6 +222,9 @@ public class AppController extends Application {
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );
+
+        PRDownloader.initialize(getApplicationContext());
+
     }
 
 

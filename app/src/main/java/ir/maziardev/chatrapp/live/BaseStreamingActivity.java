@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.TextureView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -49,10 +50,11 @@ public class BaseStreamingActivity extends AppCompatActivity implements RESConne
     public static final String RTMPADDR = "rtmpaddr";
     protected RESClient resClient;
     protected AspectTextureView txv_preview;
-    protected TextView tv_speed;
-    protected TextView tv_rtmp;
+//    protected TextView tv_speed;
+//    protected TextView tv_rtmp;
     protected Handler mainHander;
     protected Button btn_toggle;
+    protected ImageView img_live;
     protected boolean started;
     protected String rtmpaddr = "rtmp://46.4.162.91:1935/hls/test";
     protected int filtermode = RESConfig.FilterMode.SOFT;
@@ -73,8 +75,9 @@ public class BaseStreamingActivity extends AppCompatActivity implements RESConne
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_streaming);
         txv_preview = (AspectTextureView) findViewById(R.id.txv_preview);
-        tv_speed = (TextView) findViewById(R.id.tv_speed);
-        tv_rtmp = (TextView) findViewById(R.id.tv_rtmp);
+        img_live = (ImageView) findViewById(R.id.img_live);
+       /* tv_speed = (TextView) findViewById(R.id.tv_speed);
+        tv_rtmp = (TextView) findViewById(R.id.tv_rtmp);*/
         txv_preview.setKeepScreenOn(true);
         txv_preview.setSurfaceTextureListener(this);
         resClient = new RESClient();
@@ -121,7 +124,7 @@ public class BaseStreamingActivity extends AppCompatActivity implements RESConne
             @Override
             public void handleMessage(Message msg) {
                 //tv_speed.setText("byteSpeed=" + (resClient.getAVSpeed() / 1024) + ";drawFPS=" + resClient.getDrawFrameRate() + ";sendFPS=" + resClient.getSendFrameRate() + ";sendbufferfreepercent=" + resClient.getSendBufferFreePercent());
-                tv_speed.setText("");
+                //tv_speed.setText("");
                 sendEmptyMessageDelayed(0, 3000);
                 if (resClient.getSendBufferFreePercent() <= 0.05) {
                     Toast.makeText(BaseStreamingActivity.this, "sendbuffer is full,netspeed is low!", Toast.LENGTH_SHORT).show();
@@ -131,6 +134,9 @@ public class BaseStreamingActivity extends AppCompatActivity implements RESConne
         mainHander.sendEmptyMessage(0);
 
         resClient.setSoftAudioFilter(new SetVolumeAudioFilter());
+
+
+        img_live.setVisibility(View.INVISIBLE);
     }
 
 
@@ -193,7 +199,8 @@ public class BaseStreamingActivity extends AppCompatActivity implements RESConne
          * result!=0 failed
          */
         //tv_rtmp.setText("open=" + result);
-        tv_rtmp.setText("");
+        //tv_rtmp.setText("");
+        img_live.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -207,7 +214,8 @@ public class BaseStreamingActivity extends AppCompatActivity implements RESConne
          * failed to write data,maybe restart.
          */
         //tv_rtmp.setText("writeError=" + errno);
-        tv_rtmp.setText("");
+        //tv_rtmp.setText("");
+        img_live.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -217,7 +225,8 @@ public class BaseStreamingActivity extends AppCompatActivity implements RESConne
          * result!=0 failed
          */
         //tv_rtmp.setText("");
-        tv_rtmp.setText("");
+        //tv_rtmp.setText("");
+        img_live.setVisibility(View.INVISIBLE);
     }
 
     protected SurfaceTexture texture;
