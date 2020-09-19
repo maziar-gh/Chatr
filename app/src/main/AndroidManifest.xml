@@ -57,7 +57,8 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".activitys.DialogUpdateActivity"
-            android:theme="@style/Theme.AppCompat.Dialog"/>
+            android:theme="@style/Theme.AppCompat.Dialog"
+            android:label="@string/updatedialog"/>
         <activity android:name=".live.LiveActivity" />
         <activity
             android:name=".live.SoftStreamingActivity"
@@ -143,6 +144,7 @@
             </intent-filter>
         </receiver>
 
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -152,6 +154,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+
     </application>
 
 </manifest>

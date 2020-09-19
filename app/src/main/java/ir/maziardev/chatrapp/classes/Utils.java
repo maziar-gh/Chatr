@@ -24,6 +24,10 @@ public final class Utils {
         }
     }
 
+    public static String getDownloadDirPath(Context context) {
+        return context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).toString();
+    }
+
     public static String getProgressDisplayLine(long currentBytes, long totalBytes) {
         return getBytesToMBString(currentBytes) + "/" + getBytesToMBString(totalBytes);
     }

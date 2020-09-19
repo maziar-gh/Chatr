@@ -80,6 +80,9 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+
+
     @BindView(R.id.swip_main)
     SwipeRefreshLayout swip_main;
     @BindView(R.id.imageSlider)

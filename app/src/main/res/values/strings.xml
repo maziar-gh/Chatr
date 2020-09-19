@@ -186,4 +186,11 @@
     <string name="tunneling">Request multimedia tunneling</string>
 
 
+
+    <string name="downloading">Downloading...</string>
+    <string name="title_file_download">APK is downloading</string>
+    <string name="storage_access_required">Storage access is required to downloading the file.</string>
+    <string name="updatedialog">بروزرسانی</string>
+
+
 </resources>
